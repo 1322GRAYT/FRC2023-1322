@@ -4,8 +4,8 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.RFSLIB;
 import frc.robot.subsystems.LiftSubsystem.controlState;
+import frc.robot.utils.RFSLIB;
 import frc.robot.calibrations.K_LIFT;
 import frc.robot.subsystems.LiftSubsystem;
 import edu.wpi.first.wpilibj.Timer;
@@ -46,7 +46,7 @@ public class CT_LiftRobot extends CommandBase {
     dPadPos = auxStick.getPOV();
 
     liftPwr = -auxStick.getLeftY();
-    liftPwr = RFSLIB.ApplyDB_Scld(liftPwr, K_LIFT.KeLIFT_r_CntlrDeadBandThrsh, 1.0);
+    liftPwr = RFSLIB.ApplyDeadBand_Scaled(liftPwr, K_LIFT.KeLIFT_r_CntlrDeadBandThrsh, 1.0);
 
     
     switch (liftSubsystem.getLiftControlState()) {

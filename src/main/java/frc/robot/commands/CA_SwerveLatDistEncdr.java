@@ -67,7 +67,7 @@ public class CA_SwerveLatDistEncdr extends CommandBase {
     rotation = rAxis * Constants.SwerveDrivetrain.MAX_ANGULAR_VELOCITY;
     swerveDrivetrain.drive(translation, rotation, false, true);
 
-    if (K_SWRV.KeSWRV_b_DebugEnbl == true) {
+    if (K_SWRV.KeSWRV_b_DebugEnbl) {
       SmartDashboard.putNumber("Auto EncdrCnt ZeroA: ",   (zeroEncdrCntA));
       SmartDashboard.putNumber("Auto EncdrCnt ZeroB: ",   (zeroEncdrCntB));
       SmartDashboard.putNumber("Auto EncdrCnt CurrA: ",   (swerveDrivetrain.getDrvCaddyEncdrPstn(caddyIndexA)));

@@ -4,15 +4,13 @@
 
 package frc.robot.commands;
 
+import frc.robot.subsystems.SwerveDrivetrain;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
+/*
 import frc.robot.Constants;
 import frc.robot.Constants.*;
-import frc.robot.subsystems.SwerveDrivetrain;
-
 import java.util.ArrayList;
-import java.util.List;
-
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -23,56 +21,52 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
-
-
+*/
 public class CA_SwerveTrajectory1 extends CommandBase {
-  private SwerveDrivetrain drive;
+    //private SwerveDrivetrain drive;
 
-  /** Creates a new CA_SwerveTrajectory1. */
-  public CA_SwerveTrajectory1(SwerveDrivetrain drive) {
-    this.drive = drive;
+    /** Creates a new CA_SwerveTrajectory1. */
+    public CA_SwerveTrajectory1(SwerveDrivetrain drive) {
+        //this.drive = drive;
 
-    addRequirements(drive);
-  }
+        //addRequirements(drive);
+    }
 
+/*
+    private void generateTrajectory() {
 
-  private void generateTrajectory() {
+        // 1. Create trajectory settings
+        TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+                Auton.MAX_SPEED_MPS,
+                Auton.MAX_ACCELERATION_MPSS)
+                .setReversed(false)
+                .setKinematics(Constants.SwerveDrivetrain.SWERVE_KINEMATICS);
 
-      // 1. Create trajectory settings
-      TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-          Auton.MAX_SPEED_MPS,
-          Auton.MAX_ACCELERATION_MPSS)
-              .setReversed(false) 
-              .setKinematics(Constants.SwerveDrivetrain.SWERVE_KINEMATICS);
+        var initStart = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0),
+                Rotation2d.fromDegrees(0));
+        var firstBall = new Pose2d(Units.feetToMeters(5.0), Units.feetToMeters(6.0),
+                Rotation2d.fromDegrees(90));
 
+        var interiorWaypoints = new ArrayList<Translation2d>();
+        interiorWaypoints.add(new Translation2d(Units.feetToMeters(0.0), Units.feetToMeters(2.0)));
+        interiorWaypoints.add(new Translation2d(Units.feetToMeters(2.0), Units.feetToMeters(4.0)));
+        interiorWaypoints.add(new Translation2d(Units.feetToMeters(3.5), Units.feetToMeters(5.0)));
 
-      var initStart = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0),
-          Rotation2d.fromDegrees(0));
-      var firstBall = new Pose2d(Units.feetToMeters(5.0), Units.feetToMeters(6.0),
-          Rotation2d.fromDegrees(90));
-  
-      var interiorWaypoints = new ArrayList<Translation2d>();
-          interiorWaypoints.add(new Translation2d(Units.feetToMeters(0.0), Units.feetToMeters(2.0)));
-          interiorWaypoints.add(new Translation2d(Units.feetToMeters(2.0), Units.feetToMeters(4.0)));
-          interiorWaypoints.add(new Translation2d(Units.feetToMeters(3.5), Units.feetToMeters(5.0)));
-  
-                        
-      // 2. Generate trajectory
-      /*
-      Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(
-                        new Translation2d(1, 0),
-                        new Translation2d(1, -1)),
-                new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
+        // 2. Generate trajectory
+        / *
+         * Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+         * new Pose2d(0, 0, new Rotation2d(0)),
+         * List.of(
+         * new Translation2d(1, 0),
+         * new Translation2d(1, -1)),
+         * new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
+         * trajectoryConfig);
+         * /
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+                initStart,
+                interiorWaypoints,
+                firstBall,
                 trajectoryConfig);
-      */
-      Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-                        initStart,
-                        interiorWaypoints,
-                        firstBall,
-                        trajectoryConfig);
-                        
 
         // 3. Define PID controllers for tracking trajectory
         PIDController xController = Auton.PX_CONTROLLER;
@@ -89,8 +83,7 @@ public class CA_SwerveTrajectory1 extends CommandBase {
                 yController,
                 thetaController,
                 drive::setModuleStates,
-                drive);        
-
-  }
-
+                drive);
+    }
+*/
 }

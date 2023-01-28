@@ -18,7 +18,7 @@ public class CompressorSubsystem extends SubsystemBase {
 private Compressor phCompressor;
 private double pressureCompressor;
 private double currentCompressor;
-private boolean displayDashboardData = true; 
+//private boolean displayDashboardData = true; 
 
 
   /** Creates a new CompressorSubsystem. */
@@ -33,7 +33,7 @@ private boolean displayDashboardData = true;
   public void periodic() {
     // This method will be called once per scheduler run
     updateCompressorSensors();
-    if (K_COMP.KeCOMP_b_DebugEnbl == true) {
+    if (K_COMP.KeCOMP_b_DebugEnbl) {
       printCompressorPressure();
     }
   }

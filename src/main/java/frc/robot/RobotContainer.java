@@ -10,13 +10,12 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.*;
 import frc.robot.commandgroups.*;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.ShooterSubsystem.*;
-import frc.robot.calibrations.K_INTK;
+import frc.robot.utils.RFSLIB;
+//import frc.robot.subsystems.ShooterSubsystem.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -27,13 +26,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public  final RFSLIB prfsLIB = new RFSLIB();
-  private final SendableChooser<Command> m_chooser = new SendableChooser<Command>();
+//  private final SendableChooser<Command> m_chooser = new SendableChooser<Command>();
   // private final SwerveDriveSubsystem swerveSubsystem = new SwerveDriveSubsystem();
-  private final CompressorSubsystem compressorSubsystem = new CompressorSubsystem();
+  //private final CompressorSubsystem compressorSubsystem = new CompressorSubsystem();
   private final SwerveDrivetrain swerveSubsystem = new SwerveDrivetrain();
-  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-  private final LiftSubsystem liftSubsystem = new LiftSubsystem();
+  //private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  //private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+  //private final LiftSubsystem liftSubsystem = new LiftSubsystem();
   private final Camera cameraSubsystem = new Camera();
   private XboxController driverStick = new XboxController(Constants.DRVR_CNTRLR);
   private XboxController auxStick = new XboxController(Constants.AUX_CNTRLR);
@@ -44,18 +43,18 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
   // Configure Autonomous Selections Available
-    m_chooser.setDefaultOption("Default Auto", new CC_IntakeArmsRaise(intakeSubsystem));
+//    m_chooser.setDefaultOption("Default Auto", new CC_IntakeArmsRaise(intakeSubsystem));
 //     m_chooser.addOption("Test Drive", new Auto_Drive_Deadrecken(swerveSubsystem, 0, 0.5, 0, 1));
 //     m_chooser.addOption("Test Drive Encoder Reverse", new SwerveLongDistEncdr(swerveSubsystem, 36, false));  
 //     m_chooser.addOption("Test Drive Encoder Right", new SwerveLatDistEncdr(swerveSubsystem, 36, true));
-    m_chooser.addOption("Do Nothing", new CC_IntakeArmsRaise(intakeSubsystem));
-    m_chooser.addOption("Just Shoot Low", new CA_Shoot(shooterSubsystem, intakeSubsystem, cameraSubsystem, slctGoal.LoGoal));
-    m_chooser.addOption("Drive Back", new CG_DrvBack(swerveSubsystem, intakeSubsystem));
-    m_chooser.addOption("Shoot Low & Drive Back", new CG_ShootLowDrvBack(swerveSubsystem, shooterSubsystem, intakeSubsystem, cameraSubsystem));
-    m_chooser.addOption("Shoot High 2-Ball", new CG_ShootHighDrvBack(swerveSubsystem, shooterSubsystem, intakeSubsystem, cameraSubsystem));
+//    m_chooser.addOption("Do Nothing", new CC_IntakeArmsRaise(intakeSubsystem));
+//    m_chooser.addOption("Just Shoot Low", new CA_Shoot(shooterSubsystem, intakeSubsystem, cameraSubsystem, slctGoal.LoGoal));
+//    m_chooser.addOption("Drive Back", new CG_DrvBack(swerveSubsystem, intakeSubsystem));
+//    m_chooser.addOption("Shoot Low & Drive Back", new CG_ShootLowDrvBack(swerveSubsystem, shooterSubsystem, intakeSubsystem, cameraSubsystem));
+//    m_chooser.addOption("Shoot High 2-Ball", new CG_ShootHighDrvBack(swerveSubsystem, shooterSubsystem, intakeSubsystem, cameraSubsystem));
 //     m_chooser.addOption("Shoot High 2-Ball Parallel", new CG_ShootHighDrvBackParallel(swerveSubsystem, shooterSubsystem, intakeSubsystem, cameraSubsystem));
 //     m_chooser.addOption("Shoot High 2-Ball TrajPath", new CG_ShootHighDrvTrajA(swerveSubsystem, shooterSubsystem, intakeSubsystem, cameraSubsystem));
-    SmartDashboard.putData("Auto choices: ", m_chooser);
+//    SmartDashboard.putData("Auto choices: ", m_chooser);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -71,9 +70,9 @@ public class RobotContainer {
    */
   public void autonomousInit() {
     swerveSubsystem.init_periodic();
-    liftSubsystem.init_periodic();
-    intakeSubsystem.init_periodic();
-    shooterSubsystem.init_periodic();
+//    liftSubsystem.init_periodic();
+//    intakeSubsystem.init_periodic();
+//    shooterSubsystem.init_periodic();
   }
 
 
@@ -99,10 +98,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* BEGIN DRIVER STICK BUTTON ASSIGNMENTS */
-    final JoystickButton driverButton_Start = new JoystickButton (driverStick, Constants.BUTTON_START);
     final JoystickButton driverButton_BumpLT = new JoystickButton(driverStick, Constants.BUMPER_LEFT);
 
-    driverButton_Start.onTrue(new CT_LiftRobot(liftSubsystem, auxStick));
+//    driverButton_Start.onTrue(new CT_LiftRobot(liftSubsystem, auxStick));
     driverButton_BumpLT.onTrue(new CG_ResetAndZeroEncdrs(swerveSubsystem));
 
 
@@ -142,10 +140,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    m_autoCommandSelected = m_chooser.getSelected(); 
+    //m_autoCommandSelected = m_chooser.getSelected(); 
     System.out.println("Auto selected: " + m_autoCommandSelected);
     return(m_autoCommandSelected);
   }
-
-    
 }

@@ -1,9 +1,8 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
-import frc.robot.subsystems.RFSLIB;
 import frc.robot.subsystems.SwerveDrivetrain;
-
+import frc.robot.utils.RFSLIB;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -31,18 +30,18 @@ public class CT_SwerveDrive extends CommandBase {
 
     @Override
     public void execute() {
-        // double yAxis = -controller.getLeftY();
-        // double xAxis = -controller.getLeftX();
-        // double rAxis = -controller.getRightX();
+        double yAxis = -controller.getLeftY();
+        double xAxis = -controller.getLeftX();
+        double rAxis = -controller.getRightX();
 
-        double xAxis = -controller.getRawAxis(1);  // Field-Oriented Operator Robot X-Axis Input
-        double yAxis =  controller.getRawAxis(0);  // Field-Oriented Operator Robot Y-Axis Input
-        double rAxis = -controller.getRawAxis(4);
+        // double xAxis = -controller.getRawAxis(1);  // Field-Oriented Operator Robot X-Axis Input
+        // double yAxis =  controller.getRawAxis(0);  // Field-Oriented Operator Robot Y-Axis Input
+        // double rAxis = -controller.getRawAxis(4);
         
         /* Deadbands */
-        yAxis = RFSLIB.ApplyDB_Scld(yAxis, DEADBAND, 1.0);
-        xAxis = RFSLIB.ApplyDB_Scld(xAxis, DEADBAND, 1.0);
-        rAxis = RFSLIB.ApplyDB_Scld(rAxis, DEADBAND, 1.0);
+        yAxis = RFSLIB.ApplyDeadBand_Scaled(yAxis, DEADBAND, 1.0);
+        xAxis = RFSLIB.ApplyDeadBand_Scaled(xAxis, DEADBAND, 1.0);
+        rAxis = RFSLIB.ApplyDeadBand_Scaled(rAxis, DEADBAND, 1.0);
 
         // What the Operator Considers X-Y Axes is Different than Actual Robot Field Orientation
         translation = new Translation2d(yAxis, xAxis).times(Constants.SwerveDrivetrain.MAX_SPEED);
