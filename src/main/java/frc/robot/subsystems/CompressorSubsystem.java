@@ -14,16 +14,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CompressorSubsystem extends SubsystemBase {
 
-
-private Compressor phCompressor;
-private double pressureCompressor;
-private double currentCompressor;
-//private boolean displayDashboardData = true; 
-
+  private Compressor phCompressor;
+  private double pressureCompressor;
+  private double currentCompressor;
+  // private boolean displayDashboardData = true;
 
   /** Creates a new CompressorSubsystem. */
   public CompressorSubsystem() {
-    phCompressor = new Compressor(Constants.PNEU_HUB_CAN, PneumaticsModuleType.REVPH);
+    phCompressor = new Compressor(Constants.PNEUMATIC_COMPRESSOR, PneumaticsModuleType.REVPH);
     phCompressor.enableAnalog(90, 120);
     pressureCompressor = 0;
     currentCompressor = 0;
@@ -37,8 +35,6 @@ private double currentCompressor;
       printCompressorPressure();
     }
   }
-
-
 
   private void updateCompressorSensors() {
     pressureCompressor = phCompressor.getPressure();
@@ -54,17 +50,8 @@ private double currentCompressor;
   }
 
   private void printCompressorPressure() {
-    SmartDashboard.putNumber("Compressor Pressure: ",  getCompressorPressure());
-    SmartDashboard.putNumber("Compressor Current: ",   getCompressorCurrent());
+    SmartDashboard.putNumber("Compressor Pressure: ", getCompressorPressure());
+    SmartDashboard.putNumber("Compressor Current: ", getCompressorCurrent());
   }
 
-
-
 }
-
-
-
-
-
-
-
