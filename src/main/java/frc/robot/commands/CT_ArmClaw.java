@@ -5,7 +5,9 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ArmClawSubsystem.controlState;
+import frc.robot.utils.Debounce;
 import frc.robot.utils.RFSLIB;
+import frc.robot.Constants;
 import frc.robot.calibrations.K_LIFT;
 import frc.robot.subsystems.ArmClawSubsystem;
 import edu.wpi.first.wpilibj.Timer;
@@ -19,6 +21,8 @@ public class CT_ArmClaw extends CommandBase {
   private XboxController auxStick;
   private Timer delayTmr;
 
+  private Debounce clawTrigger;
+
   //private double liftPwr;
   private int dPadPos;
 
@@ -29,6 +33,7 @@ public class CT_ArmClaw extends CommandBase {
     //liftPwr = 0;
     delayTmr = new Timer();
     addRequirements(armclawSubsystem);
+    clawTrigger = new Debounce(Constants.DEBOUNCE);
   }
 
   // Called when the command is initially scheduled.
@@ -91,6 +96,8 @@ public class CT_ArmClaw extends CommandBase {
       default: break;
     }
     armClawSubsystem.setArmPosition();
+
+    if (clawTrigger.checkPress(auxStick.getRightBumper())) armClawSubsystem.clawToggle();
 
     armClawSubsystem.runArmAtPower(liftPower);
     armClawSubsystem.rotateClaw(clawPower);

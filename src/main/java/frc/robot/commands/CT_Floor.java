@@ -25,7 +25,7 @@ public class CT_Floor extends CommandBase {
   private Timer delayTmr;
 
   private double liftPwr;
-  Debounce rightTrigger,xbutton;
+  Debounce LeftBumper,xbutton;
 
 
   /** Creates a new CT_LiftRobot. */
@@ -35,7 +35,7 @@ public class CT_Floor extends CommandBase {
     liftPwr = 0;
     delayTmr = new Timer();
     addRequirements(floorSubsystem);
-    rightTrigger = new Debounce(Constants.DEBOUNCE);
+    LeftBumper = new Debounce(Constants.DEBOUNCE);
     xbutton = new Debounce(Constants.DEBOUNCE);
   }
 
@@ -57,7 +57,7 @@ public class CT_Floor extends CommandBase {
 
     
     //  there is a grab/ungrab, a lift and drop and go back
-    if (rightTrigger.checkPress(auxStick.getXButton())) {
+    if (LeftBumper.checkPress(auxStick.getLeftBumper())) {
       floorSubsystem.grabToggle();
       //try to grab
     }

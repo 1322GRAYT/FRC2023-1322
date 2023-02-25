@@ -21,6 +21,11 @@ public class ArmClawSubsystem extends SubsystemBase {
     Front
   }
 
+  public enum ClawState {
+    Open,
+    Closed
+  }
+
   private WPI_TalonFX ArmMotor = new WPI_TalonFX(Constants.ARM_MOTOR, "rio");
   private WPI_TalonFX ArmRotateMotor = new WPI_TalonFX(Constants.ARM_ROTATE_MOTOR, "rio");
 
@@ -41,6 +46,8 @@ public class ArmClawSubsystem extends SubsystemBase {
   private DigitalInput TrackMidTrig = new DigitalInput(Constants.SW_LIFT_TRACK_TRIG);
 
   private controlState armControlState;
+
+  private ClawState clawState;
 
   /********************************/
   /* LiftSubsystem Constructor */
@@ -70,6 +77,11 @@ public class ArmClawSubsystem extends SubsystemBase {
 
   }
 
+  public void  clawToggle() {
+    if (clawState == ClawState.Open) closeClaw();
+    if (clawState == ClawState.Closed) openClaw();
+  }
+  
   public void closeClaw() {
     clawGrabSolenoid.set(false);
   }
