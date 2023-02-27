@@ -48,10 +48,14 @@ public final class Constants {
      * 1-CONECENTERLIFT-AIR
      */
 
+    /* PWM ADDRESS ASSIGNMENTS */
+
+    public static final int CLAW_ROTATE_SERVO = 0;
+    public static final int CONE_ROTATE_SERVO = 1;
+
     /* MOTOR CAN ADDRESS ASSIGNMENTS */
-    // NOTE: These are tentative and are subject to change
     // Drive Motors (FALCON 500)
-    public static final int DRV_MTR_FT_LT = 2; // Front Left
+    public static final int DRV_MTR_FT_LT = 2; // Front Ledsx Aft
     public static final int DRV_MTR_FT_RT = 7; // Front Right
     public static final int DRV_MTR_RR_LT = 8; // Rear Left
     public static final int DRV_MTR_RR_RT = 6; // Rear Right
@@ -60,19 +64,15 @@ public final class Constants {
     public static final int SWRV_MTR_FT_RT = 4; // Front Right
     public static final int SWRV_MTR_RR_LT = 1; // Rear Left
     public static final int SWRV_MTR_RR_RT = 5; // Rear Right
-
-
-
-    public static final int CLAW_ROTATE_SERVO = 0;
     
-    // Ball Intake Motor (CAN TALON SRX)
+    // Floor Intake Motor (CAN TALON SRX)
     public static final int BALL_MTR_INTAKE = 9;
+
+    // Cone Lift Motor (CAN TALON SRX)
+    public static final int CONE_MTR_LIFT = 11;
+
     // Ball Advance Motor (FALCON 500)
     public static final int BALL_MTR_ADVANCE = 10;
-
-    // Shooter Motors (FALCON 500)
-    public static final int SHOOTER_MTR_RT = 11;
-    public static final int SHOOTER_MTR_LT = 12;
 
     // Robot Lift Motor (FALCON 500)
     public static final int ARM_MOTOR = 13;
@@ -80,26 +80,27 @@ public final class Constants {
     public static final int LIFT_MOTOR = 15;
     public static final int LIFT_ROTATE_MOTOR = 16;
 
-    /* PWM OUTPUT ADDRESS ASSIGNMENTS */
-    public static final int PWM_SHOOTER_ANGLE = 0;
-    public static final int PWM_CAMERA_TILT = 1;
-    public static final int PWM_CAMERA_PAN = 2;
-
     /* PNEUMATIC HUB CAN ADDRESS ASSIGNMENTS */
     public static final int PNEUMATIC_COMPRESSOR = 1;
 
     /* PNEUMATIC ACTUATOR ADDRESS ASSIGNMENTS */
     // TODO fix assignments
-    public static final int PNEUMATIC_ARM_TILT_LEFT_0 = 0;
-    public static final int PNEUMATIC_ARM_TILT_LEFT_1 = 1;
-    public static final int PNEUMATIC_ARM_TILT_RIGHT_0 = 2;
-    public static final int PNEUMATIC_ARM_TILT_RIGHT_1 = 3;
-    public static final int PNEUMATIC_CLAW = 4;
+    public static final int PNEUMATIC_ARM_TILT_INITIAL_0 = 2;
+    public static final int PNEUMATIC_ARM_TILT_INITIAL_1 = 3;
+    public static final int PNEUMATIC_ARM_TILT_SECONDARY_0 = 10;
+    public static final int PNEUMATIC_ARM_TILT_SECONDARY_1 = 11;
 
-    public static final int PNEUMATIC_LIFT_CONE_GRAB = 5;
-    
-    public static final int PNEUMATIC_FLOOR_GRAB_0 = 6;
-    public static final int PNEUMATIC_FLOOR_GRAB_1 = 7;
+    public static final int PNEUMATIC_CLAW_0 = 6;
+    public static final int PNEUMATIC_CLAW_1 = 7;
+
+    public static final int PNEUMATIC_LIFT_CONE_GRAB_0 = 4;
+    public static final int PNEUMATIC_LIFT_CONE_GRAB_1 = 5;
+
+    public static final int PNEUMATIC_FLOOR_GRAB_L_0 = 0;
+    public static final int PNEUMATIC_FLOOR_GRAB_L_1 = 1;
+
+    public static final int PNEUMATIC_FLOOR_GRAB_R_0 = 12;
+    public static final int PNEUMATIC_FLOOR_GRAB_R_1 = 13;
 
 
 

@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class FloorSubsystem extends SubsystemBase {
+public class FloorPickup extends SubsystemBase {
 //this is to do the floor grab, rotate and drop....
 
 
@@ -79,12 +79,12 @@ floor motor
       haltLift();
     }
 
-  private DigitalInput TrackMidTrig = new DigitalInput(Constants.SW_LIFT_TRACK_TRIG);
+  //private DigitalInput TrackMidTrig = new DigitalInput(Constants.SW_LIFT_TRACK_TRIG);
 
   /********************************/
   /* LiftSubsystem Constructor */
   /********************************/
-  public FloorSubsystem() {
+  public FloorPickup() {
 
     state = GrabState.Open;
     /*****************************************************************/

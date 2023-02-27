@@ -9,7 +9,7 @@ import frc.robot.utils.RFSLIB;
 import frc.robot.Constants;
 import frc.robot.calibrations.K_LIFT;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.FloorSubsystem.GrabState;
+import frc.robot.subsystems.FloorPickup.GrabState;
 
 import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
 
@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
 public class CT_Floor extends CommandBase {
-  private FloorSubsystem floorSubsystem;
+  private FloorPickup floorSubsystem;
   private XboxController auxStick;
   private Timer delayTmr;
 
@@ -29,7 +29,7 @@ public class CT_Floor extends CommandBase {
 
 
   /** Creates a new CT_LiftRobot. */
-  public CT_Floor(FloorSubsystem floorSubsystem, XboxController auxStick) {
+  public CT_Floor(FloorPickup floorSubsystem, XboxController auxStick) {
     this.floorSubsystem = floorSubsystem;
     this.auxStick = auxStick;
     liftPwr = 0;

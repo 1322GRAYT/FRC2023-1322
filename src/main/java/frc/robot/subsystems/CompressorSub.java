@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class CompressorSubsystem extends SubsystemBase {
+public class CompressorSub extends SubsystemBase {
 
   private Compressor phCompressor;
   private double pressureCompressor;
@@ -20,7 +20,7 @@ public class CompressorSubsystem extends SubsystemBase {
   // private boolean displayDashboardData = true;
 
   /** Creates a new CompressorSubsystem. */
-  public CompressorSubsystem() {
+  public CompressorSub() {
     phCompressor = new Compressor(Constants.PNEUMATIC_COMPRESSOR, PneumaticsModuleType.REVPH);
     phCompressor.enableAnalog(90, 120);
     pressureCompressor = 0;

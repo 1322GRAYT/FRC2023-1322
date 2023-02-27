@@ -29,13 +29,12 @@ public class RobotContainer {
   // SendableChooser<Command>();
   // private final SwerveDriveSubsystem swerveSubsystem = new
   // SwerveDriveSubsystem();
-  // private final CompressorSubsystem compressorSubsystem = new
-  // CompressorSubsystem();
+  private final CompressorSub compressorSubsystem = new CompressorSub(); // Don't comment this out unless you want the compressor to stop
   private final SwerveDrivetrain swerveSubsystem = new SwerveDrivetrain();
   // private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   // private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-  private final ArmClawSubsystem armClawSubsystem = new ArmClawSubsystem();
-  private final FloorSubsystem floorSubsystem = new FloorSubsystem();
+  private final LiftElevator armClawSubsystem = new LiftElevator();
+  private final FloorPickup floorSubsystem = new FloorPickup();
   private final Camera cameraSubsystem = new Camera();
   private XboxController driverStick = new XboxController(Constants.DRVR_CNTRLR);
   private XboxController auxStick = new XboxController(Constants.AUX_CNTRLR);
