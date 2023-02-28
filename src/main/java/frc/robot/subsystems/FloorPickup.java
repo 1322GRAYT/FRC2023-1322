@@ -1,160 +1,103 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
-import frc.robot.calibrations.K_LIFT;
-
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
-import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class FloorPickup extends SubsystemBase {
-//this is to do the floor grab, rotate and drop....
 
-
-/*
-there are 4 floor sensors, 1-4
-2 air floor grabs
-floor motor
-*/
-
+  // Resources
   private WPI_TalonFX FloorMotor = new WPI_TalonFX(Constants.LIFT_MOTOR, "rio");
+  private DoubleSolenoid GrabberLeft = new DoubleSolenoid(PneumaticsModuleType.REVPH,
+      Constants.PNEUMATIC_FLOOR_GRAB_L_0, Constants.PNEUMATIC_FLOOR_GRAB_L_1);
+  private DoubleSolenoid GrabberRight = new DoubleSolenoid(PneumaticsModuleType.REVPH,
+      Constants.PNEUMATIC_FLOOR_GRAB_R_0, Constants.PNEUMATIC_FLOOR_GRAB_R_1);
+
+  // Internal Definitions
+  public enum GrabState {
+    Open, LeftClose, RightClose, Closed;
+  };
+
+  GrabState grabState;
+
+  double floorMotorPower = 0;
+  ControlMode floorMotorMode = ControlMode.PercentOutput;
+
   
-  //private Solenoid floorGrab0 = new Solenoid(PneumaticsModuleType.REVPH, Constants.PNEUMATIC_LIFT_CONE_GRAB);
 
-  private Solenoid FloorGrabSolenoid0 = new Solenoid(PneumaticsModuleType.REVPH,Constants.PNEUMATIC_FLOOR_GRAB_0);
-  private Solenoid FloorGrabSolenoid1 = new Solenoid(PneumaticsModuleType.REVPH,Constants.PNEUMATIC_FLOOR_GRAB_1);
-
-
-   public enum GrabState {
-    Open,
-    Closed
-   };
-
-
-  GrabState state;
-
-  public GrabState getState() { 
-    return state;
-  }
-  
-  public void grabToggle() {
-    if (state == GrabState.Open) grabClose();
-    if (state == GrabState.Closed) grabOpen();
-
-  }
-
-  public void grabOpen() {
-    FloorGrabSolenoid0.set(false);
-    FloorGrabSolenoid1.set(false);
-  }
-
-  public void grabClose() {
-    FloorGrabSolenoid0.set(true);
-    FloorGrabSolenoid1.set(true);  }
-
-
-    public void liftDropReset() {
-      //move the lift to the top
-      while (! detectTrackLimitRear() ) {
-        runLiftAtPwr(1);
-      }
-      haltLift();
-
-      // drop the cone
-      grabOpen();
-      try {
-        Thread.sleep(200);
-      }
-      catch (InterruptedException ie) {
-      }
-
-      //move the lift to the bottom
-      while (! detectTrackLimitFront() ) {
-        runLiftAtPwr(-1);
-      }
-      haltLift();
-    }
-
-  //private DigitalInput TrackMidTrig = new DigitalInput(Constants.SW_LIFT_TRACK_TRIG);
-
-  /********************************/
-  /* LiftSubsystem Constructor */
-  /********************************/
+  /**
+   * Constructor
+   */
   public FloorPickup() {
 
-    state = GrabState.Open;
-    /*****************************************************************/
-    /* Lift Motor Controller Configurations */
-    /*****************************************************************/
+    grabState = GrabState.Open;
+
+    // Floor Pickup Motor Configuration
     FloorMotor.configFactoryDefault();
     FloorMotor.setSensorPhase(false);
     FloorMotor.setInverted(false);
     FloorMotor.setNeutralMode(NeutralMode.Brake);
-
-    FloorMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, (int) 0, (int) 0);
-    FloorMotor.setSelectedSensorPosition(0);
-    FloorMotor.config_kP(0, K_LIFT.KeLIFT_K_Prop);
-    FloorMotor.config_kI(0, K_LIFT.KeLIFT_K_Intgl);
-    FloorMotor.config_kD(0, K_LIFT.KeLIFT_K_Deriv);
-    FloorMotor.config_IntegralZone(0, K_LIFT.KeLIFT_r_IntglErrMaxEnbl);
-    FloorMotor.config_kF(0, K_LIFT.KeLIFT_K_FdFwd);
-
-    FloorMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
-    FloorMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
-
   }
 
-  /**
-   * Method: getLiftMtr - Robot Lift System - Gets the Robot Lift Motor Object
-   * 
-   * @return ShooterMotor; (WPI_TalonFX: Lift Motor Object)
-   */
-  public WPI_TalonFX getLiftMtr() {
-    return FloorMotor;
+  // Getter Interfaces
+
+  public GrabState getGrabState() {
+    return grabState;
   }
 
-  public double getLiftPstn() {
-    return getLiftMtr().getSelectedSensorPosition();
+  public double getFloorMotorPower() {
+    return floorMotorPower;
   }
 
-  public void runLiftAtSpd(double speed) {
-    getLiftMtr().set(ControlMode.Velocity, speed);
+  // Setter Interfaces
+
+  public void setGrabState(GrabState grabState) {
+    this.grabState = grabState;
   }
 
-  public void runLiftAtPwr(double pwr) {
-    getLiftMtr().set(ControlMode.PercentOutput, pwr);
+  public void setFloorMotorPower(double floorMotorPower) {
+    floorMotorMode = ControlMode.PercentOutput;
+    this.floorMotorPower = floorMotorPower;
   }
 
-  public void haltLift() {
-    getLiftMtr().set(ControlMode.PercentOutput, 0);
+  // Control Cycles
+
+
+  private void ControlFloorMotor(){
+    FloorMotor.set(floorMotorMode, floorMotorPower);
   }
 
-  public void pidLiftPstn(boolean activate, double pstn) {
-    if (activate == true) {
-      getLiftMtr().set(ControlMode.Position, pstn);
-    } else {
-      haltLift();
+  private void ControlGrabber(){
+    Value setL = Value.kOff;
+    Value setR = Value.kOff;
+
+    switch(grabState){
+      case Closed:
+      setL = Value.kReverse;
+      setR = Value.kReverse;
+        break;
+      case Open:
+      setL = Value.kForward;
+      setR = Value.kForward;
+        break;
+      case LeftClose:
+      setL = Value.kReverse;
+      setR = Value.kForward;
+        break;
+      case RightClose:
+      setL = Value.kForward;
+      setR = Value.kReverse;
+        break;
+      default:
+        break;
     }
-  }
 
-  public boolean detectTrackLimitFront() {
-    boolean limitDetected = false;
-    if (FloorMotor.getSensorCollection().isFwdLimitSwitchClosed() == 1) {
-      limitDetected = true;
-    }
-    return limitDetected;
-  }
-
-  public boolean detectTrackLimitRear() {
-    boolean limitDetected = false;
-    if (FloorMotor.getSensorCollection().isRevLimitSwitchClosed() == 1) {
-      limitDetected = true;
-    }
-    return limitDetected;
+    GrabberLeft.set(setL);
+    GrabberRight.set(setR);
   }
 
 
@@ -166,6 +109,8 @@ floor motor
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    ControlFloorMotor();
+    ControlGrabber();
   }
 
   @Override

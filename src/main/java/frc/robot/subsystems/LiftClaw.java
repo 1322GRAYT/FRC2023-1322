@@ -16,49 +16,42 @@ public class LiftClaw extends SubsystemBase {
 
   // Internal Definitions
   public enum ClawState {
-    Open,
-    Closed
+    Open, Closed;
   }
+  private ClawState clawState;
 
   // Resource Definitions
   private Servo clawRotate = new Servo(Constants.CLAW_ROTATE_SERVO);
-  private ClawState clawState;
-
   private DoubleSolenoid clawGrabSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.PNEUMATIC_CLAW_0, Constants.PNEUMATIC_CLAW_1);
   private AnalogInput clawAngle = new AnalogInput(Constants.CLAW_ANGLE_SENSOR);
 
-  /** Creates a new Claw. */
+  /**
+   * Constructor
+   */
   public LiftClaw() {}
 
-  public void  clawToggle() {
-    if (clawState == ClawState.Open) closeClaw();
-    if (clawState == ClawState.Closed) openClaw();
-  }
-  
-  public void closeClaw() {
-    clawGrabSolenoid.set(Value.kReverse);
-  }
-
-  public void openClaw() {
-    clawGrabSolenoid.set(Value.kForward);
-  }
-
-  public void rotateClaw(double power) {
-    double scale_Factor = 10;
-    double currentPosition = clawRotate.get(); // this is where it is...
-    double endPosition = 0;
-    endPosition = currentPosition + (power * scale_Factor);
-    endPosition = (endPosition > 127) ? 127 : endPosition;
-    endPosition = (endPosition < -127) ? -127 : endPosition;
-    clawRotate.set(endPosition);
-  }
+  // Getter Interfaces
 
   public double getClawPosition() {
     return clawRotate.get();
   }
   
+  // Setter Interfaces
+
+
+  // Control Cycles
+
+  public void init_periodic() {
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    // This method will be called once per scheduler run during simulation
   }
 }

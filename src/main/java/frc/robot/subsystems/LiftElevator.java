@@ -53,6 +53,7 @@ public class LiftElevator extends SubsystemBase {
     elevatorPitchState = pitchState.Back;
     final var ConfigArmLift = new configArmLift();
     ElevatorMotor.configAllSettings(ConfigArmLift._fx);
+    ElevatorMotor.setInverted(true);
   }
 
   // Set Interfaces
