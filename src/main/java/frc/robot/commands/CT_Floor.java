@@ -7,8 +7,6 @@ package frc.robot.commands;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.FloorPickup.GrabState;
 import frc.robot.utils.Direction;
-
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
