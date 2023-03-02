@@ -50,7 +50,7 @@ public final class Constants {
 
     /* PWM ADDRESS ASSIGNMENTS */
 
-    public static final int CLAW_ROTATE_SERVO = 0;
+    public static final int CLAW_YAW_SERVO = 0;
     public static final int CONE_ROTATE_SERVO = 1;
 
     /* MOTOR CAN ADDRESS ASSIGNMENTS */
@@ -64,21 +64,18 @@ public final class Constants {
     public static final int SWRV_MTR_FT_RT = 4; // Front Right
     public static final int SWRV_MTR_RR_LT = 1; // Rear Left
     public static final int SWRV_MTR_RR_RT = 5; // Rear Right
-    
-    // Floor Intake Motor (CAN TALON SRX)
-    public static final int BALL_MTR_INTAKE = 9;
+
+    // Floor Pickup
+    public static final int FLOOR_MOTOR = 9;
 
     // Cone Lift Motor (CAN TALON SRX)
     public static final int CONE_MTR_LIFT = 11;
+    
+    // Elevator
+    public static final int ELEVATOR_MOTOR = 10;
 
-    // Ball Advance Motor (FALCON 500)
-    public static final int BALL_MTR_ADVANCE = 10;
-
-    // Robot Lift Motor (FALCON 500)
-    public static final int ARM_MOTOR = 13;
-    public static final int ARM_ROTATE_MOTOR = 14;
-    public static final int LIFT_MOTOR = 15;
-    public static final int LIFT_ROTATE_MOTOR = 16;
+    // Claw Motor
+    public static final int CLAW_PITCH = 12;
 
     /* PNEUMATIC HUB CAN ADDRESS ASSIGNMENTS */
     public static final int PNEUMATIC_COMPRESSOR = 1;
@@ -160,6 +157,7 @@ public final class Constants {
     public static final int CLAW_ANGLE_SENSOR=0;
 
     public static final int TOGGLE_AUTO_CLAW_MOVEMENT = BUTTON_A;
+
     public static final class SwerveDrivetrain {
 
         /* Gyro */

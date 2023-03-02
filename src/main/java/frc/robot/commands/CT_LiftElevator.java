@@ -14,14 +14,15 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
-public class CT_ArmClaw extends CommandBase {
+public class CT_LiftElevator extends CommandBase {
   private LiftElevator liftElevator;
   private XboxController auxStick;
 
   /** Creates a new CT_LiftRobot. */
-  public CT_ArmClaw(LiftElevator liftElevator, XboxController auxStick) {
+  public CT_LiftElevator(LiftElevator liftElevator, XboxController auxStick) {
     this.liftElevator = liftElevator;
     this.auxStick = auxStick;
+    addRequirements(liftElevator);
   }
 
   // Called when the command is initially scheduled.

@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class FloorPickup extends SubsystemBase {
 
   // Resources
-  private WPI_TalonFX FloorMotor = new WPI_TalonFX(Constants.LIFT_MOTOR, "rio");
+  private WPI_TalonFX FloorMotor = new WPI_TalonFX(Constants.FLOOR_MOTOR);
   private DoubleSolenoid GrabberLeft = new DoubleSolenoid(PneumaticsModuleType.REVPH,
       Constants.PNEUMATIC_FLOOR_GRAB_L_0, Constants.PNEUMATIC_FLOOR_GRAB_L_1);
   private DoubleSolenoid GrabberRight = new DoubleSolenoid(PneumaticsModuleType.REVPH,

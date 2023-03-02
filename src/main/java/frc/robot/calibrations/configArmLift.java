@@ -13,7 +13,7 @@ import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 /** Add your docs here. */
 public class configArmLift {
-    public TalonFXConfiguration _fx;
+    public TalonFXConfiguration _fx = new TalonFXConfiguration();
 
     public configArmLift() {
         // TODO: Verify configuration from json to here

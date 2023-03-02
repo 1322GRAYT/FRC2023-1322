@@ -33,15 +33,15 @@ public class LiftElevator extends SubsystemBase {
 
   }
 
-  private pitchState elevatorPitchState;
-  private double setInput;
-  private ControlMode setControlMethod;
+  private pitchState elevatorPitchState = pitchState.Back;
+  private double setInput = 0;
+  private ControlMode setControlMethod = ControlMode.PercentOutput;
 
   // Resources
-  private WPI_TalonFX ElevatorMotor = new WPI_TalonFX(Constants.ARM_MOTOR);
-  private DoubleSolenoid InitialArmSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,
+  private WPI_TalonFX ElevatorMotor = new WPI_TalonFX(Constants.ELEVATOR_MOTOR);
+  private DoubleSolenoid InitialArmSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
       Constants.PNEUMATIC_ARM_TILT_INITIAL_0, Constants.PNEUMATIC_ARM_TILT_INITIAL_1);
-  private DoubleSolenoid SecondaryArmSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,
+  private DoubleSolenoid SecondaryArmSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
       Constants.PNEUMATIC_ARM_TILT_SECONDARY_0, Constants.PNEUMATIC_ARM_TILT_SECONDARY_1);
 
   private DigitalInput TrackMidTrig = new DigitalInput(Constants.SW_LIFT_TRACK_TRIG);
@@ -90,7 +90,7 @@ public class LiftElevator extends SubsystemBase {
 
   public void setElevatorPercentPower(double setPower) {
     setControlMethod = ControlMode.PercentOutput;
-    setInput = setPower;
+    setInput = -setPower;
   }
 
   // Get Interfaces
@@ -165,16 +165,16 @@ public class LiftElevator extends SubsystemBase {
 
     switch (elevatorPitchState) {
       case Back:
-        setInitial = kReverse;
-        setSecondary = kReverse;
+        setInitial = kForward;
+        setSecondary = kForward;
         break;
       case Mid:
         setInitial = kForward;
         setSecondary = kReverse;
         break;
       case Front:
-        setInitial = kForward;
-        setSecondary = kForward;
+        setInitial = kReverse;
+        setSecondary = kReverse;
         break;
     }
     InitialArmSolenoid.set(setInitial);

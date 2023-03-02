@@ -31,10 +31,10 @@ public class RobotContainer {
   // SwerveDriveSubsystem();
   private final CompressorSub compressorSubsystem = new CompressorSub(); // Don't comment this out unless you want the compressor to stop
   private final SwerveDrivetrain swerveSubsystem = new SwerveDrivetrain();
-  // private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  // private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-  private final LiftElevator armClawSubsystem = new LiftElevator();
+  private final LiftElevator liftElevatorSubsystem = new LiftElevator();
+  private final LiftClaw liftClawSubsystem = new LiftClaw();
   private final FloorPickup floorSubsystem = new FloorPickup();
+
   private final Camera cameraSubsystem = new Camera();
   private XboxController driverStick = new XboxController(Constants.DRVR_CNTRLR);
   private XboxController auxStick = new XboxController(Constants.AUX_CNTRLR);
@@ -101,7 +101,6 @@ public class RobotContainer {
     swerveSubsystem.init_periodic();
     // need a new subsystem for new lift.
     floorSubsystem.init_periodic();
-    armClawSubsystem.init_periodic();
     // intakeSubsystem.init_periodic();
     // shooterSubsystem.init_periodic();
   }
@@ -132,15 +131,6 @@ public class RobotContainer {
     final JoystickButton auxButton_BumpLT = new JoystickButton(auxStick, Constants.BUMPER_LEFT);
     final JoystickButton auxButton_BumpRT = new JoystickButton(auxStick, Constants.BUMPER_RIGHT);
 
-    //auxButton_X.onTrue(new CT_ArmClaw(armClawSubsystem, auxStick));
-
-    
-    /*
-    auxButton_X.onTrue(new CC_IntakeArmsLower(intakeSubsystem));
-    auxButton_Y.onTrue(new CC_IntakeArmsRaise(intakeSubsystem));
-    auxButton_BumpLT.onTrue(new CC_ShooterServoCmd(shooterSubsystem, -1));
-    auxButton_BumpRT.onTrue(new CC_ShooterServoCmd(shooterSubsystem, 1));
-    */
 
   }
 
@@ -149,7 +139,9 @@ public class RobotContainer {
     // ManualDrive(swerveSubsystem, driverStick));
     // Subsystem, Control Joystick, fieldCentric, openLoop
     swerveSubsystem.setDefaultCommand(new CT_SwerveDrive(swerveSubsystem, driverStick, true, true));
-    armClawSubsystem.setDefaultCommand(new CT_ArmClaw(armClawSubsystem, auxStick));
+    floorSubsystem.setDefaultCommand(new CT_Floor(floorSubsystem, auxStick));
+    liftElevatorSubsystem.setDefaultCommand(new CT_LiftElevator(liftElevatorSubsystem, auxStick));
+    liftClawSubsystem.setDefaultCommand(new CT_LiftCLaw(liftClawSubsystem, auxStick));
     cameraSubsystem.setDefaultCommand(new CC_CameraTrackTarget(cameraSubsystem));
   }
 

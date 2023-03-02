@@ -4,18 +4,13 @@
 
 package frc.robot.commands;
 
-import frc.robot.utils.Debounce;
-import frc.robot.utils.RFSLIB;
 import frc.robot.Constants;
-import frc.robot.calibrations.K_LIFT;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.FloorPickup.GrabState;
-
-import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
+import frc.robot.utils.Direction;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
@@ -24,50 +19,47 @@ public class CT_Floor extends CommandBase {
   private XboxController auxStick;
   private Timer delayTmr;
 
-  private double liftPwr;
-  Debounce LeftBumper,xbutton;
 
+  
 
   /** Creates a new CT_LiftRobot. */
   public CT_Floor(FloorPickup floorSubsystem, XboxController auxStick) {
     this.floorSubsystem = floorSubsystem;
     this.auxStick = auxStick;
-    liftPwr = 0;
     delayTmr = new Timer();
     addRequirements(floorSubsystem);
-    LeftBumper = new Debounce(Constants.DEBOUNCE);
-    xbutton = new Debounce(Constants.DEBOUNCE);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Robot Lift is Armed!");
     delayTmr.stop();
     delayTmr.reset();
   }
 
-
-
-
-  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    
-    //  there is a grab/ungrab, a lift and drop and go back
-    if (LeftBumper.checkPress(auxStick.getLeftBumper())) {
-      floorSubsystem.grabToggle();
-      //try to grab
+    switch(Direction.valueOf(auxStick.getPOV())){
+      case UP:
+      floorSubsystem.setFloorMotorPower(0.5);
+      break;
+      case DOWN:
+      floorSubsystem.setFloorMotorPower(-0.5);
+      break;
+      case LEFT:
+      floorSubsystem.setGrabState(GrabState.Open);
+      break;
+      case RIGHT:
+      floorSubsystem.setGrabState(GrabState.Closed);
+      break;
+      case NONE:
+      default:
+      floorSubsystem.setFloorMotorPower(0);
+      break;
     }
-    if (xbutton.checkPress(auxStick.getXButton())) {
-      //lift, drop and go back
-      floorSubsystem.liftDropReset();
-    }
-    SmartDashboard.putBoolean("LiftSwFront: ",  floorSubsystem.detectTrackLimitFront());
-    SmartDashboard.putBoolean("LiftSwBack: ",   floorSubsystem.detectTrackLimitRear());
-    SmartDashboard.putString("GrabState ",    ((floorSubsystem.getState() == GrabState.Open)?"Open":"Close"));
+
   }
 
   // Called once the command ends or is interrupted.
