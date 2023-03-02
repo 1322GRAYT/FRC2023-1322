@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import frc.robot.Constants;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.FloorPickup.GrabState;
 import frc.robot.utils.Direction;
@@ -17,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class CT_Floor extends CommandBase {
   private FloorPickup floorSubsystem;
   private XboxController auxStick;
-  private Timer delayTmr;
 
 
   
@@ -26,15 +24,12 @@ public class CT_Floor extends CommandBase {
   public CT_Floor(FloorPickup floorSubsystem, XboxController auxStick) {
     this.floorSubsystem = floorSubsystem;
     this.auxStick = auxStick;
-    delayTmr = new Timer();
     addRequirements(floorSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    delayTmr.stop();
-    delayTmr.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,10 +38,10 @@ public class CT_Floor extends CommandBase {
 
     switch(Direction.valueOf(auxStick.getPOV())){
       case UP:
-      floorSubsystem.setFloorMotorPower(0.5);
+      floorSubsystem.setFloorMotorPower(0.2);
       break;
       case DOWN:
-      floorSubsystem.setFloorMotorPower(-0.5);
+      floorSubsystem.setFloorMotorPower(-0.2);
       break;
       case LEFT:
       floorSubsystem.setGrabState(GrabState.Open);
@@ -59,6 +54,9 @@ public class CT_Floor extends CommandBase {
       floorSubsystem.setFloorMotorPower(0);
       break;
     }
+    floorSubsystem.setConeMotorPower(auxStick.getLeftTriggerAxis()-auxStick.getRightTriggerAxis());
+    floorSubsystem.setConeRotatePower(auxStick.getBackButton()?1:0);
+    floorSubsystem.setConeGrab(auxStick.getStartButton());
 
   }
 

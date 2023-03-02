@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class Camera extends SubsystemBase {
-  final static Servo Tilt = new Servo(1);
-  final static Servo Pan = new Servo(2);
+  final static Servo Tilt = new Servo(4);
+  final static Servo Pan = new Servo(3);
 
   final static double CAMERA_ANGLE_TOLERANCE = 1;
 

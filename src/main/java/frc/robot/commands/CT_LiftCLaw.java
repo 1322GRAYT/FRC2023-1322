@@ -12,12 +12,14 @@ import frc.robot.subsystems.LiftClaw.ClawState;
 public class CT_LiftCLaw extends CommandBase {
   private LiftClaw liftClaw;
   private XboxController auxStick;
+  private XboxController driverStick;
 
   /** Creates a new CT_LiftCLaw. */
-  public CT_LiftCLaw(LiftClaw liftClaw, XboxController auxStick) {
+  public CT_LiftCLaw(LiftClaw liftClaw, XboxController auxStick, XboxController driverStick) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.liftClaw = liftClaw;
     this.auxStick = auxStick;
+    this.driverStick = driverStick;
 
     addRequirements(liftClaw);
   }
@@ -30,8 +32,8 @@ public class CT_LiftCLaw extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    liftClaw.setClawState(auxStick.getRightBumper() ? ClawState.Open : ClawState.Closed);
-    liftClaw.setPitchSetPoint(auxStick.getRightY() * 0.5); // TODO: transfer scaling to motor controller maybe
+    liftClaw.setClawState(driverStick.getRightBumper() ? ClawState.Open : ClawState.Closed);
+    liftClaw.setPitchSetPoint(auxStick.getRightY() * 0.25); // TODO: transfer scaling to motor controller maybe
     liftClaw.setYawPower(auxStick.getRightX());
   }
 
