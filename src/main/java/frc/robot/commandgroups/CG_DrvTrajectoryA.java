@@ -46,6 +46,11 @@ public class CG_DrvTrajectoryA extends SequentialCommandGroup {
     var final_P = new Pose2d(Units.feetToMeters(-1.0), Units.feetToMeters(0.0),
         Rotation2d.fromDegrees(0));
 
+    List<Pose2d> poses = new ArrayList<Pose2d>();
+    poses.add(start_P);
+    poses.add(final_P);
+
+
     List<Translation2d> interiorWaypoints = new ArrayList<Translation2d>();
 
     interiorWaypoints.add(new Translation2d(0, new Rotation2d(0)));
@@ -61,7 +66,8 @@ public class CG_DrvTrajectoryA extends SequentialCommandGroup {
      * new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
      * trajectoryConfig);
      */
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(start_P, interiorWaypoints, final_P, trajectoryConfig);
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(poses, trajectoryConfig);
+    //Trajectory trajectory = TrajectoryGenerator.generateTrajectory(start_P, interiorWaypoints, final_P, trajectoryConfig);
 
     // 3. Define PID controllers for tracking trajectory
     PIDController xController = Constants.Auton.PX_CONTROLLER;
