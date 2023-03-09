@@ -45,7 +45,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure Autonomous Selections Available
-     m_chooser.setDefaultOption("Default Auto", new CA_DriveDeadrecken(swerveSubsystem, -0.5, 2));
+     m_chooser.setDefaultOption("Default Auto", new CG_PlaceCone(liftClawSubsystem, liftElevatorSubsystem));
 
     SmartDashboard.putData("Auto choices: ", m_chooser);
 
@@ -104,6 +104,10 @@ public class RobotContainer {
     final JoystickButton auxButton_BumpLT = new JoystickButton(auxStick, Constants.BUMPER_LEFT);
     final JoystickButton auxButton_BumpRT = new JoystickButton(auxStick, Constants.BUMPER_RIGHT);
 
+    // auxButton_A.onTrue(new CA_PitchElevator(liftElevatorSubsystem, true));
+    // auxButton_Y.onTrue(new CA_Elevator(liftElevatorSubsystem, true));
+    // auxButton_B.toggleOnTrue(new CA_ToggleClaw(liftClawSubsystem));
+
 
   }
 
@@ -116,6 +120,7 @@ public class RobotContainer {
     liftElevatorSubsystem.setDefaultCommand(new CT_LiftElevator(liftElevatorSubsystem, auxStick));
     liftClawSubsystem.setDefaultCommand(new CT_LiftCLaw(liftClawSubsystem, auxStick, driverStick));
     cameraSubsystem.setDefaultCommand(new CC_CameraTrackTarget(cameraSubsystem));
+
   }
 
   /**

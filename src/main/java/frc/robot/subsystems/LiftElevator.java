@@ -129,6 +129,14 @@ public class LiftElevator extends SubsystemBase {
     return (ElevatorMotor.getSensorCollection().isRevLimitSwitchClosed() == 1);
   }
 
+  public boolean getPitchOutSwitch() {
+    return (ElevatorPitchMotor.getSensorCollection().isFwdLimitSwitchClosed() == 1);
+  }
+
+public boolean getPitchInSwitch() {
+    return (ElevatorPitchMotor.getSensorCollection().isRevLimitSwitchClosed() == 1);
+}
+
   public ControlMode getPitchState(){
     return ElevatorPitchMotor.getControlMode();
   }
@@ -178,5 +186,7 @@ public class LiftElevator extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
+
 
 }
