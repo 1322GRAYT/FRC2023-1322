@@ -90,7 +90,7 @@ public class CG_DrvTrajectoryA extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         // Run trajectory
-        new InstantCommand(() -> this.drive.resetOdometry(trajectory.getInitialPose())),
+        new InstantCommand(() -> this.drive.resetOdometry(start_P)),
         swerveControllerCommand,
         new InstantCommand(() -> this.drive.stopSwerveDrvMotors())
     // new InstantCommand(() -> this.drive.stopSwerveRotMotors())

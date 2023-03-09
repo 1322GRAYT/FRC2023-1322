@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SendableChooser<Command> m_chooser = new SendableChooser<Command>();
- 
+
   private final CompressorSub compressorSubsystem = new CompressorSub();
   private final SwerveDrivetrain swerveSubsystem = new SwerveDrivetrain();
   private final LiftElevator liftElevatorSubsystem = new LiftElevator();
@@ -45,8 +45,9 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure Autonomous Selections Available
-     m_chooser.setDefaultOption("Default Auto", new CA_DriveDeadrecken(swerveSubsystem, -0.5, 2));
 
+    m_chooser.setDefaultOption("Default Auto", new CA_DriveDeadrecken(swerveSubsystem, -0.5, 2));
+    m_chooser.addOption("Greg test1", new CG_DrvTrajectoryA(swerveSubsystem));
     SmartDashboard.putData("Auto choices: ", m_chooser);
 
     // Configure the button bindings
@@ -96,14 +97,13 @@ public class RobotContainer {
     /* BEGIN AUXILLARY STICK BUTTON ASSIGNMENTS */
 
     // need to update this
-    //final Trigger rightTriggerButton = new Trigger( setArmPosition);
+    // final Trigger rightTriggerButton = new Trigger( setArmPosition);
     final JoystickButton auxButton_A = new JoystickButton(auxStick, Constants.BUTTON_A);
     final JoystickButton auxButton_B = new JoystickButton(auxStick, Constants.BUTTON_B);
     final JoystickButton auxButton_X = new JoystickButton(auxStick, Constants.BUTTON_X);
     final JoystickButton auxButton_Y = new JoystickButton(auxStick, Constants.BUTTON_Y);
     final JoystickButton auxButton_BumpLT = new JoystickButton(auxStick, Constants.BUMPER_LEFT);
     final JoystickButton auxButton_BumpRT = new JoystickButton(auxStick, Constants.BUMPER_RIGHT);
-
 
   }
 
