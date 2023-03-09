@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Constants;
@@ -122,6 +123,12 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
   }
 
+  public void secretDrive(double power){
+    for (int i = 0; i < swerveModules.length; i++) {
+      swerveModules[i].driveMotor.set(ControlMode.PercentOutput, power);
+    }
+  }
+
   /* Gyro */
   public void zeroGyro() {
     this.gyro.reset();
@@ -145,7 +152,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Roll Gyro: ", roll);
     SmartDashboard.putNumber("Pitch Gyro: ", pitch);
     SmartDashboard.putNumber("Yaw Gyro: ", rawYaw);
-    double yaw = optimizeGyro(pitch);
+    double yaw = optimizeGyro(rawYaw);
     return Constants.SwerveDrivetrain.INVERT_GYRO ? Rotation2d.fromDegrees(360 - yaw) : Rotation2d.fromDegrees(yaw);
   }
 

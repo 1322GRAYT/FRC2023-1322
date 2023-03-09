@@ -18,7 +18,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 public class SwerveModule {
     public int moduleNumber;
 
-    private TalonFX driveMotor;
+    public TalonFX driveMotor;
     private TalonFX angleMotor;
     private AnalogPotentiometer angleEncoder;
     private double angleOffset;

@@ -48,6 +48,8 @@ public final class Constants {
      * 1-CONECENTERLIFT-AIR
      */
 
+    
+
     /* PWM ADDRESS ASSIGNMENTS */
 
     public static final int CLAW_YAW_SERVO = 0;
@@ -73,6 +75,7 @@ public final class Constants {
     
     // Elevator
     public static final int ELEVATOR_MOTOR = 10;
+    public static final int ELEVATOR_PITCH_MOTOR = 13;
 
     // Claw Motor
     public static final int CLAW_PITCH = 12;

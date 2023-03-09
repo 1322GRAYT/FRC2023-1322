@@ -2,15 +2,12 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants;
 import frc.robot.calibrations.configArmLift;
+import frc.robot.calibrations.configArmPitch;
 
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 
 
 // TODO: Finish documentation
@@ -33,16 +30,15 @@ public class LiftElevator extends SubsystemBase {
 
   }
 
-  private pitchState elevatorPitchState = pitchState.Back;
-  private double setInput = 0;
-  private ControlMode setControlMethod = ControlMode.PercentOutput;
+  private double setElevatorInput = 0;
+  private ControlMode setElevatorControlMethod = ControlMode.PercentOutput;
+
+  private double setPitchInput = 0;
+  private ControlMode setPitchControlMethod = ControlMode.PercentOutput;
 
   // Resources
   private WPI_TalonFX ElevatorMotor = new WPI_TalonFX(Constants.ELEVATOR_MOTOR);
-  private DoubleSolenoid InitialArmSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
-      Constants.PNEUMATIC_ARM_TILT_INITIAL_0, Constants.PNEUMATIC_ARM_TILT_INITIAL_1);
-  private DoubleSolenoid SecondaryArmSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
-      Constants.PNEUMATIC_ARM_TILT_SECONDARY_0, Constants.PNEUMATIC_ARM_TILT_SECONDARY_1);
+  private WPI_TalonFX ElevatorPitchMotor = new WPI_TalonFX(Constants.ELEVATOR_PITCH_MOTOR);
 
   private DigitalInput TrackMidTrig = new DigitalInput(Constants.SW_LIFT_TRACK_TRIG);
 
@@ -50,10 +46,13 @@ public class LiftElevator extends SubsystemBase {
    * Contructor
    */
   public LiftElevator() {
-    elevatorPitchState = pitchState.Back;
     final var ConfigArmLift = new configArmLift();
+    final var ConfigArmPitch = new configArmPitch();
     ElevatorMotor.configAllSettings(ConfigArmLift._fx);
     ElevatorMotor.setInverted(true);
+
+    ElevatorPitchMotor.configAllSettings(ConfigArmPitch._fx);
+    ElevatorPitchMotor.setInverted(true);
   }
 
   // Set Interfaces
@@ -62,14 +61,20 @@ public class LiftElevator extends SubsystemBase {
     ElevatorMotor.set(ControlMode.PercentOutput, 0);
   }
 
-  /**
-   * Interface to set elevator pitch
-   * 
-   * @param armControlState Enumerator to set the three positions of the elevator
-   *                        pitch
-   */
-  public void setElevatorPitch(pitchState armControlState) {
-    this.elevatorPitchState = armControlState;
+  public void setPitchPosition(double setPoint) {
+    setPitchControlMethod = ControlMode.MotionMagic;
+    setPitchInput = setPoint;
+  }
+
+
+  public void setPitchControl(ControlMode mode, double setValue) {
+    setPitchControlMethod = mode;
+    setPitchInput = setValue;
+  }
+
+  public void setPitchPercentPower(double setPower) {
+    setPitchControlMethod = ControlMode.PercentOutput;
+    setPitchInput = -setPower;
   }
 
   /**
@@ -78,19 +83,19 @@ public class LiftElevator extends SubsystemBase {
    * @param setPoint Set point for motion magic, currently set as ticks. 5500 ticks per inch approx
    */
   public void setElevatorPosition(double setPoint) {
-    setControlMethod = ControlMode.MotionMagic;
-    setInput = setPoint;
+    setElevatorControlMethod = ControlMode.MotionMagic;
+    setElevatorInput = setPoint;
   }
 
 
   public void setElevatorControl(ControlMode mode, double setValue) {
-    setControlMethod = mode;
-    setInput = setValue;
+    setElevatorControlMethod = mode;
+    setElevatorInput = setValue;
   }
 
   public void setElevatorPercentPower(double setPower) {
-    setControlMethod = ControlMode.PercentOutput;
-    setInput = -setPower;
+    setElevatorControlMethod = ControlMode.PercentOutput;
+    setElevatorInput = -setPower;
   }
 
   // Get Interfaces
@@ -102,16 +107,6 @@ public class LiftElevator extends SubsystemBase {
    */
   public boolean getMidLimit() {
     return TrackMidTrig.get();
-  }
-
-  /**
-   * Gets elevator pitch enumerator
-   * 
-   * @return Position of the elevator pitch, only the setting. May not be current
-   *         exact position
-   */
-  public pitchState getElevatorPitch() {
-    return elevatorPitchState;
   }
 
   /**
@@ -134,13 +129,11 @@ public class LiftElevator extends SubsystemBase {
     return (ElevatorMotor.getSensorCollection().isRevLimitSwitchClosed() == 1);
   }
 
-  /**
-   * 
-   * @return
-   */
-  public pitchState getControlState() {
-    return elevatorPitchState;
+  public ControlMode getPitchState(){
+    return ElevatorPitchMotor.getControlMode();
   }
+
+
 
   /**
    * 
@@ -159,30 +152,12 @@ public class LiftElevator extends SubsystemBase {
    * Ran in periodic, use set interface to control.
    */
   private void controlElevatorPitch() {
-
-    Value setInitial = kOff;
-    Value setSecondary = kOff;
-
-    switch (elevatorPitchState) {
-      case Back:
-        setInitial = kForward;
-        setSecondary = kForward;
-        break;
-      case Mid:
-        setInitial = kForward;
-        setSecondary = kReverse;
-        break;
-      case Front:
-        setInitial = kReverse;
-        setSecondary = kReverse;
-        break;
-    }
-    InitialArmSolenoid.set(setInitial);
-    SecondaryArmSolenoid.set(setSecondary);
+    ElevatorPitchMotor.set(setPitchControlMethod, setPitchInput);
+    
   }
 
   private void controlElevator() {
-    ElevatorMotor.set(setControlMethod, setInput);
+    ElevatorMotor.set(setElevatorControlMethod, setElevatorInput);
   }
 
   /**
@@ -190,7 +165,6 @@ public class LiftElevator extends SubsystemBase {
    * initiation
    */
   public void init_periodic() {
-    setElevatorPitch(pitchState.Back);
   }
 
   @Override

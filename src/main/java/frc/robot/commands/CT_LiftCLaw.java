@@ -32,7 +32,16 @@ public class CT_LiftCLaw extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    liftClaw.setClawState(driverStick.getRightBumper() ? ClawState.Open : ClawState.Closed);
+
+    if(liftClaw.getClawState() == ClawState.Closed && auxStick.getBButtonPressed()){
+      liftClaw.setClawState(ClawState.Open);
+    }
+    else if (liftClaw.getClawState() == ClawState.Open && (auxStick.getBButtonPressed() || (liftClaw.getGrabSensor() && driverStick.getBButtonReleased()))){
+      liftClaw.setClawState(ClawState.Closed);
+    }
+ 
+
+    //liftClaw.setClawState(driverStick.getRightBumper() ? ClawState.Open : ClawState.Closed);
     liftClaw.setPitchSetPoint(auxStick.getRightY() * 0.25); // TODO: transfer scaling to motor controller maybe
     liftClaw.setYawPower(auxStick.getRightX());
   }

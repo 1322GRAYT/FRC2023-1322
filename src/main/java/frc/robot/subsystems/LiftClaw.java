@@ -4,13 +4,17 @@
 
 package frc.robot.subsystems;
 
+import java.io.Console;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -29,6 +33,7 @@ public class LiftClaw extends SubsystemBase {
   private PWM clawYaw = new PWM(Constants.CLAW_YAW_SERVO);
   private WPI_TalonFX clawPitch = new WPI_TalonFX(Constants.CLAW_PITCH);
   private DoubleSolenoid clawGrab = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.PNEUMATIC_CLAW_0, Constants.PNEUMATIC_CLAW_1);
+  private DigitalInput clawGrabSensor = new DigitalInput(5);
   // private AnalogInput clawAngle = new AnalogInput(Constants.CLAW_ANGLE_SENSOR);
   
 
@@ -49,6 +54,10 @@ public class LiftClaw extends SubsystemBase {
 
   public double getPitchSetPoint() {
     return pitchSetPoint;
+  }
+
+  public boolean getGrabSensor(){
+    return clawGrabSensor.get();
   }
 
   // public double getClawAngle(){
@@ -105,6 +114,7 @@ public class LiftClaw extends SubsystemBase {
     ControlPitch();
     ControlYaw();
     ControlClaw();
+    //System.out.println(getGrabSensor());
   }
 
   @Override

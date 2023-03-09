@@ -6,7 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.commandgroups.*;
 import frc.robot.subsystems.*;
@@ -25,11 +26,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  // private final SendableChooser<Command> m_chooser = new
-  // SendableChooser<Command>();
-  // private final SwerveDriveSubsystem swerveSubsystem = new
-  // SwerveDriveSubsystem();
-  private final CompressorSub compressorSubsystem = new CompressorSub(); // Don't comment this out unless you want the compressor to stop
+  private final SendableChooser<Command> m_chooser = new SendableChooser<Command>();
+ 
+  private final CompressorSub compressorSubsystem = new CompressorSub();
   private final SwerveDrivetrain swerveSubsystem = new SwerveDrivetrain();
   private final LiftElevator liftElevatorSubsystem = new LiftElevator();
   private final LiftClaw liftClawSubsystem = new LiftClaw();
@@ -46,32 +45,9 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure Autonomous Selections Available
-    // m_chooser.setDefaultOption("Default Auto", new
-    // CC_IntakeArmsRaise(intakeSubsystem));
-    // m_chooser.addOption("Test Drive", new Auto_Drive_Deadrecken(swerveSubsystem,
-    // 0, 0.5, 0, 1));
-    // m_chooser.addOption("Test Drive Encoder Reverse", new
-    // SwerveLongDistEncdr(swerveSubsystem, 36, false));
-    // m_chooser.addOption("Test Drive Encoder Right", new
-    // SwerveLatDistEncdr(swerveSubsystem, 36, true));
-    // m_chooser.addOption("Do Nothing", new CC_IntakeArmsRaise(intakeSubsystem));
-    // m_chooser.addOption("Just Shoot Low", new CA_Shoot(shooterSubsystem,
-    // intakeSubsystem, cameraSubsystem, slctGoal.LoGoal));
-    // m_chooser.addOption("Drive Back", new CG_DrvBack(swerveSubsystem,
-    // intakeSubsystem));
-    // m_chooser.addOption("Shoot Low & Drive Back", new
-    // CG_ShootLowDrvBack(swerveSubsystem, shooterSubsystem, intakeSubsystem,
-    // cameraSubsystem));
-    // m_chooser.addOption("Shoot High 2-Ball", new
-    // CG_ShootHighDrvBack(swerveSubsystem, shooterSubsystem, intakeSubsystem,
-    // cameraSubsystem));
-    // m_chooser.addOption("Shoot High 2-Ball Parallel", new
-    // CG_ShootHighDrvBackParallel(swerveSubsystem, shooterSubsystem,
-    // intakeSubsystem, cameraSubsystem));
-    // m_chooser.addOption("Shoot High 2-Ball TrajPath", new
-    // CG_ShootHighDrvTrajA(swerveSubsystem, shooterSubsystem, intakeSubsystem,
-    // cameraSubsystem));
-    // SmartDashboard.putData("Auto choices: ", m_chooser);
+     m_chooser.setDefaultOption("Default Auto", new CA_DriveDeadrecken(swerveSubsystem, -0.5, 2));
+
+    SmartDashboard.putData("Auto choices: ", m_chooser);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -87,9 +63,6 @@ public class RobotContainer {
    */
   public void autonomousInit() {
     swerveSubsystem.init_periodic();
-    // liftSubsystem.init_periodic();
-    // intakeSubsystem.init_periodic();
-    // shooterSubsystem.init_periodic();
   }
 
   /**
@@ -139,7 +112,7 @@ public class RobotContainer {
     // ManualDrive(swerveSubsystem, driverStick));
     // Subsystem, Control Joystick, fieldCentric, openLoop
     swerveSubsystem.setDefaultCommand(new CT_SwerveDrive(swerveSubsystem, driverStick, true, true));
-    floorSubsystem.setDefaultCommand(new CT_Floor(floorSubsystem, auxStick));
+    // floorSubsystem.setDefaultCommand(new CT_Floor(floorSubsystem, auxStick));
     liftElevatorSubsystem.setDefaultCommand(new CT_LiftElevator(liftElevatorSubsystem, auxStick));
     liftClawSubsystem.setDefaultCommand(new CT_LiftCLaw(liftClawSubsystem, auxStick, driverStick));
     cameraSubsystem.setDefaultCommand(new CC_CameraTrackTarget(cameraSubsystem));
@@ -151,7 +124,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // m_autoCommandSelected = m_chooser.getSelected();
+    m_autoCommandSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoCommandSelected);
     return (m_autoCommandSelected);
   }

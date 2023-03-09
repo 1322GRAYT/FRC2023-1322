@@ -40,14 +40,19 @@ public class CT_LiftElevator extends CommandBase {
       liftElevator.setElevatorPercentPower(auxStick.getLeftY());
     }
 
+
+    if (Math.abs(auxStick.getLeftTriggerAxis() - auxStick.getRightTriggerAxis()) - ControlSettings.AUX_STICK_DEADBAND > 0 || liftElevator.getPitchState() == ControlMode.PercentOutput){
+      liftElevator.setPitchPercentPower(auxStick.getLeftTriggerAxis() - auxStick.getRightTriggerAxis());
+    }
+
     // Toggle between Positions
-    if (auxStick.getLeftBumperPressed() && liftElevator.getElevatorPitch() != pitchState.Back){
-      liftElevator.setElevatorPitch(liftElevator.getElevatorPitch().previous());
-    }
+    // if (auxStick.getLeftBumperPressed() && liftElevator.getElevatorPitch() != pitchState.Back){
+    //   liftElevator.setElevatorPitch(liftElevator.getElevatorPitch().previous());
+    // }
     
-    if (auxStick.getRightBumperPressed() && liftElevator.getElevatorPitch() != pitchState.Front){
-      liftElevator.setElevatorPitch(liftElevator.getElevatorPitch().next());
-    }
+    // if (auxStick.getRightBumperPressed() && liftElevator.getElevatorPitch() != pitchState.Front){
+    //   liftElevator.setElevatorPitch(liftElevator.getElevatorPitch().next());
+    // }
   }
 
 

@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
@@ -41,11 +42,19 @@ public class CA_DriveDeadrecken extends CommandBase {
     
   }
 
+  public CA_DriveDeadrecken(SwerveDrivetrain drive, double power, double time) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.drive = drive;
+    this.rSpeed = power;
+    this.time = time;
+    playTime = new Timer();
+    
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drive.drive(this.setSpeed, this.rSpeed, false, true);
-    drive.resetOdometry(new Pose2d(0.0,0.0,new Rotation2d(0)));
+    drive.secretDrive(rSpeed);
     playTime.reset();
     playTime.start();
   }
@@ -53,11 +62,7 @@ public class CA_DriveDeadrecken extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //this.currentPose = drive.getPose();
-    //SmartDashboard.putNumber("Driver X Pose", drive.getPose().getX());
-    //SmartDashboard.putNumber("Driver Y Pose", drive.getPose().getY());
-    //SmartDashboard.putNumber("x Pose", currentPose.getX());
-    //SmartDashboard.putNumber("y Pose", currentPose.getY());
+
   }
 
   // Called once the command ends or is interrupted.
