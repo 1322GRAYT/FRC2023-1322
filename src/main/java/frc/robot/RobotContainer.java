@@ -117,7 +117,7 @@ public class RobotContainer {
     // CommandScheduler.getInstance().setDefaultCommand(swerveSubsystem, new
     // ManualDrive(swerveSubsystem, driverStick));
     // Subsystem, Control Joystick, fieldCentric, openLoop
-    swerveSubsystem.setDefaultCommand(new CT_SwerveDrive(swerveSubsystem, driverStick, true, true));
+    swerveSubsystem.setDefaultCommand(new CT_SwerveDrive(swerveSubsystem, driverStick, false, true));
     // floorSubsystem.setDefaultCommand(new CT_Floor(floorSubsystem, auxStick));
     liftElevatorSubsystem.setDefaultCommand(new CT_LiftElevator(liftElevatorSubsystem, auxStick));
     liftClawSubsystem.setDefaultCommand(new CT_LiftCLaw(liftClawSubsystem, auxStick, driverStick));
