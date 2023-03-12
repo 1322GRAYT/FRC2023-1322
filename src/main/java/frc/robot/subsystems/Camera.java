@@ -4,15 +4,15 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.controller.PIDController;
+//import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class Camera extends SubsystemBase {
-  final static Servo Tilt = new Servo(1);
-  final static Servo Pan = new Servo(2);
+  final static Servo Tilt = new Servo(4);
+  final static Servo Pan = new Servo(3);
 
   final static double CAMERA_ANGLE_TOLERANCE = 1;
 

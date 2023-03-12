@@ -12,18 +12,16 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class CompressorSubsystem extends SubsystemBase {
+public class CompressorSub extends SubsystemBase {
 
-
-private Compressor phCompressor;
-private double pressureCompressor;
-private double currentCompressor;
-private boolean displayDashboardData = true; 
-
+  private Compressor phCompressor;
+  private double pressureCompressor;
+  private double currentCompressor;
+  // private boolean displayDashboardData = true;
 
   /** Creates a new CompressorSubsystem. */
-  public CompressorSubsystem() {
-    phCompressor = new Compressor(Constants.PNEU_HUB_CAN, PneumaticsModuleType.REVPH);
+  public CompressorSub() {
+    phCompressor = new Compressor(Constants.PNEUMATIC_COMPRESSOR, PneumaticsModuleType.REVPH);
     phCompressor.enableAnalog(90, 120);
     pressureCompressor = 0;
     currentCompressor = 0;
@@ -33,12 +31,10 @@ private boolean displayDashboardData = true;
   public void periodic() {
     // This method will be called once per scheduler run
     updateCompressorSensors();
-    if (K_COMP.KeCOMP_b_DebugEnbl == true) {
+    if (K_COMP.KeCOMP_b_DebugEnbl) {
       printCompressorPressure();
     }
   }
-
-
 
   private void updateCompressorSensors() {
     pressureCompressor = phCompressor.getPressure();
@@ -54,17 +50,8 @@ private boolean displayDashboardData = true;
   }
 
   private void printCompressorPressure() {
-    SmartDashboard.putNumber("Compressor Pressure: ",  getCompressorPressure());
-    SmartDashboard.putNumber("Compressor Current: ",   getCompressorCurrent());
+    SmartDashboard.putNumber("Compressor Pressure: ", getCompressorPressure());
+    SmartDashboard.putNumber("Compressor Current: ", getCompressorCurrent());
   }
 
-
-
 }
-
-
-
-
-
-
-

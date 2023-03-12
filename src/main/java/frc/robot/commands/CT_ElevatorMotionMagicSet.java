@@ -5,25 +5,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.IntakeSubsystem;
+
+
+// TODO: Create this implementation, may need to create seperate implementation for raise/lower or specific pose
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class CC_IntakeRunArmMotor extends InstantCommand {
-  private IntakeSubsystem intakeSubsystem;  
-  private double mtrPwrCmd;
-
-  public CC_IntakeRunArmMotor(IntakeSubsystem intakeSubsystem, double mtrPwrCmd) {
-    this.intakeSubsystem = intakeSubsystem;
-    this.mtrPwrCmd = mtrPwrCmd;
-
-    addRequirements(intakeSubsystem);
+public class CT_ElevatorMotionMagicSet extends InstantCommand {
+  public CT_ElevatorMotionMagicSet() {
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    intakeSubsystem.runIntakeAtPwr(mtrPwrCmd);
-  }
+  public void initialize() {}
 }

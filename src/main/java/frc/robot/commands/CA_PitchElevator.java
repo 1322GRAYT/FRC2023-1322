@@ -4,30 +4,27 @@
 
 package frc.robot.commands;
 
-import frc.robot.calibrations.K_INTK;
-import frc.robot.subsystems.IntakeSubsystem;
-
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.LiftElevator;
 
-public class CC_IntakeArmsLower extends CommandBase {
+public class CA_PitchElevator extends CommandBase {
+  private static final double POWER = 0.5;
+  private LiftElevator liftElevator;
+  private boolean out;
 
-  private IntakeSubsystem intakeSubsystem;  
-  private Timer exitTmr;
+  /** Creates a new CA_PitchElevator. */
+  public CA_PitchElevator(LiftElevator liftElevator, boolean out) {
+    // Use addRequirements() here to declare subsystem dependencies.
 
-  /** Creates a new CC_IntakeArmsLower. */
-  public CC_IntakeArmsLower(IntakeSubsystem intakeSubsystem) {
-    this.intakeSubsystem = intakeSubsystem;
-    exitTmr = new Timer();
-    addRequirements(intakeSubsystem);
+    this.liftElevator = liftElevator;
+    this.out = out;
+    addRequirements(liftElevator);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeSubsystem.lowerIntakeArms();
-    exitTmr.reset();
-    exitTmr.start();
+    liftElevator.setPitchPercentPower(out ? -POWER : POWER);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,12 +34,12 @@ public class CC_IntakeArmsLower extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    exitTmr.stop();
+    liftElevator.setPitchPercentPower(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (exitTmr.get() > K_INTK.KeINTK_t_IntakeArmRaiseLowerDlyCmd);
+    return (liftElevator.getPitchOutSwitch() && out)||(liftElevator.getPitchInSwitch() && !out);
   }
 }
