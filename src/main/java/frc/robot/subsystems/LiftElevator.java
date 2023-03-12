@@ -3,16 +3,17 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 import frc.robot.calibrations.configArmLift;
 import frc.robot.calibrations.configArmPitch;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-
 // TODO: Finish documentation
 
 public class LiftElevator extends SubsystemBase {
+
+  public boolean setPosition = false;
 
   // Internal Definitions
   public enum pitchState {
@@ -50,6 +51,7 @@ public class LiftElevator extends SubsystemBase {
     final var ConfigArmPitch = new configArmPitch();
     ElevatorMotor.configAllSettings(ConfigArmLift._fx);
     ElevatorMotor.setInverted(true);
+    ElevatorMotor.setNeutralMode(NeutralMode.Brake);
 
     ElevatorPitchMotor.configAllSettings(ConfigArmPitch._fx);
     ElevatorPitchMotor.setInverted(true);
@@ -66,7 +68,6 @@ public class LiftElevator extends SubsystemBase {
     setPitchInput = setPoint;
   }
 
-
   public void setPitchControl(ControlMode mode, double setValue) {
     setPitchControlMethod = mode;
     setPitchInput = setValue;
@@ -77,25 +78,40 @@ public class LiftElevator extends SubsystemBase {
     setPitchInput = -setPower;
   }
 
+  double topPos;
+
+  public void setTopPos() {
+    topPos = ElevatorMotor.getSelectedSensorPosition(0);
+  }
+
   /**
    * Sets control mode to Motion Magic
    * TODO: develop tick conversion factor, approx 5500 ticks per inch
-   * @param setPoint Set point for motion magic, currently set as ticks. 5500 ticks per inch approx
+   * 
+   * @param setPoint Set point for motion magic, currently set as ticks. 5500
+   *                 ticks per inch approx
    */
   public void setElevatorPosition(double setPoint) {
+    if (setPoint < 0) {
+      setPoint += topPos;
+    }
+    setPosition = true;
     setElevatorControlMethod = ControlMode.MotionMagic;
     setElevatorInput = setPoint;
   }
 
-
   public void setElevatorControl(ControlMode mode, double setValue) {
-    setElevatorControlMethod = mode;
-    setElevatorInput = setValue;
+    if (!setPosition) {
+      setElevatorControlMethod = mode;
+      setElevatorInput = setValue;
+    }
   }
 
   public void setElevatorPercentPower(double setPower) {
-    setElevatorControlMethod = ControlMode.PercentOutput;
-    setElevatorInput = -setPower;
+    if (!setPosition) {
+      setElevatorControlMethod = ControlMode.PercentOutput;
+      setElevatorInput = -setPower;
+    }
   }
 
   // Get Interfaces
@@ -133,15 +149,13 @@ public class LiftElevator extends SubsystemBase {
     return (ElevatorPitchMotor.getSensorCollection().isFwdLimitSwitchClosed() == 1);
   }
 
-public boolean getPitchInSwitch() {
+  public boolean getPitchInSwitch() {
     return (ElevatorPitchMotor.getSensorCollection().isRevLimitSwitchClosed() == 1);
-}
-
-  public ControlMode getPitchState(){
-    return ElevatorPitchMotor.getControlMode();
   }
 
-
+  public ControlMode getPitchState() {
+    return ElevatorPitchMotor.getControlMode();
+  }
 
   /**
    * 
@@ -161,11 +175,19 @@ public boolean getPitchInSwitch() {
    */
   private void controlElevatorPitch() {
     ElevatorPitchMotor.set(setPitchControlMethod, setPitchInput);
-    
+
   }
 
   private void controlElevator() {
     ElevatorMotor.set(setElevatorControlMethod, setElevatorInput);
+    while (setPosition &&Math.abs(ElevatorMotor.getSelectedSensorPosition(0)-setElevatorInput)> 2000) {
+      // do nothing!!!
+      SmartDashboard.putBoolean("Doing move!", setPosition);
+    }
+    SmartDashboard.putBoolean("Doing move!", false);
+    if (setElevatorControlMethod == ControlMode.MotionMagic) {
+      setPosition = false;
+    }
   }
 
   /**
@@ -178,15 +200,16 @@ public boolean getPitchInSwitch() {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("setPosition", setPosition);
     controlElevatorPitch();
     controlElevator();
+    SmartDashboard.putNumber("Elevator Height: ", ElevatorMotor.getSelectedSensorPosition(0));
+    SmartDashboard.putNumber("Elevator Top Pos", topPos);
   }
 
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
-
-
 
 }

@@ -40,6 +40,10 @@ public class CA_Elevator extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (liftElevator.getTopSwitch() && out)||(liftElevator.getBottomSwitch() && !out);
+    if ((liftElevator.getTopSwitch() && out)||(liftElevator.getBottomSwitch() && !out)) {
+      liftElevator.setTopPos();
+      return true;
+    }
+    return false;
   }
 }

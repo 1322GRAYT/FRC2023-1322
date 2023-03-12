@@ -130,8 +130,7 @@ public class SwerveModule {
     }
 
     public double getDrvEncdrCurrentPstn() {
-        double encdrCnts = this.driveMotor.getSelectedSensorPosition();
-        return encdrCnts;
+        return driveMotor.getSelectedSensorPosition();
     }
 
     public void resetDrvEncdrPstn() {

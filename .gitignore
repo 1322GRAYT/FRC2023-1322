@@ -166,3 +166,6 @@ bin/
 
 #wpilib
 .wpilib/
+
+#build.gradle
+build.gradle

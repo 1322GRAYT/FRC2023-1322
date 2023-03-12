@@ -79,9 +79,12 @@ public class SwerveDrivetrain extends SubsystemBase {
     dashboard();
   }
 
+  /*
   public SwerveModule getSwerveModule(int i) {
     return swerveModules[i];
   }
+*/
+
 
   public SwerveModulePosition[] getSwerveModulePositions() {
     SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[swerveModules.length];
@@ -135,14 +138,7 @@ public class SwerveDrivetrain extends SubsystemBase {
   }
 
   private double optimizeGyro(double degrees) {
-    // 0 < degrees < 360
-    if ((degrees > 0.0) && (degrees < 360.0)) {
-      return degrees;
-    } else {
-      int m = (int) Math.floor(degrees / 360.0);
-      double optimizedDegrees = degrees - (m * 360.0);
-      return Math.abs(optimizedDegrees);
-    }
+    return (360+(degrees%360)) % 360;
   }
 
   public Rotation2d getYaw() {
@@ -244,39 +240,36 @@ public class SwerveDrivetrain extends SubsystemBase {
 
   public void resetSwerveDrvEncdrs() {
     for (int i = 0; i < 4; i++) {
-      getSwerveModule(i).resetDrvEncdrPstn();
-      ;
+      swerveModules[i].resetDrvEncdrPstn();
     }
   }
 
   public void resetSwerveRotEncdrs() {
     for (int i = 0; i < 4; i++) {
-      getSwerveModule(i).resetRotEncdrPstn();
-      ;
+      swerveModules[i].resetRotEncdrPstn();
     }
   }
 
   public void zeroSwerveRotEncdrs() {
     for (int i = 0; i < 4; i++) {
-      getSwerveModule(i).zeroRotEncdrPstn();
-      ;
+      swerveModules[i].zeroRotEncdrPstn();  
     }
   }
 
   public void stopSwerveDrvMotors() {
     for (int i = 0; i < 4; i++) {
-      getSwerveModule(i).stopDrvMotor();
+      swerveModules[i].stopDrvMotor();
     }
   }
 
   public void stopSwerveRotMotors() {
     for (int i = 0; i < 4; i++) {
-      getSwerveModule(i).stopRotMotor();
+      swerveModules[i].stopRotMotor();
     }
   }
 
-  public void stopSwerveCaddyDrvMotor(int mtrIdx) {
-    getSwerveModule(mtrIdx).stopDrvMotor();
+  public void stopSwerveCaddyDrvMotor(int motorIndex) {
+    swerveModules[motorIndex].stopDrvMotor();
   }
 
   /**
@@ -288,16 +281,17 @@ public class SwerveDrivetrain extends SubsystemBase {
    * @param: Encoder Counts (cnts)
    * @return: Linear Wheel Distance (inches)
    */
-  public double getDrvInchesPerEncdrCnts(double encdrCnts) {
-    double encdrRevs;
-    double wheelRevs;
-    double wheelDistInches;
+  public double getDrvInchesPerEncdrCnts(double encoderCounts) {
+    double encoderRevolutions;
+    double wheelRevolutions;
+    double wheelDistanceInches;
 
-    encdrRevs = encdrCnts / (double) Constants.SwerveDrivetrain.DRIVE_CNTS_PER_REV;
-    wheelRevs = encdrRevs / (double) Constants.SwerveDrivetrain.DRIVE_GEAR_RATIO;
-    wheelDistInches = wheelRevs * (double) Constants.SwerveDrivetrain.WHEEL_CIRCUMFERENCE;
+    encoderRevolutions = encoderCounts / (double) Constants.SwerveDrivetrain.DRIVE_CNTS_PER_REV;
+    wheelRevolutions = encoderRevolutions / (double) Constants.SwerveDrivetrain.DRIVE_GEAR_RATIO;
+    wheelDistanceInches = wheelRevolutions * (double) Constants.SwerveDrivetrain.WHEEL_CIRCUMFERENCE;
 
-    return (wheelDistInches);
+    
+    return (wheelDistanceInches);
   }
 
   /**
@@ -323,13 +317,12 @@ public class SwerveDrivetrain extends SubsystemBase {
 
   public double getDrvDistTravelled(int mtrIdx, double zeroPstnRefCnts) {
     double drvEncdrCntDelt;
-    drvEncdrCntDelt = Math.round(getSwerveModule(mtrIdx).getDrvEncdrCurrentPstn() - zeroPstnRefCnts);
+    drvEncdrCntDelt = Math.round(swerveModules[mtrIdx].getDrvEncdrCurrentPstn() - zeroPstnRefCnts);
     return (getDrvInchesPerEncdrCnts(drvEncdrCntDelt));
   }
 
   public double getDrvCaddyEncdrPstn(int mtrIdx) {
-    double drvEncdrCnt = Math.round(getSwerveModule(mtrIdx).getDrvEncdrCurrentPstn());
-    return drvEncdrCnt;
+    return Math.round(swerveModules[mtrIdx].getDrvEncdrCurrentPstn());  
   }
 
   public void dashboard() {

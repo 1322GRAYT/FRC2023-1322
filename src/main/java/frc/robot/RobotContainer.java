@@ -45,10 +45,11 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure Autonomous Selections Available
-     m_chooser.setDefaultOption("Default Auto", new CG_PlaceCone(liftClawSubsystem, liftElevatorSubsystem));
+    m_chooser.setDefaultOption("Default Auto", new CG_PlaceCone(liftClawSubsystem, liftElevatorSubsystem));
 
-    m_chooser.setDefaultOption("Default Auto", new CA_DriveDeadrecken(swerveSubsystem, -0.5, 2));
-    m_chooser.addOption("Greg test1", new CG_DrvTrajectoryA(swerveSubsystem));
+    // m_chooser.setDefaultOption("Default Auto", new
+    // CA_DriveDeadrecken(swerveSubsystem, -0.5, 2));
+    //m_chooser.addOption("Greg test1", new CG_DrvTrajectoryA(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
     SmartDashboard.putData("Auto choices: ", m_chooser);
 
     // Configure the button bindings
@@ -109,7 +110,6 @@ public class RobotContainer {
     // auxButton_A.onTrue(new CA_PitchElevator(liftElevatorSubsystem, true));
     // auxButton_Y.onTrue(new CA_Elevator(liftElevatorSubsystem, true));
     // auxButton_B.toggleOnTrue(new CA_ToggleClaw(liftClawSubsystem));
-
 
   }
 

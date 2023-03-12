@@ -31,6 +31,8 @@ public class CT_LiftElevator extends CommandBase {
     
   }
 
+
+  private long debounce_A_time=System.currentTimeMillis(); 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -45,6 +47,11 @@ public class CT_LiftElevator extends CommandBase {
       liftElevator.setPitchPercentPower(auxStick.getLeftTriggerAxis() - auxStick.getRightTriggerAxis());
     }
 
+
+   /* if (auxStick.getAButtonPressed()) {
+      liftElevator.setElevatorPosition(-64000);
+    }
+    */
     // Toggle between Positions
     // if (auxStick.getLeftBumperPressed() && liftElevator.getElevatorPitch() != pitchState.Back){
     //   liftElevator.setElevatorPitch(liftElevator.getElevatorPitch().previous());

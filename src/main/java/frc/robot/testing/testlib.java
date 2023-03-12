@@ -1,10 +1,33 @@
 package frc.robot.testing;
 
-import frc.robot.utils.RFSLIB;
+//import frc.robot.utils.RFSLIB;
 
 public class testlib {
 
+    private static double optimizeGyroNope(double degrees) {
+        return (360+(degrees%360)) % 360;
+      }
+      private static double optimizeGyro(double degrees) {
+        // 0 < degrees < 360
+        if ((degrees > 0.0) && (degrees < 360.0)) {
+          return degrees;
+        } else {
+          int m = (int) Math.floor(degrees / 360.0);
+          double optimizedDegrees = degrees - (m * 360.0);
+          return Math.abs(optimizedDegrees);
+        }
+      }
     public static void main( String [] Args) {
+
+    
+        double []degrees = {20.0,30.0,90.0,-30.0,-770.0,-315.0};
+
+        for (int i = 0 ; i< degrees.length; i++) {
+            System.out.printf("Degrees:  %f  -- Old(%f) -- New(%f)]\n", degrees[i], optimizeGyro(degrees[i]), optimizeGyroNope(degrees[i]));
+        }
+    }
+         
+        /*
         double tmp;
         long start, end;
 
@@ -44,7 +67,7 @@ public class testlib {
 
     }
 
-
+*/
 
 
 /*        start = System.nanoTime();
