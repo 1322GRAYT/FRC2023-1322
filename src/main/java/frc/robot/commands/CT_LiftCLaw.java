@@ -33,10 +33,20 @@ public class CT_LiftCLaw extends CommandBase {
   @Override
   public void execute() {
 
+    if (!liftClaw.getGrabSensor() && auxStick.getYButtonPressed()){
+      liftClaw.setIntakeMotorPower(1.0);
+    }
+    else if (!liftClaw.getGrabSensor() && auxStick.getAButtonPressed()){
+      liftClaw.setIntakeMotorPower(-1.0);
+      }
+    if (liftClaw.getGrabSensor() || auxStick.getAButtonReleased() || auxStick.getYButtonReleased()) {
+      liftClaw.setIntakeMotorPower(0);
+    }
+
     if(liftClaw.getClawState() == ClawState.Closed && auxStick.getBButtonPressed()){
       liftClaw.setClawState(ClawState.Open);
     }
-    else if (liftClaw.getClawState() == ClawState.Open && (auxStick.getBButtonPressed() || (liftClaw.getGrabSensor() && driverStick.getBButtonReleased()))){
+    else if (liftClaw.getClawState() == ClawState.Open && (auxStick.getBButtonPressed() || (liftClaw.getGrabSensor() && auxStick.getBButtonReleased()))){
       liftClaw.setClawState(ClawState.Closed);
     }
  

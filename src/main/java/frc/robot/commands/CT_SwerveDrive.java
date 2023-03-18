@@ -2,8 +2,8 @@ package frc.robot.commands;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
-import frc.robot.utils.RFSLIB;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -16,16 +16,22 @@ public class CT_SwerveDrive extends CommandBase {
     private boolean fieldRelative;
     private boolean openLoop;
     
-    private SwerveDrivetrain s_Swerve;
+    private SwerveDrivetrain swerveSubsystem;
     private XboxController controller;
+    private SlewRateLimiter xLimiter, yLimiter, rLimiter;
 
     public CT_SwerveDrive (SwerveDrivetrain s_Swerve, XboxController controller, boolean fieldRelative, boolean openLoop) {
-        this.s_Swerve = s_Swerve;
+        this.swerveSubsystem = s_Swerve;
         addRequirements(s_Swerve);
 
         this.controller = controller;
         this.fieldRelative = fieldRelative;
         this.openLoop = openLoop;
+        s_Swerve.resetSwerveDriveEncoders();
+        s_Swerve.resetSwerveRotateEncoders();
+        xLimiter = new SlewRateLimiter(Constants.SwerveDrivetrain.MAX_SPEED);
+        yLimiter = new SlewRateLimiter(Constants.SwerveDrivetrain.MAX_SPEED);
+        rLimiter = new SlewRateLimiter(Constants.SwerveDrivetrain.MAX_ANGULAR_VELOCITY);
     }
 
     @Override
@@ -39,13 +45,26 @@ public class CT_SwerveDrive extends CommandBase {
         // double rAxis = -controller.getRawAxis(4);
         
         /* Deadbands */
-        yAxis = RFSLIB.ApplyDeadBand_Scaled(yAxis, DEADBAND, 1.0);
-        xAxis = RFSLIB.ApplyDeadBand_Scaled(xAxis, DEADBAND, 1.0);
-        rAxis = RFSLIB.ApplyDeadBand_Scaled(rAxis, DEADBAND, 1.0);
+        yAxis = ApplyDeadBand_Scaled(yAxis, DEADBAND, 1.0);
+        xAxis = ApplyDeadBand_Scaled(xAxis, DEADBAND, 1.0);
+        rAxis = ApplyDeadBand_Scaled(rAxis, DEADBAND, 1.0);
+
+        xAxis = xLimiter.calculate(xAxis);
+        yAxis = yLimiter.calculate(yAxis);
+        rAxis = rLimiter.calculate(rAxis);
+
+
 
         // What the Operator Considers X-Y Axes is Different than Actual Robot Field Orientation
         translation = new Translation2d(yAxis, xAxis).times(Constants.SwerveDrivetrain.MAX_SPEED);
         rotation = rAxis * Constants.SwerveDrivetrain.MAX_ANGULAR_VELOCITY;
-        s_Swerve.drive(translation, rotation, fieldRelative, openLoop);
+        swerveSubsystem.drive(translation, rotation, fieldRelative, openLoop);
     }
+
+    public double ApplyDeadBand_Scaled( double power, double deadBand, double powerLimit) {
+		if (power > -deadBand && power < deadBand) return 0.0;
+		double sign = (power>0)?1:((power<0)?-1:0);
+		if (power > powerLimit || power < - powerLimit) return powerLimit*sign;
+		return ((power - sign*deadBand)/(powerLimit - deadBand))*powerLimit;
+	}
 }

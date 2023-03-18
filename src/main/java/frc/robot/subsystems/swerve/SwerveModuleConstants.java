@@ -1,4 +1,4 @@
-package frc.robot.utils.swerve;
+package frc.robot.subsystems.swerve;
 
 public class SwerveModuleConstants {
     

@@ -23,7 +23,7 @@ public class CC_SwerveStopMtrs extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    swerveDrivetrain.stopSwerveDrvMotors();
+    swerveDrivetrain.stopSwerveDriveMotors();
     swerveDrivetrain.stopSwerveRotMotors();
   }
 }

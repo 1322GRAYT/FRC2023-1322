@@ -82,7 +82,7 @@ public class CA_SwerveLatDistEncdr extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    swerveDrivetrain.stopSwerveDrvMotors();
+    swerveDrivetrain.stopSwerveDriveMotors();
   }
 
   // Returns true when the command should end.

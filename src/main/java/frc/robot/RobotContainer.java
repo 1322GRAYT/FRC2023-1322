@@ -32,7 +32,7 @@ public class RobotContainer {
   private final SwerveDrivetrain swerveSubsystem = new SwerveDrivetrain();
   private final LiftElevator liftElevatorSubsystem = new LiftElevator();
   private final LiftClaw liftClawSubsystem = new LiftClaw();
-  private final FloorPickup floorSubsystem = new FloorPickup();
+  //private final FloorPickup floorSubsystem = new FloorPickup();
 
   private final Camera cameraSubsystem = new Camera();
   private XboxController driverStick = new XboxController(Constants.DRVR_CNTRLR);
@@ -49,7 +49,7 @@ public class RobotContainer {
 
     // m_chooser.setDefaultOption("Default Auto", new
     // CA_DriveDeadrecken(swerveSubsystem, -0.5, 2));
-    //m_chooser.addOption("Greg test1", new CG_DrvTrajectoryA(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
+    m_chooser.addOption("Greg test1", new CG_DriveBack(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
     SmartDashboard.putData("Auto choices: ", m_chooser);
 
     // Configure the button bindings
@@ -76,7 +76,7 @@ public class RobotContainer {
   public void teleopInit() {
     swerveSubsystem.init_periodic();
     // need a new subsystem for new lift.
-    floorSubsystem.init_periodic();
+    //floorSubsystem.init_periodic();
     // intakeSubsystem.init_periodic();
     // shooterSubsystem.init_periodic();
   }
@@ -91,22 +91,22 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* BEGIN DRIVER STICK BUTTON ASSIGNMENTS */
-    final JoystickButton driverButton_BumpLT = new JoystickButton(driverStick, Constants.BUMPER_LEFT);
+    //final JoystickButton driverButton_BumpLT = new JoystickButton(driverStick, Constants.BUMPER_LEFT);
 
     // driverButton_Start.onTrue(new CT_LiftRobot(liftSubsystem, auxStick));
-    driverButton_BumpLT.onTrue(new CG_ResetAndZeroEncdrs(swerveSubsystem));
+    //driverButton_BumpLT.onTrue(new CG_ResetAndZeroEncdrs(swerveSubsystem));
 
     /* BEGIN AUXILLARY STICK BUTTON ASSIGNMENTS */
 
     // need to update this
-    // final Trigger rightTriggerButton = new Trigger( setArmPosition);
+    /*/ final Trigger rightTriggerButton = new Trigger( setArmPosition);
     final JoystickButton auxButton_A = new JoystickButton(auxStick, Constants.BUTTON_A);
     final JoystickButton auxButton_B = new JoystickButton(auxStick, Constants.BUTTON_B);
     final JoystickButton auxButton_X = new JoystickButton(auxStick, Constants.BUTTON_X);
     final JoystickButton auxButton_Y = new JoystickButton(auxStick, Constants.BUTTON_Y);
     final JoystickButton auxButton_BumpLT = new JoystickButton(auxStick, Constants.BUMPER_LEFT);
     final JoystickButton auxButton_BumpRT = new JoystickButton(auxStick, Constants.BUMPER_RIGHT);
-
+*/
     // auxButton_A.onTrue(new CA_PitchElevator(liftElevatorSubsystem, true));
     // auxButton_Y.onTrue(new CA_Elevator(liftElevatorSubsystem, true));
     // auxButton_B.toggleOnTrue(new CA_ToggleClaw(liftClawSubsystem));

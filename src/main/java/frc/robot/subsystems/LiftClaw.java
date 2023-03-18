@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import java.io.Console;
 
+import javax.print.Doc;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -17,6 +19,9 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import com.ctre.phoenix.motorcontrol.*;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class LiftClaw extends SubsystemBase {
 
@@ -29,18 +34,35 @@ public class LiftClaw extends SubsystemBase {
   private double pitchSetPoint = 0;
   private ControlMode pitchMode = ControlMode.PercentOutput;
 
+  private WPI_TalonSRX intakeMotor = new WPI_TalonSRX(Constants.CONE_MTR_LIFT);
   // Resource Definitions
   private PWM clawYaw = new PWM(Constants.CLAW_YAW_SERVO);
   private WPI_TalonFX clawPitch = new WPI_TalonFX(Constants.CLAW_PITCH);
   private DoubleSolenoid clawGrab = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.PNEUMATIC_CLAW_0, Constants.PNEUMATIC_CLAW_1);
   private DigitalInput clawGrabSensor = new DigitalInput(5);
   // private AnalogInput clawAngle = new AnalogInput(Constants.CLAW_ANGLE_SENSOR);
-  
+  double intakeMotorPower = 0;
+  ControlMode intakeMotorMode = ControlMode.PercentOutput;
 
   /**
    * Constructor
    */
-  public LiftClaw() {}
+  public LiftClaw() {
+    intakeMotor.setInverted(true);
+    intakeMotor.setNeutralMode(NeutralMode.Brake);
+  }
+
+  public boolean getClawGrabSensor(){
+    return clawGrabSensor.get();
+  }
+
+  public void setIntakeMotorPower(double coneMotorPower) {
+    this.intakeMotorPower = coneMotorPower;
+  }
+
+  private void intakeControl() {
+    intakeMotor.set(intakeMotorMode, intakeMotorPower);
+  }
 
   // Getter Interfaces
 
@@ -114,6 +136,7 @@ public class LiftClaw extends SubsystemBase {
     ControlPitch();
     ControlYaw();
     ControlClaw();
+    intakeControl();
     //System.out.println(getGrabSensor());
   }
 
