@@ -4,22 +4,24 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
+import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.LiftClaw;
 import frc.robot.subsystems.LiftClaw.ClawState;
 
 public class CT_LiftCLaw extends CommandBase {
   private LiftClaw liftClaw;
-  private XboxController auxStick;
-  private XboxController driverStick;
+
+  Supplier<Double> pitchPowerControl, yawPowerControl;
+  Supplier<Boolean> clawOpenControl;
 
   /** Creates a new CT_LiftCLaw. */
-  public CT_LiftCLaw(LiftClaw liftClaw, XboxController auxStick, XboxController driverStick) {
+  public CT_LiftCLaw(LiftClaw liftClaw, Supplier<Double> pitchPowerControl, Supplier<Double> yawPowerControl, Supplier<Boolean> clawOpenControl) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.liftClaw = liftClaw;
-    this.auxStick = auxStick;
-    this.driverStick = driverStick;
+    this.pitchPowerControl = pitchPowerControl;
+    this.yawPowerControl = yawPowerControl;
+    this.clawOpenControl = clawOpenControl;
 
     addRequirements(liftClaw);
   }
@@ -29,21 +31,23 @@ public class CT_LiftCLaw extends CommandBase {
   public void initialize() {
   }
 
+  boolean stateReleased = true;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    var clawButtonState = clawOpenControl.get();
 
-    if(liftClaw.getClawState() == ClawState.Closed && auxStick.getBButtonPressed()){
+    if(liftClaw.getClawState() == ClawState.Closed && clawButtonState){
       liftClaw.setClawState(ClawState.Open);
     }
-    else if (liftClaw.getClawState() == ClawState.Open && (auxStick.getBButtonPressed() || (liftClaw.getGrabSensor() && driverStick.getBButtonReleased()))){
+    else if (liftClaw.getClawState() == ClawState.Open && (clawButtonState || (liftClaw.getGrabSensor() && stateReleased))){
       liftClaw.setClawState(ClawState.Closed);
     }
- 
 
-    //liftClaw.setClawState(driverStick.getRightBumper() ? ClawState.Open : ClawState.Closed);
-    liftClaw.setPitchSetPoint(auxStick.getRightY() * 0.25); // TODO: transfer scaling to motor controller maybe
-    liftClaw.setYawPower(auxStick.getRightX());
+    stateReleased = !clawButtonState;
+ 
+    liftClaw.setPitchPower(pitchPowerControl.get()); // TODO: transfer scaling to motor controller maybe
+    liftClaw.setYawPower(yawPowerControl.get());
   }
 
   // Called once the command ends or is interrupted.

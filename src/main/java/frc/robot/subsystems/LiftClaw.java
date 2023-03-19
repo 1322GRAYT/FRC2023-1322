@@ -75,7 +75,7 @@ public class LiftClaw extends SubsystemBase {
     this.yawPower = yawPower;
   }
 
-  public void setPitchSetPoint(double pitchSetPoint) {
+  public void setPitchPower(double pitchSetPoint) {
     this.pitchSetPoint = pitchSetPoint;
   }
 

@@ -11,9 +11,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.commandgroups.*;
 import frc.robot.subsystems.*;
-//import frc.robot.subsystems.ShooterSubsystem.*;
+import frc.robot.subsystems.LiftElevator.Element;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.utils.Direction;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -37,6 +40,14 @@ public class RobotContainer {
   private XboxController driverStick = new XboxController(Constants.DRVR_CNTRLR);
   private XboxController auxStick = new XboxController(Constants.AUX_CNTRLR);
 
+  Trigger auxPOVup = new Trigger(() -> auxStick.getPOV() == Direction.UP.getValue());
+  Trigger auxPOVdown = new Trigger(() -> auxStick.getPOV() == Direction.DOWN.getValue());
+  Trigger auxPOVleft = new Trigger(() -> auxStick.getPOV() == Direction.LEFT.getValue());
+  Trigger auxPOVright = new Trigger(() -> auxStick.getPOV() == Direction.RIGHT.getValue());
+
+  JoystickButton auxAButton = new JoystickButton(auxStick, Constants.BUTTON_A);
+  JoystickButton auxBButton = new JoystickButton(auxStick, Constants.BUTTON_B);
+
   private Command m_autoCommandSelected;
 
   /**
@@ -51,8 +62,6 @@ public class RobotContainer {
     // m_chooser.addOption("Greg test1", new CG_DrvTrajectoryA(swerveSubsystem,
     // liftClawSubsystem, liftElevatorSubsystem));
     SmartDashboard.putData("Auto choices: ", m_chooser);
-
-    
 
     // Configure the button bindings
     configureButtonBindings();
@@ -88,41 +97,30 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    /* BEGIN DRIVER STICK BUTTON ASSIGNMENTS */
+    // BEGIN DRIVER STICK BUTTON ASSIGNMENTS
     final JoystickButton driverButton_BumpLT = new JoystickButton(driverStick, Constants.BUMPER_LEFT);
-
-    // driverButton_Start.onTrue(new CT_LiftRobot(liftSubsystem, auxStick));
     driverButton_BumpLT.onTrue(new CG_ResetAndZeroEncdrs(swerveSubsystem));
 
-    /* BEGIN AUXILLARY STICK BUTTON ASSIGNMENTS */
+    // BEGIN AUXILLARY STICK BUTTON ASSIGNMENTS
+    auxPOVup.onTrue(new RunCommand(() -> liftElevatorSubsystem.increaseDeliveryHeight(), liftElevatorSubsystem)).debounce(1);
+    auxPOVdown.onTrue(new RunCommand(() -> liftElevatorSubsystem.decreaseDeliveryHeight(), liftElevatorSubsystem)).debounce(1);
+    auxPOVleft.onTrue(new RunCommand(() -> liftElevatorSubsystem.setCurrentElement(Element.CUBE), liftElevatorSubsystem)).debounce(1);
+    auxPOVright.onTrue(new RunCommand(() -> liftElevatorSubsystem.setCurrentElement(Element.CONE), liftElevatorSubsystem)).debounce(1);
 
-    // need to update this
-    // final Trigger rightTriggerButton = new Trigger( setArmPosition);
-    final JoystickButton auxButton_A = new JoystickButton(auxStick, Constants.BUTTON_A);
-    final JoystickButton auxButton_B = new JoystickButton(auxStick, Constants.BUTTON_B);
-    final JoystickButton auxButton_X = new JoystickButton(auxStick, Constants.BUTTON_X);
-    final JoystickButton auxButton_Y = new JoystickButton(auxStick, Constants.BUTTON_Y);
-    final JoystickButton auxButton_BumpLT = new JoystickButton(auxStick, Constants.BUMPER_LEFT);
-    final JoystickButton auxButton_BumpRT = new JoystickButton(auxStick, Constants.BUMPER_RIGHT);
-
-    // auxButton_A.onTrue(new CA_PitchElevator(liftElevatorSubsystem, true));
-    // auxButton_Y.onTrue(new CA_Elevator(liftElevatorSubsystem, true));
-    // auxButton_B.toggleOnTrue(new CA_ToggleClaw(liftClawSubsystem));
-
+    auxAButton.onTrue(new RunCommand(() -> liftElevatorSubsystem.setGotoDelivery(), liftElevatorSubsystem));
+    auxBButton.onTrue(new RunCommand(() -> liftElevatorSubsystem.setGotoIntake(), liftElevatorSubsystem));
   }
 
   private void setDefaultCommands() {
-    // CommandScheduler.getInstance().setDefaultCommand(swerveSubsystem, new
-    // ManualDrive(swerveSubsystem, driverStick));
-    // Subsystem, Control Joystick, fieldCentric, openLoop
     swerveSubsystem.setDefaultCommand(new CT_SwerveDrive(swerveSubsystem, driverStick, false, true));
-    liftElevatorSubsystem.setDefaultCommand(new CT_LiftElevator(liftElevatorSubsystem, 
+    liftElevatorSubsystem.setDefaultCommand(new CT_LiftElevator(liftElevatorSubsystem,
         () -> auxStick.getLeftY(),
         () -> (auxStick.getLeftTriggerAxis() - auxStick.getRightTriggerAxis())));
-    liftClawSubsystem.setDefaultCommand(new CT_LiftCLaw(liftClawSubsystem, auxStick, driverStick));
+    liftClawSubsystem.setDefaultCommand(new CT_LiftCLaw(liftClawSubsystem,
+        () -> auxStick.getRightY(),
+        () -> auxStick.getRightX(),
+        () -> driverStick.getRightBumper()));
     cameraSubsystem.setDefaultCommand(new CC_CameraTrackTarget(cameraSubsystem));
-
-
 
   }
 
