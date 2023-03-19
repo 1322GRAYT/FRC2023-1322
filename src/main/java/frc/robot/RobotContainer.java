@@ -32,7 +32,6 @@ public class RobotContainer {
   private final SwerveDrivetrain swerveSubsystem = new SwerveDrivetrain();
   private final LiftElevator liftElevatorSubsystem = new LiftElevator();
   private final LiftClaw liftClawSubsystem = new LiftClaw();
-  private final FloorPickup floorSubsystem = new FloorPickup();
 
   private final Camera cameraSubsystem = new Camera();
   private XboxController driverStick = new XboxController(Constants.DRVR_CNTRLR);
@@ -49,8 +48,11 @@ public class RobotContainer {
 
     // m_chooser.setDefaultOption("Default Auto", new
     // CA_DriveDeadrecken(swerveSubsystem, -0.5, 2));
-    //m_chooser.addOption("Greg test1", new CG_DrvTrajectoryA(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
+    // m_chooser.addOption("Greg test1", new CG_DrvTrajectoryA(swerveSubsystem,
+    // liftClawSubsystem, liftElevatorSubsystem));
     SmartDashboard.putData("Auto choices: ", m_chooser);
+
+    
 
     // Configure the button bindings
     configureButtonBindings();
@@ -75,10 +77,6 @@ public class RobotContainer {
    */
   public void teleopInit() {
     swerveSubsystem.init_periodic();
-    // need a new subsystem for new lift.
-    floorSubsystem.init_periodic();
-    // intakeSubsystem.init_periodic();
-    // shooterSubsystem.init_periodic();
   }
 
   /**
@@ -118,10 +116,13 @@ public class RobotContainer {
     // ManualDrive(swerveSubsystem, driverStick));
     // Subsystem, Control Joystick, fieldCentric, openLoop
     swerveSubsystem.setDefaultCommand(new CT_SwerveDrive(swerveSubsystem, driverStick, false, true));
-    // floorSubsystem.setDefaultCommand(new CT_Floor(floorSubsystem, auxStick));
-    liftElevatorSubsystem.setDefaultCommand(new CT_LiftElevator(liftElevatorSubsystem, auxStick));
+    liftElevatorSubsystem.setDefaultCommand(new CT_LiftElevator(liftElevatorSubsystem, 
+        () -> auxStick.getLeftY(),
+        () -> (auxStick.getLeftTriggerAxis() - auxStick.getRightTriggerAxis())));
     liftClawSubsystem.setDefaultCommand(new CT_LiftCLaw(liftClawSubsystem, auxStick, driverStick));
     cameraSubsystem.setDefaultCommand(new CC_CameraTrackTarget(cameraSubsystem));
+
+
 
   }
 
