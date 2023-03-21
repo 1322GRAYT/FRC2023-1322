@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants;
 import frc.robot.calibrations.configArmLift;
-import frc.robot.calibrations.configArmPitch;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -33,15 +32,15 @@ public class LiftElevator extends SubsystemBase {
   public boolean setPosition = false;
 
   // TODO: Determine Numbers
-  private static final int CUBE_INTAKE_PITCH = 0;
-  private static final int CUBE_INTAKE_ELEVATOR = 0;
-  private static final int CONE_INTAKE_PITCH = 0;
-  private static final int CONE_INTAKE_ELEVATOR = 0;
+  private static final int CUBE_INTAKE_PITCH = 61000;
+  private static final int CUBE_INTAKE_ELEVATOR = 196000;
+  private static final int CONE_INTAKE_PITCH = 61000;
+  private static final int CONE_INTAKE_ELEVATOR = 196000;
 
   public enum DeliveryState {
     Bottom(1,2,3,4), 
     Mid(1,2,3,4), 
-    Top(1,2,3,4);
+    Top(260000,310800,260000,310800);
 
     public int CubePointElevator, CubePointPitch, ConePointElevator, ConePointPitch;
     DeliveryState(int CubePointElevator, int CubePointPitch, int ConePointElevator, int ConePointPitch){
@@ -85,13 +84,8 @@ public class LiftElevator extends SubsystemBase {
    * Contructor
    */
   public LiftElevator() {
-    final var ConfigArmLift = new configArmLift();
-    final var ConfigArmPitch = new configArmPitch();
-    ElevatorMotor.configAllSettings(ConfigArmLift._fx);
     ElevatorMotor.setInverted(true);
     ElevatorMotor.setNeutralMode(NeutralMode.Brake);
-
-    ElevatorPitchMotor.configAllSettings(ConfigArmPitch._fx);
     ElevatorPitchMotor.setInverted(true);
   }
 

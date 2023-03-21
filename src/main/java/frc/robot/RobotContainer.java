@@ -102,13 +102,28 @@ public class RobotContainer {
     driverButton_BumpLT.onTrue(new CG_ResetAndZeroEncdrs(swerveSubsystem));
 
     // BEGIN AUXILLARY STICK BUTTON ASSIGNMENTS
-    auxPOVup.onTrue(new RunCommand(() -> liftElevatorSubsystem.increaseDeliveryHeight(), liftElevatorSubsystem)).debounce(1);
-    auxPOVdown.onTrue(new RunCommand(() -> liftElevatorSubsystem.decreaseDeliveryHeight(), liftElevatorSubsystem)).debounce(1);
-    auxPOVleft.onTrue(new RunCommand(() -> liftElevatorSubsystem.setCurrentElement(Element.CUBE), liftElevatorSubsystem)).debounce(1);
-    auxPOVright.onTrue(new RunCommand(() -> liftElevatorSubsystem.setCurrentElement(Element.CONE), liftElevatorSubsystem)).debounce(1);
+    // Set Positions for
+    // auxPOVup.onTrue(new RunCommand(() ->
+    // liftElevatorSubsystem.increaseDeliveryHeight(),
+    // liftElevatorSubsystem)).debounce(1);
+    // auxPOVdown.onTrue(new RunCommand(() ->
+    // liftElevatorSubsystem.decreaseDeliveryHeight(),
+    // liftElevatorSubsystem)).debounce(1);
+    // auxPOVleft.onTrue(new RunCommand(() ->
+    // liftElevatorSubsystem.setCurrentElement(Element.CUBE),
+    // liftElevatorSubsystem)).debounce(1);
+    // auxPOVright.onTrue(new RunCommand(() ->
+    // liftElevatorSubsystem.setCurrentElement(Element.CONE),
+    // liftElevatorSubsystem)).debounce(1);
 
-    auxAButton.onTrue(new RunCommand(() -> liftElevatorSubsystem.setGotoDelivery(), liftElevatorSubsystem));
-    auxBButton.onTrue(new RunCommand(() -> liftElevatorSubsystem.setGotoIntake(), liftElevatorSubsystem));
+    auxPOVup.onTrue(new RunCommand(() -> {
+      liftElevatorSubsystem.setGotoDelivery();
+      liftClawSubsystem.gotoDelivery();
+    }, liftElevatorSubsystem, liftClawSubsystem));
+    auxPOVdown.onTrue(new RunCommand(() -> {
+      liftElevatorSubsystem.setGotoIntake();
+      liftClawSubsystem.gotoIntake();
+    }, liftElevatorSubsystem, liftClawSubsystem));
   }
 
   private void setDefaultCommands() {

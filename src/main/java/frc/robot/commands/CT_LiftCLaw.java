@@ -5,6 +5,9 @@
 package frc.robot.commands;
 
 import java.util.function.Supplier;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.LiftClaw;
 import frc.robot.subsystems.LiftClaw.ClawState;
@@ -46,7 +49,10 @@ public class CT_LiftCLaw extends CommandBase {
 
     stateReleased = !clawButtonState;
  
-    liftClaw.setPitchPower(pitchPowerControl.get()); // TODO: transfer scaling to motor controller maybe
+    if(Math.abs(pitchPowerControl.get()) - 0.1 > 0 || liftClaw.getPiControlMode() == ControlMode.PercentOutput){
+      liftClaw.setPitchPower(pitchPowerControl.get()); // TODO: transfer scaling to motor controller maybe
+    }
+
     liftClaw.setYawPower(yawPowerControl.get());
   }
 
