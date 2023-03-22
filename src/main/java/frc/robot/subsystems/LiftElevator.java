@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants;
 import frc.robot.calibrations.configArmLift;
-import frc.robot.calibrations.configArmPitch;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -13,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LiftElevator extends SubsystemBase {
 
-  public boolean setPosition = false;
 
   // Internal Definitions
   public enum pitchState {
@@ -31,6 +29,45 @@ public class LiftElevator extends SubsystemBase {
 
   }
 
+  public boolean setPosition = false;
+
+  // TODO: Determine Numbers
+  private static final int CUBE_INTAKE_PITCH = 61000;
+  private static final int CUBE_INTAKE_ELEVATOR = 196000;
+  private static final int CONE_INTAKE_PITCH = 61000;
+  private static final int CONE_INTAKE_ELEVATOR = 196000;
+
+  public enum DeliveryState {
+    Bottom(1,2,3,4), 
+    Mid(1,2,3,4), 
+    Top(260000,310800,260000,310800);
+
+    public int CubePointElevator, CubePointPitch, ConePointElevator, ConePointPitch;
+    DeliveryState(int CubePointElevator, int CubePointPitch, int ConePointElevator, int ConePointPitch){
+      this.CubePointElevator = CubePointElevator;
+      this.CubePointPitch = CubePointPitch;
+      this.ConePointElevator = ConePointElevator;
+      this.ConePointPitch = ConePointPitch;
+    }
+
+    private static final DeliveryState[] vals = values();
+
+    public DeliveryState next() {
+      return vals[(this.ordinal() + 1) % vals.length];
+    }
+
+    public DeliveryState previous() {
+      return vals[(this.ordinal() - 1) % vals.length];
+    }
+  }
+
+  public enum Element {
+    CUBE, CONE;
+  }
+
+  private Element currentElement = Element.CONE;
+  private DeliveryState currentDeliverHeight = DeliveryState.Top;
+
   private double setElevatorInput = 0;
   private ControlMode setElevatorControlMethod = ControlMode.PercentOutput;
 
@@ -47,13 +84,8 @@ public class LiftElevator extends SubsystemBase {
    * Contructor
    */
   public LiftElevator() {
-    final var ConfigArmLift = new configArmLift();
-    final var ConfigArmPitch = new configArmPitch();
-    ElevatorMotor.configAllSettings(ConfigArmLift._fx);
     ElevatorMotor.setInverted(true);
     ElevatorMotor.setNeutralMode(NeutralMode.Brake);
-
-    ElevatorPitchMotor.configAllSettings(ConfigArmPitch._fx);
     ElevatorPitchMotor.setInverted(true);
   }
 
@@ -76,6 +108,14 @@ public class LiftElevator extends SubsystemBase {
   public void setPitchPercentPower(double setPower) {
     setPitchControlMethod = ControlMode.PercentOutput;
     setPitchInput = -setPower;
+  }
+
+  public void increaseDeliveryHeight() {
+    currentDeliverHeight = currentDeliverHeight.next();
+  }
+
+  public void decreaseDeliveryHeight() {
+    currentDeliverHeight = currentDeliverHeight.previous();
   }
 
   double topPos;
@@ -112,6 +152,43 @@ public class LiftElevator extends SubsystemBase {
       setElevatorControlMethod = ControlMode.PercentOutput;
       setElevatorInput = -setPower;
     }
+  }
+
+  public void setCurrentElement(Element currentElement) {
+    this.currentElement = currentElement;
+  }
+
+  public void setGotoDelivery(){
+    switch(currentElement){
+      case CONE:
+        setElevatorInput = currentDeliverHeight.ConePointElevator;
+        setPitchInput = currentDeliverHeight.ConePointPitch;
+        break;
+      case CUBE:
+        setElevatorInput = currentDeliverHeight.CubePointElevator;
+        setPitchInput = currentDeliverHeight.CubePointPitch;
+        break;
+    }
+
+    setElevatorControlMethod = ControlMode.MotionMagic;
+    setPitchControlMethod = ControlMode.MotionMagic;
+  }
+
+  public void setGotoIntake(){
+    switch(currentElement){
+      case CONE:
+        setElevatorInput = CONE_INTAKE_ELEVATOR;
+        setPitchInput = CONE_INTAKE_PITCH;
+        break;
+      case CUBE:
+        setElevatorInput = CUBE_INTAKE_ELEVATOR;
+        setPitchInput = CUBE_INTAKE_PITCH;
+        break;
+    }
+
+    setElevatorControlMethod = ControlMode.MotionMagic;
+    setPitchControlMethod = ControlMode.MotionMagic;
+    
   }
 
   // Get Interfaces
@@ -180,7 +257,7 @@ public class LiftElevator extends SubsystemBase {
 
   private void controlElevator() {
     ElevatorMotor.set(setElevatorControlMethod, setElevatorInput);
-    while (setPosition &&Math.abs(ElevatorMotor.getSelectedSensorPosition(0)-setElevatorInput)> 2000) {
+    while (setPosition && Math.abs(ElevatorMotor.getSelectedSensorPosition(0) - setElevatorInput) > 2000) {
       // do nothing!!!
       SmartDashboard.putBoolean("Doing move!", setPosition);
     }

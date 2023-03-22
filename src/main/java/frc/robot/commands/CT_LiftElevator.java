@@ -4,24 +4,22 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.LiftElevator.pitchState;
 import frc.robot.calibrations.ControlSettings;
 import frc.robot.subsystems.LiftElevator;
-
+import java.util.function.Supplier;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
 public class CT_LiftElevator extends CommandBase {
   private LiftElevator liftElevator;
-  private XboxController auxStick;
+  Supplier<Double> elevatorControl, pitchControl;
 
   /** Creates a new CT_LiftRobot. */
-  public CT_LiftElevator(LiftElevator liftElevator, XboxController auxStick) {
+  public CT_LiftElevator(LiftElevator liftElevator, Supplier<Double> elevatorControl, Supplier<Double> pitchControl) {
     this.liftElevator = liftElevator;
-    this.auxStick = auxStick;
+    this.elevatorControl = elevatorControl;
+    this.pitchControl = pitchControl;
     addRequirements(liftElevator);
   }
 
@@ -38,13 +36,13 @@ public class CT_LiftElevator extends CommandBase {
   public void execute() {
     // Don't interupt Motion Magic unless movement in joystick
     // TODO: Add factor to allow for stoppoing of arm.
-    if (Math.abs(auxStick.getLeftY()) - ControlSettings.AUX_STICK_DEADBAND > 0 || liftElevator.getElevatorState() == ControlMode.PercentOutput){
-      liftElevator.setElevatorPercentPower(auxStick.getLeftY());
+    if (Math.abs(elevatorControl.get()) - ControlSettings.AUX_STICK_DEADBAND > 0 || liftElevator.getElevatorState() == ControlMode.PercentOutput){
+      liftElevator.setElevatorPercentPower(elevatorControl.get());
     }
 
 
-    if (Math.abs(auxStick.getLeftTriggerAxis() - auxStick.getRightTriggerAxis()) - ControlSettings.AUX_STICK_DEADBAND > 0 || liftElevator.getPitchState() == ControlMode.PercentOutput){
-      liftElevator.setPitchPercentPower(auxStick.getLeftTriggerAxis() - auxStick.getRightTriggerAxis());
+    if (Math.abs(pitchControl.get()) - ControlSettings.AUX_STICK_DEADBAND > 0 || liftElevator.getPitchState() == ControlMode.PercentOutput){
+      liftElevator.setPitchPercentPower(pitchControl.get());
     }
 
 

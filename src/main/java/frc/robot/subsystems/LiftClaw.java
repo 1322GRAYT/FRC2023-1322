@@ -4,17 +4,13 @@
 
 package frc.robot.subsystems;
 
-import java.io.Console;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -26,6 +22,8 @@ public class LiftClaw extends SubsystemBase {
   }
   private ClawState clawState = ClawState.Closed;
   private double yawPower = 0;
+  private final int INTAKE_PITCH = 10000;
+  private final int DELIVERY_PITCH = 25000;
   private double pitchSetPoint = 0;
   private ControlMode pitchMode = ControlMode.PercentOutput;
 
@@ -56,6 +54,10 @@ public class LiftClaw extends SubsystemBase {
     return pitchSetPoint;
   }
 
+  public ControlMode getPiControlMode(){
+    return pitchMode;
+  }
+
   public boolean getGrabSensor(){
     return clawGrabSensor.get();
   }
@@ -75,8 +77,18 @@ public class LiftClaw extends SubsystemBase {
     this.yawPower = yawPower;
   }
 
-  public void setPitchSetPoint(double pitchSetPoint) {
+  public void setPitchPower(double pitchSetPoint) {
     this.pitchSetPoint = pitchSetPoint;
+  }
+
+  public void gotoDelivery(){
+    this.pitchMode = ControlMode.MotionMagic;
+    this.pitchSetPoint = DELIVERY_PITCH;
+  }
+
+  public void gotoIntake(){
+    this.pitchMode = ControlMode.MotionMagic;
+    this.pitchSetPoint = INTAKE_PITCH;
   }
 
   // Control Cycles
