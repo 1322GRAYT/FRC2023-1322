@@ -5,7 +5,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Constants;
 import frc.robot.calibrations.K_SWRV;
-import frc.robot.utils.swerve.SwerveModule;
+import frc.robot.subsystems.swerve.SwerveModule;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -51,9 +51,20 @@ public class SwerveDrivetrain extends SubsystemBase {
    */
 
   public SwerveDrivetrain() {
+
+    System.out.println("Starting SwerveDriveTrain");
+  
     this.gyro = new AHRS(Constants.SwerveDrivetrain.GYRO_ID);
     this.gyro.calibrate();
-    this.zeroGyro();
+    new Thread(()-> {
+      try {
+        Thread.sleep(1000);
+      }
+      catch (Exception e) {
+      }
+      this.zeroGyro();
+    }).start();
+    System.out.println("SwerveDriveTrain -- gyro done");
 
     this.swerveModules = new SwerveModule[] {
         new SwerveModule(0, Constants.SwerveDrivetrain.Mod0.constants),
@@ -61,12 +72,16 @@ public class SwerveDrivetrain extends SubsystemBase {
         new SwerveModule(2, Constants.SwerveDrivetrain.Mod2.constants),
         new SwerveModule(3, Constants.SwerveDrivetrain.Mod3.constants)
     };
+    System.out.println("SwerveDriveTrain -- SwerveModules");
+
 
     this.swerveOdometry = new SwerveDriveOdometry(Constants.SwerveDrivetrain.SWERVE_KINEMATICS,
         this.getYaw(),
         getSwerveModulePositions());
 
     this.field = new Field2d();
+
+    System.out.println("Starting SwerveDriveTrain -- odometry");
 
     /* Rotation Control PID */
     rotPID = new PIDController(K_SWRV.KeSWRV_k_CL_PropGx_Rot, K_SWRV.KeSWRV_k_CL_IntglGx_Rot,
@@ -75,6 +90,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     rotPID_PowOutMin = -1;
     rotPID_PowOutMax = 1;
     // rotPID_RotAngCmnd = this.getYaw().getDegrees();
+    System.out.println("Starting SwerveDriveTrain  -- rotPID");
 
     dashboard();
   }
@@ -160,12 +176,14 @@ public class SwerveDrivetrain extends SubsystemBase {
     return this.getYaw().getRadians();
   }
 
+  /*
   public void resetToAbsolute() {
     this.swerveModules[0].resetToAbsolute();
     this.swerveModules[1].resetToAbsolute();
     this.swerveModules[2].resetToAbsolute();
     this.swerveModules[3].resetToAbsolute();
   }
+  */
 
   /* Odometry */
 
@@ -238,33 +256,33 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
   }
 
-  public void resetSwerveDrvEncdrs() {
-    for (int i = 0; i < 4; i++) {
-      swerveModules[i].resetDrvEncdrPstn();
+  public void resetSwerveDriveEncoders() {
+    for (SwerveModule module: swerveModules) {
+      module.resetDrvEncdrPstn();
     }
   }
 
-  public void resetSwerveRotEncdrs() {
-    for (int i = 0; i < 4; i++) {
-      swerveModules[i].resetRotEncdrPstn();
+  public void resetSwerveRotateEncoders() {
+    for (SwerveModule module: swerveModules) {
+      module.resetRotEncdrPstn();
     }
   }
 
   public void zeroSwerveRotEncdrs() {
-    for (int i = 0; i < 4; i++) {
-      swerveModules[i].zeroRotEncdrPstn();  
+    for (SwerveModule module: swerveModules) {
+      //module.zeroRotEncdrPstn();
     }
   }
 
-  public void stopSwerveDrvMotors() {
-    for (int i = 0; i < 4; i++) {
-      swerveModules[i].stopDrvMotor();
+  public void stopSwerveDriveMotors() {
+    for (SwerveModule module: swerveModules) {
+      module.stopDrvMotor();
     }
   }
 
   public void stopSwerveRotMotors() {
-    for (int i = 0; i < 4; i++) {
-      swerveModules[i].stopRotMotor();
+    for (SwerveModule module: swerveModules) {
+      module.stopRotMotor();
     }
   }
 

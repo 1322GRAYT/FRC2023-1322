@@ -13,7 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
-import frc.robot.utils.swerve.SwerveModuleConstants;
+import frc.robot.subsystems.swerve.SwerveModuleConstants;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -34,22 +34,6 @@ public final class Constants {
         UP, DOWN, OFF
     }
 
-    public static long DEBOUNCE=200;
-    /*
-     * motors and airlines in 2023
-     * 4-DRIVEDIRECTION-MOTOR
-     * 1-LIFT-MOTOR
-     * 1-ARMTILT-MOTOR
-     * 1-CLAWROTATE-MOTOR
-     * 1-LIFTTILT-AIR
-     * 1-CLAWOPEN-AIR
-     * 1-FLOORPICK-AIR
-     * 1-FLOORPUSH-AIR
-     * 1-CONECENTERLIFT-AIR
-     */
-
-    
-
     /* PWM ADDRESS ASSIGNMENTS */
 
     public static final int CLAW_YAW_SERVO = 0;
@@ -57,6 +41,7 @@ public final class Constants {
 
     /* MOTOR CAN ADDRESS ASSIGNMENTS */
     // Drive Motors (FALCON 500)
+    /* 
     public static final int DRV_MTR_FT_LT = 2; // Front Ledsx Aft
     public static final int DRV_MTR_FT_RT = 7; // Front Right
     public static final int DRV_MTR_RR_LT = 8; // Rear Left
@@ -66,9 +51,9 @@ public final class Constants {
     public static final int SWRV_MTR_FT_RT = 4; // Front Right
     public static final int SWRV_MTR_RR_LT = 1; // Rear Left
     public static final int SWRV_MTR_RR_RT = 5; // Rear Right
-
+*/
     // Floor Pickup
-    public static final int FLOOR_MOTOR = 9;
+    //public static final int FLOOR_MOTOR = 9;
 
     // Cone Lift Motor (CAN TALON SRX)
     public static final int CONE_MTR_LIFT = 11;
@@ -85,25 +70,11 @@ public final class Constants {
 
     /* PNEUMATIC ACTUATOR ADDRESS ASSIGNMENTS */
     // TODO fix assignments
-    public static final int PNEUMATIC_ARM_TILT_INITIAL_0 = 2;
-    public static final int PNEUMATIC_ARM_TILT_INITIAL_1 = 3;
-    public static final int PNEUMATIC_ARM_TILT_SECONDARY_0 = 10;
-    public static final int PNEUMATIC_ARM_TILT_SECONDARY_1 = 11;
 
     public static final int PNEUMATIC_CLAW_0 = 6;
     public static final int PNEUMATIC_CLAW_1 = 7;
 
-    public static final int PNEUMATIC_LIFT_CONE_GRAB_0 = 4;
-    public static final int PNEUMATIC_LIFT_CONE_GRAB_1 = 5;
-
-    public static final int PNEUMATIC_FLOOR_GRAB_L_0 = 0;
-    public static final int PNEUMATIC_FLOOR_GRAB_L_1 = 1;
-
-    public static final int PNEUMATIC_FLOOR_GRAB_R_0 = 12;
-    public static final int PNEUMATIC_FLOOR_GRAB_R_1 = 13;
-
-
-
+/* 
     public static final int PNEUMATIC_FLOORPICK = 5;
     public static final int PNEUMATIC_FLOORPUSH = 33;
     public static final int PNEUMATIC_CONECENTERLIFT = 34;
@@ -116,29 +87,30 @@ public final class Constants {
     public static final int PNEU_BALL_INTAKE_RR = 12;
     public static final int PNEU_LIFT_TRACK = 13;
     public static final int PNEU_SHOOTER_CAMERA = 8;
-
+*/
     /* ANALOG INPUT ADDRESS ASSIGNMENTS */
-    // Swerve Steer Motors Position
+    /*/ Swerve Steer Motors Position
     public static final int ANA_SWRV_ANG_FT_LT = 3; // Front Left
     public static final int ANA_SWRV_ANG_RR_LT = 2; // Rear Left
     public static final int ANA_SWRV_ANG_FT_RT = 0; // Front Right
     public static final int ANA_SWRV_ANG_RR_RT = 1; // Rear Right
-
+*/
     /* DIGITAL INPUT ADDRESS ASSIGNMENTS */
     public static final int SW_LIFT_TRACK_TRIG = 0;
+/*
     public static final int SW_BALL_INTAKE_LT = 1;
     public static final int SW_BALL_INTAKE_RT = 3;
     public static final int SW_BALL_INTAKE_FT = 4;
     public static final int SW_BALL_INTAKE_RR = 2;
     public static final int SW_BALL_ADVANCE_1 = 5;
     public static final int SW_BALL_ADVANCE_2 = 6;
-
+*/
     /* X-BOX CONTROLLER MAPPING */
     // Controller Assignments
     public static final int DRVR_CNTRLR = 0;
     public static final int AUX_CNTRLR = 1;
     // Button Assignments
-    public static final int BUTTON_A = 1;
+     public static final int BUTTON_A = 1;
     public static final int BUTTON_B = 2;
     public static final int BUTTON_X = 3;
     public static final int BUTTON_Y = 4;
@@ -159,7 +131,7 @@ public final class Constants {
 
     public static final int CLAW_ANGLE_SENSOR=0;
 
-    public static final int TOGGLE_AUTO_CLAW_MOVEMENT = BUTTON_A;
+   // public static final int TOGGLE_AUTO_CLAW_MOVEMENT = BUTTON_A;
 
     public static final class SwerveDrivetrain {
 

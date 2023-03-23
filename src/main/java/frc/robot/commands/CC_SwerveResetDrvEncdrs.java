@@ -23,6 +23,6 @@ public class CC_SwerveResetDrvEncdrs extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    swerveDrivetrain.resetSwerveDrvEncdrs();
+    swerveDrivetrain.resetSwerveDriveEncoders();
   }
 }

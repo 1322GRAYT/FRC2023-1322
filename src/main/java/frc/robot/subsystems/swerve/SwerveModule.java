@@ -1,4 +1,4 @@
-package frc.robot.utils.swerve;
+package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -49,7 +49,11 @@ public class SwerveModule {
         this.angleMotor = new TalonFX(moduleConstants.angleMotorID);
         configAngleMotor();
 
+        resetDrvEncdrPstn();
+        resetRotEncdrPstn();
+        //zeroRotEncdrPstn();
         this.lastAngle = getState().angle.getDegrees();
+        System.out.println("lastangle == "+lastAngle);
     }
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
@@ -86,9 +90,9 @@ public class SwerveModule {
     }
 
     private void configAngleEncoder() {
-        // this.angleEncoder.configFactoryDefault();
+        //this.angleEncoder.configFactoryDefault();
         // System.out.println("HERE");
-        // this.angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCANCoderConfig);
+        //this.angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCANCoderConfig);
         // System.out.println("HERE 2");
     }
 

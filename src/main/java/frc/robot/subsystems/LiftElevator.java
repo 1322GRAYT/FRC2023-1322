@@ -141,17 +141,16 @@ public class LiftElevator extends SubsystemBase {
   }
 
   public void setElevatorControl(ControlMode mode, double setValue) {
-    if (!setPosition) {
+    
       setElevatorControlMethod = mode;
       setElevatorInput = setValue;
-    }
   }
 
   public void setElevatorPercentPower(double setPower) {
-    if (!setPosition) {
+    // if (!setPosition) {
       setElevatorControlMethod = ControlMode.PercentOutput;
       setElevatorInput = -setPower;
-    }
+    // }
   }
 
   public void setCurrentElement(Element currentElement) {

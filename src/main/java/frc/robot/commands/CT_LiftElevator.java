@@ -30,13 +30,16 @@ public class CT_LiftElevator extends CommandBase {
   }
 
 
-  private long debounce_A_time=System.currentTimeMillis(); 
+  //private long debounce_A_time=System.currentTimeMillis(); 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+    
     // Don't interupt Motion Magic unless movement in joystick
     // TODO: Add factor to allow for stoppoing of arm.
-    if (Math.abs(elevatorControl.get()) - ControlSettings.AUX_STICK_DEADBAND > 0 || liftElevator.getElevatorState() == ControlMode.PercentOutput){
+    if (Math.abs(elevatorControl.get()) - ControlSettings.AUX_STICK_DEADBAND > 0 
+        || liftElevator.getElevatorState() == ControlMode.PercentOutput){
       liftElevator.setElevatorPercentPower(elevatorControl.get());
     }
 

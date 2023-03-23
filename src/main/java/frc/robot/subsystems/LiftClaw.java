@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PWM;
@@ -13,6 +15,9 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import com.ctre.phoenix.motorcontrol.*;
+//import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class LiftClaw extends SubsystemBase {
 
@@ -27,18 +32,36 @@ public class LiftClaw extends SubsystemBase {
   private double pitchSetPoint = 0;
   private ControlMode pitchMode = ControlMode.PercentOutput;
 
+  private WPI_TalonSRX intakeMotor = new WPI_TalonSRX(Constants.CONE_MTR_LIFT);
   // Resource Definitions
   private PWM clawYaw = new PWM(Constants.CLAW_YAW_SERVO);
   private WPI_TalonFX clawPitch = new WPI_TalonFX(Constants.CLAW_PITCH);
   private DoubleSolenoid clawGrab = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.PNEUMATIC_CLAW_0, Constants.PNEUMATIC_CLAW_1);
   private DigitalInput clawGrabSensor = new DigitalInput(5);
   // private AnalogInput clawAngle = new AnalogInput(Constants.CLAW_ANGLE_SENSOR);
-  
+  double intakeMotorPower = 0;
+  ControlMode intakeMotorMode = ControlMode.PercentOutput;
 
   /**
    * Constructor
    */
-  public LiftClaw() {}
+  public LiftClaw() {
+    intakeMotor.setInverted(true);
+    intakeMotor.setNeutralMode(NeutralMode.Brake);
+    yawLimiter = new SlewRateLimiter(0.5);
+  }
+
+  public boolean getClawGrabSensor(){
+    return clawGrabSensor.get();
+  }
+
+  public void setIntakeMotorPower(double coneMotorPower) {
+    this.intakeMotorPower = coneMotorPower;
+  }
+
+  private void intakeControl() {
+    intakeMotor.set(intakeMotorMode, intakeMotorPower);
+  }
 
   // Getter Interfaces
 
@@ -72,9 +95,11 @@ public class LiftClaw extends SubsystemBase {
     this.clawState = clawState;
   }
 
+  private SlewRateLimiter yawLimiter;
+  
   public void setYawPower(double yawPower) {
     pitchMode = ControlMode.PercentOutput;
-    this.yawPower = yawPower;
+    this.yawPower = yawLimiter.calculate(yawPower);
   }
 
   public void setPitchPower(double pitchSetPoint) {
@@ -126,6 +151,7 @@ public class LiftClaw extends SubsystemBase {
     ControlPitch();
     ControlYaw();
     ControlClaw();
+    intakeControl();
     //System.out.println(getGrabSensor());
   }
 

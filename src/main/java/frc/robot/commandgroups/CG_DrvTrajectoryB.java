@@ -87,7 +87,7 @@ public class CG_DrvTrajectoryB extends SequentialCommandGroup {
       //Run trajectory
       new InstantCommand(() -> this.drive.resetOdometry(trajectory.getInitialPose())),
       swerveControllerCommand,
-      new InstantCommand(() -> this.drive.stopSwerveDrvMotors()),
+      new InstantCommand(() -> this.drive.stopSwerveDriveMotors()),
       new InstantCommand(() -> this.drive.stopSwerveRotMotors())        
     );
   }

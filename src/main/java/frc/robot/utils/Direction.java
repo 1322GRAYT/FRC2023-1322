@@ -8,28 +8,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 /** Add your docs here. */
-public enum Direction{
+public enum Direction {
     NONE(-1), UP(0), UPRIGHT(45), RIGHT(90), DOWNRIGHT(135), DOWN(180), DOWNLEFT(225), LEFT(270), UPLEFT(315);
 
     int direction;
     private static Map map = new HashMap<>();
 
     static {
-      for (Direction direction : Direction.values()){
-        map.put(direction.direction, direction);
-      }
+        for (Direction direction : Direction.values()) {
+            map.put(direction.direction, direction);
+        }
     }
 
-    private Direction(int direction){
-      this.direction = direction;
+    private Direction(int direction) {
+        this.direction = direction;
     }
 
-    public static Direction valueOf(int direction){
-      return (Direction) map.get(direction);
+    public static Direction valueOf(int direction) {
+        return (Direction) map.get(direction);
     }
 
-    public int getValue(){
-      return direction;
+    public int getValue() {
+        return direction;
     }
 
-  };
+};
