@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PWM;
@@ -14,7 +16,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.*;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+//import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class LiftClaw extends SubsystemBase {
@@ -46,6 +48,7 @@ public class LiftClaw extends SubsystemBase {
   public LiftClaw() {
     intakeMotor.setInverted(true);
     intakeMotor.setNeutralMode(NeutralMode.Brake);
+    yawLimiter = new SlewRateLimiter(0.5);
   }
 
   public boolean getClawGrabSensor(){
@@ -92,9 +95,11 @@ public class LiftClaw extends SubsystemBase {
     this.clawState = clawState;
   }
 
+  private SlewRateLimiter yawLimiter;
+  
   public void setYawPower(double yawPower) {
     pitchMode = ControlMode.PercentOutput;
-    this.yawPower = yawPower;
+    this.yawPower = yawLimiter.calculate(yawPower);
   }
 
   public void setPitchPower(double pitchSetPoint) {

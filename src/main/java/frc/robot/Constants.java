@@ -110,7 +110,7 @@ public final class Constants {
     public static final int DRVR_CNTRLR = 0;
     public static final int AUX_CNTRLR = 1;
     // Button Assignments
-/*     public static final int BUTTON_A = 1;
+     public static final int BUTTON_A = 1;
     public static final int BUTTON_B = 2;
     public static final int BUTTON_X = 3;
     public static final int BUTTON_Y = 4;
@@ -127,7 +127,7 @@ public final class Constants {
     public static final int STICK_RIGHT_XAXIS = 4;
     public static final int STICK_RIGHT_YAXIS = 5;
     public static final int DPAD = 6;
-*/
+
 
     public static final int CLAW_ANGLE_SENSOR=0;
 

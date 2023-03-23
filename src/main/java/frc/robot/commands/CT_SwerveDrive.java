@@ -29,9 +29,9 @@ public class CT_SwerveDrive extends CommandBase {
         this.openLoop = openLoop;
         s_Swerve.resetSwerveDriveEncoders();
         s_Swerve.resetSwerveRotateEncoders();
-        xLimiter = new SlewRateLimiter(Constants.SwerveDrivetrain.MAX_SPEED);
-        yLimiter = new SlewRateLimiter(Constants.SwerveDrivetrain.MAX_SPEED);
-        rLimiter = new SlewRateLimiter(Constants.SwerveDrivetrain.MAX_ANGULAR_VELOCITY);
+        xLimiter = new SlewRateLimiter(.9);
+        yLimiter = new SlewRateLimiter(.9);
+        rLimiter = new SlewRateLimiter(.9);
     }
 
     @Override
@@ -49,9 +49,9 @@ public class CT_SwerveDrive extends CommandBase {
         xAxis = ApplyDeadBand_Scaled(xAxis, DEADBAND, 1.0);
         rAxis = ApplyDeadBand_Scaled(rAxis, DEADBAND, 1.0);
 
-        xAxis = xLimiter.calculate(xAxis);
-        yAxis = yLimiter.calculate(yAxis);
-        rAxis = rLimiter.calculate(rAxis);
+        //xAxis = xLimiter.calculate(xAxis);
+        //yAxis = yLimiter.calculate(yAxis);
+        //rAxis = rLimiter.calculate(rAxis);
 
 
 

@@ -51,7 +51,7 @@ public class SwerveModule {
 
         resetDrvEncdrPstn();
         resetRotEncdrPstn();
-        zeroRotEncdrPstn();
+        //zeroRotEncdrPstn();
         this.lastAngle = getState().angle.getDegrees();
         System.out.println("lastangle == "+lastAngle);
     }

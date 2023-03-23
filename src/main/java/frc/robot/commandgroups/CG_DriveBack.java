@@ -13,17 +13,21 @@ import frc.robot.commands.*;
 
 public class CG_DriveBack extends SequentialCommandGroup {
 
-    private double power = 1;
-    private double time = 1;
+    private double power = 1.5;
+    private double time = 2;
 
     public CG_DriveBack(SwerveDrivetrain drive, LiftClaw liftClaw, LiftElevator liftElevator) {
         addCommands(
                 new CA_Elevator(liftElevator, true),
                 new CA_PitchElevator(liftElevator, true),
-                new InstantCommand(()->liftClaw.setClawState(ClawState.Closed), liftClaw),
-//                new CA_ToggleClaw(liftClaw),
+                new CA_ToggleClaw(liftClaw),
                 new CA_PitchElevator(liftElevator, false),
-                new RunCommand(() -> drive.drive(new Translation2d(-power, 0.0),0, false, true), drive).withTimeout(time),
+                new ParallelCommandGroup(
+                    new CA_ToggleClaw(liftClaw),
+                    new RunCommand(() -> drive.drive(
+                        new Translation2d(-power, 0.0), 0, false, true),
+                        drive).withTimeout(time)
+                ),
                 new InstantCommand(() -> drive.stopSwerveDriveMotors()));
     }
 }
