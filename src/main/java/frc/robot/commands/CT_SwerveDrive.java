@@ -3,7 +3,6 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -18,8 +17,7 @@ public class CT_SwerveDrive extends CommandBase {
     
     private SwerveDrivetrain swerveSubsystem;
     private XboxController controller;
-    private SlewRateLimiter xLimiter, yLimiter, rLimiter;
-
+    
     public CT_SwerveDrive (SwerveDrivetrain s_Swerve, XboxController controller, boolean fieldRelative, boolean openLoop) {
         this.swerveSubsystem = s_Swerve;
         addRequirements(s_Swerve);
@@ -29,9 +27,6 @@ public class CT_SwerveDrive extends CommandBase {
         this.openLoop = openLoop;
         s_Swerve.resetSwerveDriveEncoders();
         s_Swerve.resetSwerveRotateEncoders();
-        xLimiter = new SlewRateLimiter(.9);
-        yLimiter = new SlewRateLimiter(.9);
-        rLimiter = new SlewRateLimiter(.9);
     }
 
     @Override

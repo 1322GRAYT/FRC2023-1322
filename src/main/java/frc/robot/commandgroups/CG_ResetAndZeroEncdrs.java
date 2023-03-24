@@ -4,11 +4,9 @@
 
 package frc.robot.commandgroups;
 
-import frc.robot.commands.CC_TimeDly;
 import frc.robot.commands.CC_SwerveResetDrvEncdrs;
 import frc.robot.commands.CC_SwerveResetRotEncdrs;
 import frc.robot.commands.CC_SwerveZeroGyro;
-import frc.robot.commands.CC_SwerveZeroRotEncdrs;
 import frc.robot.subsystems.SwerveDrivetrain;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -23,10 +21,7 @@ public class CG_ResetAndZeroEncdrs extends SequentialCommandGroup {
     addCommands(
       (new CC_SwerveResetRotEncdrs(swerveDrivetrain)),
       (new CC_SwerveResetDrvEncdrs(swerveDrivetrain)),
-      (new CC_SwerveZeroGyro(swerveDrivetrain)),
-      (new CC_TimeDly(0.100)),
-      (new CC_SwerveZeroRotEncdrs(swerveDrivetrain)),
-      (new CC_TimeDly(0.150))
+      (new CC_SwerveZeroGyro(swerveDrivetrain))
     );
     System.out.println("CG_ResetAndZeroEncdrs Autonomous Invoked.");
   }

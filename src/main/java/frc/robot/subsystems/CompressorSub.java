@@ -41,7 +41,7 @@ public class CompressorSub extends SubsystemBase {
     currentCompressor = phCompressor.getCurrent();
   }
 
-  private double getCompressorPressure() {
+  public double getCompressorPressure() {
     return pressureCompressor;
   }
 

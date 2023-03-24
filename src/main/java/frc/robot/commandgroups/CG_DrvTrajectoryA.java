@@ -14,16 +14,11 @@ import java.util.List;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-//import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.commands.*;
-//import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-//import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-//import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.*;
 
@@ -39,12 +34,12 @@ public class CG_DrvTrajectoryA extends SequentialCommandGroup {
                 this.drive = drive;
 
                 // 1. Create trajectory settings
-                TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+                /*TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
                                 Constants.Auton.MAX_SPEED_MPS,
                                 Constants.Auton.MAX_ACCELERATION_MPSS)
                                 .setReversed(true)
                                 .setKinematics(Constants.SwerveDrivetrain.SWERVE_KINEMATICS);
-
+*/
                 var start_P = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0),
                                 Rotation2d.fromDegrees(0));
                 var final_P = new Pose2d(Units.feetToMeters(-1.0), Units.feetToMeters(0.0),

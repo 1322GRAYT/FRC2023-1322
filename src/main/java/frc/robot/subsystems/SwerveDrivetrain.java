@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Constants;
@@ -16,7 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-//import edu.wpi.first.math.trajectory.TrapezoidProfile;
+
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -117,9 +116,9 @@ public class SwerveDrivetrain extends SubsystemBase {
     this.swerveModules[2].getCanCoder();
     this.swerveModules[3].getCanCoder();
 
-    SmartDashboard.putNumber("Field X-Coord: ", this.field.getRobotPose().getX());
-    SmartDashboard.putNumber("Field Y-Coord: ", this.field.getRobotPose().getY());
-    SmartDashboard.putNumber("Fixed Gyro: ", this.getYaw().getDegrees());
+    //SmartDashboard.putNumber("Field X-Coord: ", this.field.getRobotPose().getX());
+    //SmartDashboard.putNumber("Field Y-Coord: ", this.field.getRobotPose().getY());
+    SmartDashboard.putNumber("Yaw: ", this.getYaw().getDegrees());
 
   }
 
@@ -142,12 +141,6 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
   }
 
-  public void secretDrive(double power){
-    for (int i = 0; i < swerveModules.length; i++) {
-      swerveModules[i].driveMotor.set(ControlMode.PercentOutput, power);
-    }
-  }
-
   /* Gyro */
   public void zeroGyro() {
     this.gyro.reset();
@@ -166,6 +159,22 @@ public class SwerveDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Yaw Gyro: ", rawYaw);
     double yaw = optimizeGyro(rawYaw);
     return Constants.SwerveDrivetrain.INVERT_GYRO ? Rotation2d.fromDegrees(360 - yaw) : Rotation2d.fromDegrees(yaw);
+  }
+
+  public double getPitch() {
+    return gyro.getPitch();
+  }
+
+  public double getRoll() {
+    return gyro.getRoll();
+  }
+
+  public double getPitchOptimized() {
+    return optimizeGyro(getPitch());
+  }
+
+  public double getRollOptimized() {
+    return optimizeGyro(getRoll());
   }
 
   public double getGyroAngleDegrees() {
@@ -203,43 +212,6 @@ public class SwerveDrivetrain extends SubsystemBase {
     this.swerveOdometry.resetPosition(getYaw(), getSwerveModulePositions(), pose);
   }
 
-  // public boolean runUntilZero() {
-  // double encoder0 = this.swerveModules[0].getCanCoder().getDegrees() -
-  // this.swerveModules[0].getAngleOffset();
-  // double encoder1 = this.swerveModules[1].getCanCoder().getDegrees() -
-  // this.swerveModules[1].getAngleOffset();
-  // double encoder2 = this.swerveModules[2].getCanCoder().getDegrees() -
-  // this.swerveModules[2].getAngleOffset();
-  // double encoder3 = this.swerveModules[3].getCanCoder().getDegrees() -
-  // this.swerveModules[3].getAngleOffset();
-  // boolean allAtZero = true;
-  // if(encoder0 > 3) {
-  // this.swerveModules[0].runAngleByPercent(.2);
-  // allAtZero = false;
-  // } else {
-  // this.swerveModules[0].runAngleByPercent(0);
-  // }
-  // if(encoder1 > 3) {
-  // this.swerveModules[1].runAngleByPercent(.2);
-  // allAtZero = false;
-  // } else {
-  // this.swerveModules[1].runAngleByPercent(0);
-  // }
-  // if(encoder2 > 3) {
-  // this.swerveModules[2].runAngleByPercent(.2);
-  // allAtZero = false;
-  // } else {
-  // this.swerveModules[2].runAngleByPercent(0);
-  // }
-  // if(encoder3 > 3) {
-  // this.swerveModules[3].runAngleByPercent(.2);
-  // allAtZero = false;
-  // } else {
-  // this.swerveModules[3].runAngleByPercent(0);
-  // }
-  // return allAtZero;
-  // }
-
   /* Module States */
   public SwerveModuleState[] getStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
@@ -265,12 +237,6 @@ public class SwerveDrivetrain extends SubsystemBase {
   public void resetSwerveRotateEncoders() {
     for (SwerveModule module: swerveModules) {
       module.resetRotEncdrPstn();
-    }
-  }
-
-  public void zeroSwerveRotEncdrs() {
-    for (SwerveModule module: swerveModules) {
-      //module.zeroRotEncdrPstn();
     }
   }
 

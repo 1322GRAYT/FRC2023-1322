@@ -10,13 +10,13 @@ import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
-public class CG_DriveBack extends SequentialCommandGroup {
+public class CG_DriveBackOrig extends SequentialCommandGroup {
 
     //no ramp was 1.5, 2.0
     private double power = 2;
     private double time = 2.6;
 
-    public CG_DriveBack(SwerveDrivetrain drive, LiftClaw liftClaw, LiftElevator liftElevator) {
+    public CG_DriveBackOrig(SwerveDrivetrain drive, LiftClaw liftClaw, LiftElevator liftElevator) {
         addCommands(
                 new CA_Elevator(liftElevator, true),
                 new CA_PitchElevator(liftElevator, true),
