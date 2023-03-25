@@ -48,10 +48,11 @@ public class CompressorSub extends SubsystemBase {
   private double getCompressorCurrent() {
     return currentCompressor;
   }
+  
 
   private void printCompressorPressure() {
     SmartDashboard.putNumber("Compressor Pressure: ", getCompressorPressure());
-    SmartDashboard.putNumber("Compressor Current: ", getCompressorCurrent());
+    //SmartDashboard.putNumber("Compressor Current: ", getCompressorCurrent());
   }
 
 }

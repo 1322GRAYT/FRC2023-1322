@@ -60,8 +60,18 @@ public class RobotContainer {
 
     // m_chooser.setDefaultOption("Default Auto", new
     // CA_DriveDeadrecken(swerveSubsystem, -0.5, 2));
-    m_chooser.setDefaultOption("PlaceAndBack",
+
+    compressorSubsystem.getCompressorPressure(); // this gets rid of the
+
+    m_chooser.setDefaultOption("Ramp PlaceAndBack",
         new CG_DriveBack(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
+    m_chooser.addOption("No Ramp Place and move back.",
+        new CG_DriveBackOrig(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
+    // m_chooser.addOption("Place and then attempt to balance.", new
+    // CG_DriveBackBalance(swerveSubsystem, liftClawSubsystem,
+    // liftElevatorSubsystem));
+    // m_chooser.addOption("Balance Only!", new CG_BalanceOnly(swerveSubsystem,
+    // liftClawSubsystem, liftElevatorSubsystem));
     SmartDashboard.putData("Auto choices: ", m_chooser);
 
     // Configure the button bindings
@@ -107,15 +117,17 @@ public class RobotContainer {
      * liftElevatorSubsystem.setGotoDelivery();
      * liftClawSubsystem.gotoDelivery();
      * }, liftElevatorSubsystem, liftClawSubsystem));
-     * auxPOVdown.onTrue(new RunCommand(() -> {
-     * liftElevatorSubsystem.setGotoIntake();
-     * liftClawSubsystem.gotoIntake();
-     * }, liftElevatorSubsystem, liftClawSubsystem));
      */
-    auxAButton.whileTrue(new RunCommand(() -> {
+/* 
+     auxPOVdown.onTrue(new RunCommand(() -> {
+      liftElevatorSubsystem.setGotoIntake();
+      liftClawSubsystem.gotoIntake();
+    }, liftElevatorSubsystem, liftClawSubsystem));
+*/
+    auxYButton.whileTrue(new RunCommand(() -> {
       liftClawSubsystem.setIntakeMotorPower(1.0);
     }, liftClawSubsystem));
-    auxYButton.whileTrue(new RunCommand(() -> {
+    auxAButton.whileTrue(new RunCommand(() -> {
       liftClawSubsystem.setIntakeMotorPower(-1.0);
     }, liftClawSubsystem));
   }

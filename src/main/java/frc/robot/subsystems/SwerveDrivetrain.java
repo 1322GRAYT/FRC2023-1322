@@ -118,7 +118,7 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     //SmartDashboard.putNumber("Field X-Coord: ", this.field.getRobotPose().getX());
     //SmartDashboard.putNumber("Field Y-Coord: ", this.field.getRobotPose().getY());
-    SmartDashboard.putNumber("Yaw: ", this.getYaw().getDegrees());
+    //SmartDashboard.putNumber("Yaw: ", this.getYaw().getDegrees());
 
   }
 
@@ -316,7 +316,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     tab.addNumber("Gyro Angle (GRAPH) ???", this::getGyroAngleDegrees).withWidget(BuiltInWidgets.kGraph);
     tab.add("Field X-Coord ", this.field.getRobotPose().getX());
     tab.add("Field Y-Coord ", this.field.getRobotPose().getY());
-    SmartDashboard.putData(this.field);
+    //SmartDashboard.putData(this.field);
     // SmartDashboard.putData("ANGLE PID", data);
     // SmartDashboard.putData("DRIVE PID", data);
   }
@@ -446,5 +446,6 @@ public class SwerveDrivetrain extends SubsystemBase {
    * }
    */
   // }
+
 
 }

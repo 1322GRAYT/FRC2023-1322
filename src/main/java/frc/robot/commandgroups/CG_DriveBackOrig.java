@@ -12,12 +12,12 @@ import frc.robot.commands.*;
 
 public class CG_DriveBackOrig extends SequentialCommandGroup {
 
-    //no ramp was 1.5, 2.0
-    private double power = 2;
-    private double time = 2.6;
+    private double power = 1.5;
+    private double time = 2.0;
 
     public CG_DriveBackOrig(SwerveDrivetrain drive, LiftClaw liftClaw, LiftElevator liftElevator) {
         addCommands(
+                new InstantCommand(() -> {drive.resetSwerveDriveEncoders();drive.resetSwerveRotateEncoders();}),
                 new CA_Elevator(liftElevator, true),
                 new CA_PitchElevator(liftElevator, true),
                 new CA_ToggleClaw(liftClaw),

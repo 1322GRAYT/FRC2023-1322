@@ -71,8 +71,8 @@ public final class Constants {
     /* PNEUMATIC ACTUATOR ADDRESS ASSIGNMENTS */
     // TODO fix assignments
 
-    public static final int PNEUMATIC_CLAW_0 = 6;
-    public static final int PNEUMATIC_CLAW_1 = 7;
+    public static final int PNEUMATIC_CLAW_0 = 11;
+    public static final int PNEUMATIC_CLAW_1 = 10;
 
 /* 
     public static final int PNEUMATIC_FLOORPICK = 5;
