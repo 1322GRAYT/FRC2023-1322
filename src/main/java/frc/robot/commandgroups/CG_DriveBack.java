@@ -14,7 +14,7 @@ public class CG_DriveBack extends SequentialCommandGroup {
 
     //no ramp was 1.5, 2.0
     private double power = 2;
-    private double time = 2.9;
+    private double time = 2.6;
 
     public CG_DriveBack(SwerveDrivetrain drive, LiftClaw liftClaw, LiftElevator liftElevator) {
         addCommands(

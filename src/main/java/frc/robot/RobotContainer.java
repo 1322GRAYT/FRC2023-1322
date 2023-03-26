@@ -63,15 +63,18 @@ public class RobotContainer {
 
     compressorSubsystem.getCompressorPressure(); // this gets rid of the
 
-    m_chooser.setDefaultOption("Ramp PlaceAndBack",
+    m_chooser.setDefaultOption("PlaceAndBack",
         new CG_DriveBack(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
-    m_chooser.addOption("No Ramp Place and move back.",
-        new CG_DriveBackOrig(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
+    //m_chooser.addOption("No Ramp Place and move back.",
+    //    new CG_DriveBackOrig(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
     // m_chooser.addOption("Place and then attempt to balance.", new
     // CG_DriveBackBalance(swerveSubsystem, liftClawSubsystem,
     // liftElevatorSubsystem));
-    // m_chooser.addOption("Balance Only!", new CG_BalanceOnly(swerveSubsystem,
-    // liftClawSubsystem, liftElevatorSubsystem));
+    m_chooser.addOption("Ramp Balance", new CG_BalanceRamp(swerveSubsystem,
+        liftClawSubsystem, liftElevatorSubsystem));
+    m_chooser.addOption("Yeet Cube, then Ramp", new CG_YeetCubeRamp(swerveSubsystem,
+        liftClawSubsystem, liftElevatorSubsystem));
+        
     SmartDashboard.putData("Auto choices: ", m_chooser);
 
     // Configure the button bindings
