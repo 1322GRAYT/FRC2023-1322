@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -12,8 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.commandgroups.*;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.LiftClaw.ClawState;
-import frc.robot.subsystems.LiftElevator.Element;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -49,7 +46,7 @@ public class RobotContainer {
 
   JoystickButton auxAButton = new JoystickButton(auxStick, Constants.BUTTON_A);
   JoystickButton auxYButton = new JoystickButton(auxStick, Constants.BUTTON_Y);
-  //JoystickButton auxBButton = new JoystickButton(auxStick, Constants.BUTTON_B);
+  // JoystickButton auxBButton = new JoystickButton(auxStick, Constants.BUTTON_B);
 
   private Command m_autoCommandSelected;
 
@@ -58,11 +55,26 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure Autonomous Selections Available
-    //m_chooser.setDefaultOption("Default Auto", new CG_PlaceCone(liftClawSubsystem, liftElevatorSubsystem));
+    // m_chooser.setDefaultOption("Default Auto", new
+    // CG_PlaceCone(liftClawSubsystem, liftElevatorSubsystem));
 
     // m_chooser.setDefaultOption("Default Auto", new
     // CA_DriveDeadrecken(swerveSubsystem, -0.5, 2));
-    m_chooser.setDefaultOption("PlaceAndBack", new CG_DriveBack(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
+
+    compressorSubsystem.getCompressorPressure(); // this gets rid of the
+
+    m_chooser.setDefaultOption("PlaceAndBack",
+        new CG_DriveBack(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
+    //m_chooser.addOption("No Ramp Place and move back.",
+    //    new CG_DriveBackOrig(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
+    // m_chooser.addOption("Place and then attempt to balance.", new
+    // CG_DriveBackBalance(swerveSubsystem, liftClawSubsystem,
+    // liftElevatorSubsystem));
+    m_chooser.addOption("Ramp Balance", new CG_BalanceRamp(swerveSubsystem,
+        liftClawSubsystem, liftElevatorSubsystem));
+    m_chooser.addOption("Yeet Cube, then Ramp", new CG_YeetCubeRamp(swerveSubsystem,
+        liftClawSubsystem, liftElevatorSubsystem));
+        
     SmartDashboard.putData("Auto choices: ", m_chooser);
 
     // Configure the button bindings
@@ -103,56 +115,35 @@ public class RobotContainer {
     final JoystickButton driverButton_BumpLT = new JoystickButton(driverStick, Constants.BUMPER_LEFT);
     driverButton_BumpLT.onTrue(new CG_ResetAndZeroEncdrs(swerveSubsystem));
 
-    // BEGIN AUXILLARY STICK BUTTON ASSIGNMENTS
-    // Set Positions for
-    // auxPOVup.onTrue(new RunCommand(() ->
-    // liftElevatorSubsystem.increaseDeliveryHeight(),
-    // liftElevatorSubsystem)).debounce(1);
-    // auxPOVdown.onTrue(new RunCommand(() ->
-    // liftElevatorSubsystem.decreaseDeliveryHeight(),
-    // liftElevatorSubsystem)).debounce(1);
-    // auxPOVleft.onTrue(new RunCommand(() ->
-    // liftElevatorSubsystem.setCurrentElement(Element.CUBE),
-    // liftElevatorSubsystem)).debounce(1);
-    // auxPOVright.onTrue(new RunCommand(() ->
-    // liftElevatorSubsystem.setCurrentElement(Element.CONE),
-    // liftElevatorSubsystem)).debounce(1);
-
-    auxPOVup.onTrue(new RunCommand(() -> {
-      liftElevatorSubsystem.setGotoDelivery();
-      liftClawSubsystem.gotoDelivery();
-    }, liftElevatorSubsystem, liftClawSubsystem));
-    auxPOVdown.onTrue(new RunCommand(() -> {
+    /*
+     * auxPOVup.onTrue(new RunCommand(() -> {
+     * liftElevatorSubsystem.setGotoDelivery();
+     * liftClawSubsystem.gotoDelivery();
+     * }, liftElevatorSubsystem, liftClawSubsystem));
+     */
+/* 
+     auxPOVdown.onTrue(new RunCommand(() -> {
       liftElevatorSubsystem.setGotoIntake();
       liftClawSubsystem.gotoIntake();
     }, liftElevatorSubsystem, liftClawSubsystem));
-
-    auxAButton.whileTrue(new RunCommand(() -> {
+*/
+    auxYButton.whileTrue(new RunCommand(() -> {
       liftClawSubsystem.setIntakeMotorPower(1.0);
     }, liftClawSubsystem));
-    auxYButton.whileTrue(new RunCommand(() -> {
+    auxAButton.whileTrue(new RunCommand(() -> {
       liftClawSubsystem.setIntakeMotorPower(-1.0);
     }, liftClawSubsystem));
-
-    //auxBButton.debounce(0.1).onTrue(new CA_ToggleClaw(liftClawSubsystem));
-
-    /*auxBButton.whileTrue(new RunCommand(() -> {
-      liftClawSubsystem.setClawState(ClawState.Open);
-    }, liftClawSubsystem));
-*/
   }
 
   private void setDefaultCommands() {
     swerveSubsystem.setDefaultCommand(new CT_SwerveDrive(swerveSubsystem, driverStick, false, true));
     liftElevatorSubsystem.setDefaultCommand(new CT_LiftElevator(liftElevatorSubsystem,
         () -> auxStick.getLeftY(),
-        () -> (auxStick.getLeftTriggerAxis() - auxStick.getRightTriggerAxis())
-        ));
+        () -> (auxStick.getLeftTriggerAxis() - auxStick.getRightTriggerAxis())));
     liftClawSubsystem.setDefaultCommand(new CT_LiftCLaw(liftClawSubsystem,
         () -> auxStick.getRightY(),
         () -> auxStick.getRightX(),
-        () -> auxStick.getBButtonPressed()
-        ));
+        () -> auxStick.getBButtonPressed()));
     cameraSubsystem.setDefaultCommand(new CC_CameraTrackTarget(cameraSubsystem));
 
   }

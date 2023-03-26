@@ -3,7 +3,6 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -18,8 +17,7 @@ public class CT_SwerveDrive extends CommandBase {
     
     private SwerveDrivetrain swerveSubsystem;
     private XboxController controller;
-    private SlewRateLimiter xLimiter, yLimiter, rLimiter;
-
+    
     public CT_SwerveDrive (SwerveDrivetrain s_Swerve, XboxController controller, boolean fieldRelative, boolean openLoop) {
         this.swerveSubsystem = s_Swerve;
         addRequirements(s_Swerve);
@@ -29,9 +27,6 @@ public class CT_SwerveDrive extends CommandBase {
         this.openLoop = openLoop;
         s_Swerve.resetSwerveDriveEncoders();
         s_Swerve.resetSwerveRotateEncoders();
-        xLimiter = new SlewRateLimiter(.9);
-        yLimiter = new SlewRateLimiter(.9);
-        rLimiter = new SlewRateLimiter(.9);
     }
 
     @Override
@@ -55,8 +50,13 @@ public class CT_SwerveDrive extends CommandBase {
 
 
 
+        double max_speed =  Constants.SwerveDrivetrain.MAX_SPEED;
+
+        if (controller.getRightBumper()) {
+            max_speed = max_speed/2;
+        }
         // What the Operator Considers X-Y Axes is Different than Actual Robot Field Orientation
-        translation = new Translation2d(yAxis, xAxis).times(Constants.SwerveDrivetrain.MAX_SPEED);
+        translation = new Translation2d(yAxis, xAxis).times(max_speed);
         rotation = rAxis * Constants.SwerveDrivetrain.MAX_ANGULAR_VELOCITY;
         swerveSubsystem.drive(translation, rotation, fieldRelative, openLoop);
     }

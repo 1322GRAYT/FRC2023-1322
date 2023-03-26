@@ -12,7 +12,7 @@ public enum Direction {
     NONE(-1), UP(0), UPRIGHT(45), RIGHT(90), DOWNRIGHT(135), DOWN(180), DOWNLEFT(225), LEFT(270), UPLEFT(315);
 
     int direction;
-    private static Map map = new HashMap<>();
+    private static Map<Integer,Direction> map = new HashMap<>();
 
     static {
         for (Direction direction : Direction.values()) {

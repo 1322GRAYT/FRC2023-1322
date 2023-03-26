@@ -117,7 +117,7 @@ public class SwerveModule {
         double raw = angleEncoder.get();
         double temp = raw * 360;
         SmartDashboard.putNumber("Encoder for Module " + this.moduleNumber + " Position: ", temp);
-        SmartDashboard.putNumber("Encoder for Module " + this.moduleNumber + " Raw Position: ", raw);
+        //SmartDashboard.putNumber("Encoder for Module " + this.moduleNumber + " Raw Position: ", raw);
         return Rotation2d.fromDegrees(temp);
     }
 
@@ -150,9 +150,11 @@ public class SwerveModule {
     }
 
     public void zeroRotEncdrPstn() {
+       /*
         double zeroPstnOffset = Conversions.degreesToFalcon(this.getCanCoder().getDegrees() - angleOffset,
                 Constants.SwerveDrivetrain.ANGLE_GEAR_RATIO);
         this.angleMotor.set(TalonFXControlMode.Position, zeroPstnOffset);
+        */
     }
 
 }

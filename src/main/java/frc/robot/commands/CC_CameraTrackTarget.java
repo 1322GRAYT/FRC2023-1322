@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Camera;
 
@@ -32,13 +31,13 @@ public class CC_CameraTrackTarget extends CommandBase {
       if(!m_camera.isTargetCenter()){
         m_camera.moveCameraToCenter();
       }
-      SmartDashboard.putNumber("Y Angle", m_camera.yAngleToTarget());
-      SmartDashboard.putNumber("Goal Distance", m_camera.getDistanceToCenterOfHoop());
+      //SmartDashboard.putNumber("Y Angle", m_camera.yAngleToTarget());
+      //SmartDashboard.putNumber("Goal Distance", m_camera.getDistanceToCenterOfHoop());
     } else {
       m_camera.setNeutral();
     }
-    SmartDashboard.putBoolean("Target Aligned", m_camera.isTargetValid() && m_camera.isPanInTolerance());
-    SmartDashboard.putNumber("Target Error", m_camera.errorToTargetPan());
+    //SmartDashboard.putBoolean("Target Aligned", m_camera.isTargetValid() && m_camera.isPanInTolerance());
+    //SmartDashboard.putNumber("Target Error", m_camera.errorToTargetPan());
 
   }
 

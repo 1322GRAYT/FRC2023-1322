@@ -1,14 +1,12 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
-import frc.robot.calibrations.configArmLift;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-// TODO: Finish documentation
 
 public class LiftElevator extends SubsystemBase {
 

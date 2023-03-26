@@ -11,7 +11,9 @@ import com.ctre.phoenix.motorcontrol.MotorCommutation;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
-/** Add your docs here. */
+/** Add your docs here. 
+ * TODO: What is the point of this?
+*/
 public class configArmLift {
     public TalonFXConfiguration _fx = new TalonFXConfiguration();
 

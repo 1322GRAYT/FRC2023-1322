@@ -29,6 +29,13 @@ import frc.robot.subsystems.swerve.SwerveModuleConstants;
  */
 public final class Constants {
 
+    //TODO: if does not work for balance delete
+    public static final double BEAM_BALANACED_DRIVE_KP = 0.015; // P (Proportional) constant of a PID loop
+    public static final double BEAM_BALANCED_GOAL_DEGREES = 0;
+    public static final double BEAM_BALANCED_ANGLE_TRESHOLD_DEGREES = 1;
+    public static final double BACKWARDS_BALANCING_EXTRA_POWER_MULTIPLIER = 1.35;
+    public static final double BEAM_BALANCE_POWER_MULTIPLIER=0.6;
+
     // Enum for Solenoid control
     public enum SolenoidPosition {
         UP, DOWN, OFF
@@ -71,8 +78,8 @@ public final class Constants {
     /* PNEUMATIC ACTUATOR ADDRESS ASSIGNMENTS */
     // TODO fix assignments
 
-    public static final int PNEUMATIC_CLAW_0 = 6;
-    public static final int PNEUMATIC_CLAW_1 = 7;
+    public static final int PNEUMATIC_CLAW_0 = 11;
+    public static final int PNEUMATIC_CLAW_1 = 10;
 
 /* 
     public static final int PNEUMATIC_FLOORPICK = 5;
