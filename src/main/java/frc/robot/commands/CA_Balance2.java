@@ -4,10 +4,8 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.subsystems.SwerveDrivetrain;
 
-import javax.swing.text.html.HTMLDocument.BlockElement;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
@@ -46,7 +44,7 @@ public class CA_Balance2 extends CommandBase {
         // controller joystick
         // Double currentAngle = -1 *
         // Robot.controller.getRawAxis(Constants.LEFT_VERTICAL_JOYSTICK_AXIS) * 45;
-        this.currentAngle = -drive.getRoll();
+        currentAngle = -drive.getRoll();
 
         error = Constants.BEAM_BALANCED_GOAL_DEGREES - currentAngle;
         drivePower = -Math.min(Constants.BEAM_BALANACED_DRIVE_KP * error, 1);

@@ -53,32 +53,32 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     System.out.println("Starting SwerveDriveTrain");
   
-    this.gyro = new AHRS(Constants.SwerveDrivetrain.GYRO_ID);
-    this.gyro.calibrate();
+    gyro = new AHRS(Constants.SwerveDrivetrain.GYRO_ID);
+    gyro.calibrate();
     new Thread(()-> {
       try {
         Thread.sleep(1000);
       }
       catch (Exception e) {
       }
-      this.zeroGyro();
+      zeroGyro();
     }).start();
     System.out.println("SwerveDriveTrain -- gyro done");
 
-    this.swerveModules = new SwerveModule[] {
-        new SwerveModule(0, Constants.SwerveDrivetrain.Mod0.constants),
-        new SwerveModule(1, Constants.SwerveDrivetrain.Mod1.constants),
-        new SwerveModule(2, Constants.SwerveDrivetrain.Mod2.constants),
-        new SwerveModule(3, Constants.SwerveDrivetrain.Mod3.constants)
+    swerveModules = new SwerveModule[] {
+        new SwerveModule(0, Constants.SwerveDrivetrain.Module0),
+        new SwerveModule(1, Constants.SwerveDrivetrain.Module1),
+        new SwerveModule(2, Constants.SwerveDrivetrain.Module2),
+        new SwerveModule(3, Constants.SwerveDrivetrain.Module3)
     };
     System.out.println("SwerveDriveTrain -- SwerveModules");
 
 
-    this.swerveOdometry = new SwerveDriveOdometry(Constants.SwerveDrivetrain.SWERVE_KINEMATICS,
-        this.getYaw(),
+    swerveOdometry = new SwerveDriveOdometry(Constants.SwerveDrivetrain.SWERVE_KINEMATICS,
+        getYaw(),
         getSwerveModulePositions());
 
-    this.field = new Field2d();
+    field = new Field2d();
 
     System.out.println("Starting SwerveDriveTrain -- odometry");
 
@@ -88,7 +88,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     // rotPID_PowCorr = 0;
     rotPID_PowOutMin = -1;
     rotPID_PowOutMax = 1;
-    // rotPID_RotAngCmnd = this.getYaw().getDegrees();
+    // rotPID_RotAngCmnd = getYaw().getDegrees();
     System.out.println("Starting SwerveDriveTrain  -- rotPID");
 
     dashboard();
@@ -111,14 +111,14 @@ public class SwerveDrivetrain extends SubsystemBase {
 
   public void print() {
 
-    this.swerveModules[0].getCanCoder();
-    this.swerveModules[1].getCanCoder();
-    this.swerveModules[2].getCanCoder();
-    this.swerveModules[3].getCanCoder();
+    swerveModules[0].getCanCoder();
+    swerveModules[1].getCanCoder();
+    swerveModules[2].getCanCoder();
+    swerveModules[3].getCanCoder();
 
-    //SmartDashboard.putNumber("Field X-Coord: ", this.field.getRobotPose().getX());
-    //SmartDashboard.putNumber("Field Y-Coord: ", this.field.getRobotPose().getY());
-    //SmartDashboard.putNumber("Yaw: ", this.getYaw().getDegrees());
+    //SmartDashboard.putNumber("Field X-Coord: ", field.getRobotPose().getX());
+    //SmartDashboard.putNumber("Field Y-Coord: ", field.getRobotPose().getY());
+    //SmartDashboard.putNumber("Yaw: ", getYaw().getDegrees());
 
   }
 
@@ -128,7 +128,7 @@ public class SwerveDrivetrain extends SubsystemBase {
             translation.getX(),
             translation.getY(),
             rotation,
-            this.getYaw())
+            getYaw())
             : new ChassisSpeeds(
                 translation.getX(),
                 translation.getY(),
@@ -136,14 +136,14 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.SwerveDrivetrain.MAX_SPEED);
 
-    for (SwerveModule mod : this.swerveModules) {
+    for (SwerveModule mod : swerveModules) {
       mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
     }
   }
 
   /* Gyro */
   public void zeroGyro() {
-    this.gyro.reset();
+    gyro.reset();
   }
 
   private double optimizeGyro(double degrees) {
@@ -151,9 +151,9 @@ public class SwerveDrivetrain extends SubsystemBase {
   }
 
   public Rotation2d getYaw() {
-    double pitch = this.gyro.getPitch();
-    double roll = this.gyro.getRoll();
-    double rawYaw = this.gyro.getYaw();
+    double pitch = gyro.getPitch();
+    double roll = gyro.getRoll();
+    double rawYaw = gyro.getYaw();
     SmartDashboard.putNumber("Roll Gyro: ", roll);
     SmartDashboard.putNumber("Pitch Gyro: ", pitch);
     SmartDashboard.putNumber("Yaw Gyro: ", rawYaw);
@@ -178,44 +178,44 @@ public class SwerveDrivetrain extends SubsystemBase {
   }
 
   public double getGyroAngleDegrees() {
-    return this.getYaw().getDegrees();
+    return getYaw().getDegrees();
   }
 
   public double getGyroAngleRadians() {
-    return this.getYaw().getRadians();
+    return getYaw().getRadians();
   }
 
   /*
   public void resetToAbsolute() {
-    this.swerveModules[0].resetToAbsolute();
-    this.swerveModules[1].resetToAbsolute();
-    this.swerveModules[2].resetToAbsolute();
-    this.swerveModules[3].resetToAbsolute();
+    swerveModules[0].resetToAbsolute();
+    swerveModules[1].resetToAbsolute();
+    swerveModules[2].resetToAbsolute();
+    swerveModules[3].resetToAbsolute();
   }
   */
 
   /* Odometry */
 
   public Pose2d getPose() {
-    return this.swerveOdometry.getPoseMeters();
+    return swerveOdometry.getPoseMeters();
   }
 
   public void setPose(Pose2d pose) {
-    // this.swerveOdometry.resetPosition(pose, getSwerveModulePositions(),
+    // swerveOdometry.resetPosition(pose, getSwerveModulePositions(),
     // pose.getRotation());
-    this.swerveOdometry.resetPosition(pose.getRotation(), getSwerveModulePositions(), pose);
+    swerveOdometry.resetPosition(pose.getRotation(), getSwerveModulePositions(), pose);
   }
 
   public void resetOdometry(Pose2d pose) {
-    // this.swerveOdometry.resetPosition(pose, getSwerveModulePositions(),
-    // this.getYaw());
-    this.swerveOdometry.resetPosition(getYaw(), getSwerveModulePositions(), pose);
+    // swerveOdometry.resetPosition(pose, getSwerveModulePositions(),
+    // getYaw());
+    swerveOdometry.resetPosition(getYaw(), getSwerveModulePositions(), pose);
   }
 
   /* Module States */
   public SwerveModuleState[] getStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
-    for (SwerveModule mod : this.swerveModules) {
+    for (SwerveModule mod : swerveModules) {
       states[mod.moduleNumber] = mod.getState();
     }
     return states;
@@ -223,7 +223,7 @@ public class SwerveDrivetrain extends SubsystemBase {
 
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.SwerveDrivetrain.MAX_SPEED);
-    for (SwerveModule mod : this.swerveModules) {
+    for (SwerveModule mod : swerveModules) {
       mod.setDesiredState(desiredStates[mod.moduleNumber], false);
     }
   }
@@ -314,9 +314,9 @@ public class SwerveDrivetrain extends SubsystemBase {
     tab.add(this);
     tab.addNumber("Gyro Angle ???", this::getGyroAngleDegrees).withWidget(BuiltInWidgets.kGyro);
     tab.addNumber("Gyro Angle (GRAPH) ???", this::getGyroAngleDegrees).withWidget(BuiltInWidgets.kGraph);
-    tab.add("Field X-Coord ", this.field.getRobotPose().getX());
-    tab.add("Field Y-Coord ", this.field.getRobotPose().getY());
-    //SmartDashboard.putData(this.field);
+    tab.add("Field X-Coord ", field.getRobotPose().getX());
+    tab.add("Field Y-Coord ", field.getRobotPose().getY());
+    //SmartDashboard.putData(field);
     // SmartDashboard.putData("ANGLE PID", data);
     // SmartDashboard.putData("DRIVE PID", data);
   }
@@ -328,10 +328,10 @@ public class SwerveDrivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    this.print();
-    //this.swerveOdometry.update(this.getYaw(), this.getStates());
-    this.swerveOdometry.update(getYaw(), getSwerveModulePositions());
-    this.field.setRobotPose(this.swerveOdometry.getPoseMeters());
+    print();
+    //swerveOdometry.update(getYaw(), getStates());
+    swerveOdometry.update(getYaw(), getSwerveModulePositions());
+    field.setRobotPose(swerveOdometry.getPoseMeters());
   }
 
   /*****************************************************************/

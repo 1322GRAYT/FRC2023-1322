@@ -27,32 +27,40 @@ public class CTREModuleState {
     }
 
     /**
-     * @param scopeReference Current Angle
+     * @param currentAngle Current Angle
      * @param newAngle       Target Angle
      * @return Closest angle within scope
      */
-    private static double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {
+    private static double placeInAppropriate0To360Scope(double currentAngle, double newAngle) {
         double lowerBound;
         double upperBound;
-        double lowerOffset = scopeReference % 360;
+        
+        // this makes loweroffset in the range -360 <= lowerOffset <= 360
+        double lowerOffset = currentAngle % 360;
+
         if (lowerOffset >= 0) {
-            lowerBound = scopeReference - lowerOffset;
-            upperBound = scopeReference + (360 - lowerOffset);
+            lowerBound = currentAngle - lowerOffset;   // lowerbound should be 0 in this case if currentangle is 0 <= currentAngle <= 360
+            upperBound = currentAngle + (360 - lowerOffset); //upperbound should be 360 inb this case if currentangle is 0 <= currentAngle <= 360
         } else {
-            upperBound = scopeReference - lowerOffset;
-            lowerBound = scopeReference - (360 + lowerOffset);
+            upperBound = currentAngle - lowerOffset;  //upperbound should be 0 in this case if currentangle is -360 <= currentAngle <= 0
+            lowerBound = currentAngle - (360 + lowerOffset); //lowerbound should be -360 in this case if currentangle is -360 <= currentAngle <= 0
         }
+
+
         while (newAngle < lowerBound) {
             newAngle += 360;
-        }
+        }   
+
         while (newAngle > upperBound) {
             newAngle -= 360;
         }
-        if (newAngle - scopeReference > 180) {
+
+        if (newAngle - currentAngle > 180) {
             newAngle -= 360;
-        } else if (newAngle - scopeReference < -180) {
+        } else if (newAngle - currentAngle < -180) {
             newAngle += 360;
         }
+        
         return newAngle;
     }
 }

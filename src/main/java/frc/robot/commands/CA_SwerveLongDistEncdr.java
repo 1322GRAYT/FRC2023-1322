@@ -43,10 +43,10 @@ public class CA_SwerveLongDistEncdr extends CommandBase {
     zeroEncdrCntA = swerveDrivetrain.getDrvCaddyEncdrPstn(caddyIndexA);
     zeroEncdrCntB = swerveDrivetrain.getDrvCaddyEncdrPstn(caddyIndexB);
 
-    if (this.mtrPwrCmnd < 0)
-      this.mtrPwrCmnd = 0;
-    if (this.mtrPwrCmnd > 1)
-      this.mtrPwrCmnd = 1;
+    if (mtrPwrCmnd < 0)
+      mtrPwrCmnd = 0;
+    if (mtrPwrCmnd > 1)
+      mtrPwrCmnd = 1;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -56,7 +56,7 @@ public class CA_SwerveLongDistEncdr extends CommandBase {
     distTravelledB = swerveDrivetrain.getDrvDistTravelled(caddyIndexB, zeroEncdrCntB);
 
       double yAxis =  0.0;
-      double xAxis =  this.mtrPwrCmnd;
+      double xAxis =  mtrPwrCmnd;
       double rAxis =  0.0;
 
       if (!isDirctnRwd) {

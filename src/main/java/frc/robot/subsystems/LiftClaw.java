@@ -56,7 +56,7 @@ public class LiftClaw extends SubsystemBase {
   }
 
   public void setIntakeMotorPower(double coneMotorPower) {
-    this.intakeMotorPower = coneMotorPower;
+    intakeMotorPower = coneMotorPower;
   }
 
   private void intakeControl() {
@@ -107,13 +107,13 @@ public class LiftClaw extends SubsystemBase {
   }
 
   public void gotoDelivery(){
-    this.pitchMode = ControlMode.MotionMagic;
-    this.pitchSetPoint = DELIVERY_PITCH;
+    pitchMode = ControlMode.MotionMagic;
+    pitchSetPoint = DELIVERY_PITCH;
   }
 
   public void gotoIntake(){
-    this.pitchMode = ControlMode.MotionMagic;
-    this.pitchSetPoint = INTAKE_PITCH;
+    pitchMode = ControlMode.MotionMagic;
+    pitchSetPoint = INTAKE_PITCH;
   }
 
   // Control Cycles

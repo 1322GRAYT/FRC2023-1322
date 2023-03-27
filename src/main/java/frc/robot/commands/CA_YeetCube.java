@@ -4,10 +4,8 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.LiftClaw;
-import frc.robot.subsystems.LiftClaw.ClawState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:

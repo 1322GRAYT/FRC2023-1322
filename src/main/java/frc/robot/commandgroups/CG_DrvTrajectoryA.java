@@ -26,13 +26,11 @@ import frc.robot.subsystems.*;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class CG_DrvTrajectoryA extends SequentialCommandGroup {
-        private SwerveDrivetrain drive;
-
+        
         /** Creates a new CG_DrvTrajectoryA. */
         public CG_DrvTrajectoryA(SwerveDrivetrain drive, LiftClaw liftClaw, LiftElevator liftElevator) {
 
-                this.drive = drive;
-
+        
                 // 1. Create trajectory settings
                 /*TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
                                 Constants.Auton.MAX_SPEED_MPS,
@@ -93,16 +91,16 @@ public class CG_DrvTrajectoryA extends SequentialCommandGroup {
                                  * (new CC_TimeDly(0.150)),
                                  * // Run trajectory
                                  */
-                                // new InstantCommand(() -> this.drive.resetOdometry(start_P)),
-                                new InstantCommand(() -> this.drive.stopSwerveDriveMotors()),
+                                // new InstantCommand(() -> drive.resetOdometry(start_P)),
+                                new InstantCommand(() -> drive.stopSwerveDriveMotors()),
                                 new CA_Elevator(liftElevator, true),
                                 new CA_PitchElevator(liftElevator, true),
                                 new CA_ToggleClaw(liftClaw),
                                 new CA_PitchElevator(liftElevator, false),
                                 new RunCommand(() -> drive.drive(new Translation2d(-0.5, 0.0), 0, false, true), drive)
                                                 .withTimeout(1),
-                                new InstantCommand(() -> this.drive.stopSwerveDriveMotors())
-                // new InstantCommand(() -> this.drive.stopSwerveRotMotors())
+                                new InstantCommand(() -> drive.stopSwerveDriveMotors())
+                // new InstantCommand(() -> drive.stopSwerveRotMotors())
                 );
         }
 }

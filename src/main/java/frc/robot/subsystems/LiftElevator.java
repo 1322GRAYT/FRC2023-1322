@@ -51,11 +51,11 @@ public class LiftElevator extends SubsystemBase {
     private static final DeliveryState[] vals = values();
 
     public DeliveryState next() {
-      return vals[(this.ordinal() + 1) % vals.length];
+      return vals[(ordinal() + 1) % vals.length];
     }
 
     public DeliveryState previous() {
-      return vals[(this.ordinal() - 1) % vals.length];
+      return vals[(ordinal() - 1) % vals.length];
     }
   }
 
@@ -243,8 +243,7 @@ public class LiftElevator extends SubsystemBase {
 
   /**
    * Control Elevator Pitch:
-   * This is the interface to control solenoids to control the pitch of the
-   * elevator.
+   * This is the interface to control the motor to control the pitch of the elevator.
    * Ran in periodic, use set interface to control.
    */
   private void controlElevatorPitch() {
@@ -254,11 +253,6 @@ public class LiftElevator extends SubsystemBase {
 
   private void controlElevator() {
     ElevatorMotor.set(setElevatorControlMethod, setElevatorInput);
-    while (setPosition && Math.abs(ElevatorMotor.getSelectedSensorPosition(0) - setElevatorInput) > 2000) {
-      // do nothing!!!
-      SmartDashboard.putBoolean("Doing move!", setPosition);
-    }
-    SmartDashboard.putBoolean("Doing move!", false);
     if (setElevatorControlMethod == ControlMode.MotionMagic) {
       setPosition = false;
     }

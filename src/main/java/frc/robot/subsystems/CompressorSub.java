@@ -16,7 +16,7 @@ public class CompressorSub extends SubsystemBase {
 
   private Compressor phCompressor;
   private double pressureCompressor;
-  private double currentCompressor;
+  //private double currentCompressor;
   // private boolean displayDashboardData = true;
 
   /** Creates a new CompressorSubsystem. */
@@ -24,7 +24,7 @@ public class CompressorSub extends SubsystemBase {
     phCompressor = new Compressor(Constants.PNEUMATIC_COMPRESSOR, PneumaticsModuleType.REVPH);
     phCompressor.enableAnalog(90, 120);
     pressureCompressor = 0;
-    currentCompressor = 0;
+    //currentCompressor = 0;
   }
 
   @Override
@@ -38,16 +38,16 @@ public class CompressorSub extends SubsystemBase {
 
   private void updateCompressorSensors() {
     pressureCompressor = phCompressor.getPressure();
-    currentCompressor = phCompressor.getCurrent();
+    //currentCompressor = phCompressor.getCurrent();
   }
 
   public double getCompressorPressure() {
     return pressureCompressor;
   }
 
-  private double getCompressorCurrent() {
-    return currentCompressor;
-  }
+  //private double getCompressorCurrent() {
+  //  return currentCompressor;
+ // }
   
 
   private void printCompressorPressure() {

@@ -29,12 +29,12 @@ import frc.robot.subsystems.swerve.SwerveModuleConstants;
  */
 public final class Constants {
 
-    //TODO: if does not work for balance delete
+    // TODO: if does not work for balance delete
     public static final double BEAM_BALANACED_DRIVE_KP = 0.015; // P (Proportional) constant of a PID loop
     public static final double BEAM_BALANCED_GOAL_DEGREES = 0;
     public static final double BEAM_BALANCED_ANGLE_TRESHOLD_DEGREES = 1;
     public static final double BACKWARDS_BALANCING_EXTRA_POWER_MULTIPLIER = 1.35;
-    public static final double BEAM_BALANCE_POWER_MULTIPLIER=0.6;
+    public static final double BEAM_BALANCE_POWER_MULTIPLIER = 0.6;
 
     // Enum for Solenoid control
     public enum SolenoidPosition {
@@ -48,23 +48,23 @@ public final class Constants {
 
     /* MOTOR CAN ADDRESS ASSIGNMENTS */
     // Drive Motors (FALCON 500)
-    /* 
-    public static final int DRV_MTR_FT_LT = 2; // Front Ledsx Aft
-    public static final int DRV_MTR_FT_RT = 7; // Front Right
-    public static final int DRV_MTR_RR_LT = 8; // Rear Left
-    public static final int DRV_MTR_RR_RT = 6; // Rear Right
-    // Swerve Steer Motors (FALCON 500)
-    public static final int SWRV_MTR_FT_LT = 3; // Front Left
-    public static final int SWRV_MTR_FT_RT = 4; // Front Right
-    public static final int SWRV_MTR_RR_LT = 1; // Rear Left
-    public static final int SWRV_MTR_RR_RT = 5; // Rear Right
-*/
+    /*
+     * public static final int DRV_MTR_FT_LT = 2; // Front Ledsx Aft
+     * public static final int DRV_MTR_FT_RT = 7; // Front Right
+     * public static final int DRV_MTR_RR_LT = 8; // Rear Left
+     * public static final int DRV_MTR_RR_RT = 6; // Rear Right
+     * // Swerve Steer Motors (FALCON 500)
+     * public static final int SWRV_MTR_FT_LT = 3; // Front Left
+     * public static final int SWRV_MTR_FT_RT = 4; // Front Right
+     * public static final int SWRV_MTR_RR_LT = 1; // Rear Left
+     * public static final int SWRV_MTR_RR_RT = 5; // Rear Right
+     */
     // Floor Pickup
-    //public static final int FLOOR_MOTOR = 9;
+    // public static final int FLOOR_MOTOR = 9;
 
     // Cone Lift Motor (CAN TALON SRX)
     public static final int CONE_MTR_LIFT = 11;
-    
+
     // Elevator
     public static final int ELEVATOR_MOTOR = 10;
     public static final int ELEVATOR_PITCH_MOTOR = 13;
@@ -76,48 +76,18 @@ public final class Constants {
     public static final int PNEUMATIC_COMPRESSOR = 1;
 
     /* PNEUMATIC ACTUATOR ADDRESS ASSIGNMENTS */
-    // TODO fix assignments
 
     public static final int PNEUMATIC_CLAW_0 = 11;
     public static final int PNEUMATIC_CLAW_1 = 10;
 
-/* 
-    public static final int PNEUMATIC_FLOORPICK = 5;
-    public static final int PNEUMATIC_FLOORPUSH = 33;
-    public static final int PNEUMATIC_CONECENTERLIFT = 34;
-
-
-    public static final int PNEU_PRESSURE_SENSOR = 0;
-    public static final int PNEU_BALL_INTAKE_LT = 11;
-    public static final int PNEU_BALL_INTAKE_RT = 9;
-    public static final int PNEU_BALL_INTAKE_FT = 10;
-    public static final int PNEU_BALL_INTAKE_RR = 12;
-    public static final int PNEU_LIFT_TRACK = 13;
-    public static final int PNEU_SHOOTER_CAMERA = 8;
-*/
-    /* ANALOG INPUT ADDRESS ASSIGNMENTS */
-    /*/ Swerve Steer Motors Position
-    public static final int ANA_SWRV_ANG_FT_LT = 3; // Front Left
-    public static final int ANA_SWRV_ANG_RR_LT = 2; // Rear Left
-    public static final int ANA_SWRV_ANG_FT_RT = 0; // Front Right
-    public static final int ANA_SWRV_ANG_RR_RT = 1; // Rear Right
-*/
     /* DIGITAL INPUT ADDRESS ASSIGNMENTS */
     public static final int SW_LIFT_TRACK_TRIG = 0;
-/*
-    public static final int SW_BALL_INTAKE_LT = 1;
-    public static final int SW_BALL_INTAKE_RT = 3;
-    public static final int SW_BALL_INTAKE_FT = 4;
-    public static final int SW_BALL_INTAKE_RR = 2;
-    public static final int SW_BALL_ADVANCE_1 = 5;
-    public static final int SW_BALL_ADVANCE_2 = 6;
-*/
-    /* X-BOX CONTROLLER MAPPING */
+
     // Controller Assignments
     public static final int DRVR_CNTRLR = 0;
     public static final int AUX_CNTRLR = 1;
     // Button Assignments
-     public static final int BUTTON_A = 1;
+    public static final int BUTTON_A = 1;
     public static final int BUTTON_B = 2;
     public static final int BUTTON_X = 3;
     public static final int BUTTON_Y = 4;
@@ -128,17 +98,16 @@ public final class Constants {
     public static final int STICK_LEFT_PRESS = 9; // JOYSTICK PRESS
     public static final int STICK_RIGHT_PRESS = 10; // JOYSTICK PRESS
     // Analog Assignments
-    public static final int STICK_LEFT_XAXIS = 1;
-    public static final int STICK_LEFT_YAXIS = 2;
-    public static final int TRIGGERS = 3;
-    public static final int STICK_RIGHT_XAXIS = 4;
-    public static final int STICK_RIGHT_YAXIS = 5;
-    public static final int DPAD = 6;
+    //public static final int STICK_LEFT_XAXIS = 1;
+    //public static final int STICK_LEFT_YAXIS = 2;
+    //public static final int TRIGGERS = 3;
+    //public static final int STICK_RIGHT_XAXIS = 4;
+    //public static final int STICK_RIGHT_YAXIS = 5;
+    //public static final int DPAD = 6;
 
+    //public static final int CLAW_ANGLE_SENSOR = 0;
 
-    public static final int CLAW_ANGLE_SENSOR=0;
-
-   // public static final int TOGGLE_AUTO_CLAW_MOVEMENT = BUTTON_A;
+    // public static final int TOGGLE_AUTO_CLAW_MOVEMENT = BUTTON_A;
 
     public static final class SwerveDrivetrain {
 
@@ -211,44 +180,16 @@ public final class Constants {
 
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
-        public static final class Mod0 {
-            public static final int DRIVE_MOTOR_ID = 2;
-            public static final int ANGLE_MOTOR_ID = 3;
-            public static final int CAN_CODER_ID = 3;
-            public static final double ANGLE_OFFSET = 126.0;
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(DRIVE_MOTOR_ID,
-                    ANGLE_MOTOR_ID, CAN_CODER_ID, ANGLE_OFFSET);
-        }
+        public static final SwerveModuleConstants Module0 = new SwerveModuleConstants(2, 3, 3);
 
         /* Front Right Module - Module 1 */
-        public static final class Mod1 {
-            public static final int DRIVE_MOTOR_ID = 7;
-            public static final int ANGLE_MOTOR_ID = 4;
-            public static final int CAN_CODER_ID = 0;
-            public static final double ANGLE_OFFSET = 235.2;
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(DRIVE_MOTOR_ID,
-                    ANGLE_MOTOR_ID, CAN_CODER_ID, ANGLE_OFFSET);
-        }
+        public static final SwerveModuleConstants Module1 = new SwerveModuleConstants(7, 4, 0);
 
         /* Back Left Module - Module 2 */
-        public static final class Mod2 {
-            public static final int DRIVE_MOTOR_ID = 8;
-            public static final int ANGLE_MOTOR_ID = 1;
-            public static final int CAN_CODER_ID = 2;
-            public static final double ANGLE_OFFSET = 128.5;
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(DRIVE_MOTOR_ID,
-                    ANGLE_MOTOR_ID, CAN_CODER_ID, ANGLE_OFFSET);
-        }
+        public static final SwerveModuleConstants Module2 = new SwerveModuleConstants(8, 1, 2);
 
         /* Back Right Module - Module 3 */
-        public static final class Mod3 {
-            public static final int DRIVE_MOTOR_ID = 6;
-            public static final int ANGLE_MOTOR_ID = 5;
-            public static final int CAN_CODER_ID = 1;
-            public static final double ANGLE_OFFSET = 138.7;
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(DRIVE_MOTOR_ID,
-                    ANGLE_MOTOR_ID, CAN_CODER_ID, ANGLE_OFFSET);
-        }
+        public static final SwerveModuleConstants Module3 = new SwerveModuleConstants(6, 5, 1);
     }
 
     public static final class Auton {
@@ -262,11 +203,7 @@ public final class Constants {
 
         public static final double MAX_ANGULAR_SPEED_RPS = 2 * Math.PI; // radians per second
         public static final double MAX_ANGULAR_SPEED_RPSS = 2 * Math.PI; // radians per second squared
-
-        // public static final PIDController PX_CONTROLLER = new PIDController(5.25, 1,
-        // 0.4);
-        // public static final PIDController PY_CONTROLLER = new PIDController(5.25, 1,
-        // 0.4);
+        
         public static final PIDController PX_CONTROLLER = new PIDController(6.0, 0, 0.1);
         public static final PIDController PY_CONTROLLER = new PIDController(6.0, 0, 0.1);
         // public static final double PTHETA_CONTROLLER = 1.0;

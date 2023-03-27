@@ -29,7 +29,7 @@ public class CT_LiftCLaw extends CommandBase {
     this.pitchPowerControl = pitchPowerControl;
     this.yawPowerControl = yawPowerControl;
     this.clawOpenControl = clawOpenControl;
-    this.clawLimiter = new SlewRateLimiter(0.5, -0.5, 0);
+    clawLimiter = new SlewRateLimiter(0.5, -0.5, 0);
 
 
     addRequirements(liftClaw);
