@@ -55,7 +55,7 @@ public class AutoBalance extends CommandBase {
         // Our robot needed an extra push to drive up in reverse, probably due to weight
         // imbalances
         if (drivePower < 0) {
-            drivePower *= Constants.BACKWARDS_BALANCING_EXTRA_POWER_MULTIPLIER;
+            drivePower *= Constants.BEAM_BACKWARDS_BALANCING_EXTRA_POWER_MULTIPLIER;
         }
 
         // Limit the max power

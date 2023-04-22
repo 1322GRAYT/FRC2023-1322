@@ -5,30 +5,28 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
-import frc.robot.calibrations.K_COMP;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class CompressorSub extends SubsystemBase {
+public class Compressor extends SubsystemBase {
 
-  private static CompressorSub instance;
-  private Compressor phCompressor;
+  private static Compressor instance;
+  private edu.wpi.first.wpilibj.Compressor phCompressor;
   private double pressureCompressor;
   //private double currentCompressor;
   // private boolean displayDashboardData = true;
 
-  public static CompressorSub getInstance() {
+  public static Compressor getInstance() {
     if (instance == null) {
-      instance = new CompressorSub();
+      instance = new Compressor();
     }
     return instance;
   }
   /** Creates a new CompressorSubsystem. */
-  private CompressorSub() {
-    phCompressor = new Compressor(Constants.PNEUMATIC_COMPRESSOR, PneumaticsModuleType.REVPH);
+  private Compressor() {
+    phCompressor = new edu.wpi.first.wpilibj.Compressor(Constants.PNEUMATIC_COMPRESSOR, PneumaticsModuleType.REVPH);
     phCompressor.enableAnalog(90, 120);
     pressureCompressor = 0;
     //currentCompressor = 0;
@@ -38,7 +36,7 @@ public class CompressorSub extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     updateCompressorSensors();
-    if (K_COMP.KeCOMP_b_DebugEnbl) {
+    if (Constants.PNEUMATIC_COMPRESSOR_DEBUG_ENABLE) {
       printCompressorPressure();
     }
   }

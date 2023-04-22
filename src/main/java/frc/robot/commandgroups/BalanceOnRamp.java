@@ -27,7 +27,6 @@ public class BalanceOnRamp extends SequentialCommandGroup {
                 new RunCommand(() -> drive.drive(
                     new Translation2d(0.0,-power), 0, false, true),drive).withTimeout(time)
             ),
-            //new InstantCommand(() -> drive.stopSwerveDriveMotors()),
             new AutoBalance(drive,gyro)
             );
     }

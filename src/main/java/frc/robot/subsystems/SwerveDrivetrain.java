@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 
 import frc.robot.Constants;
-import frc.robot.calibrations.K_SWRV;
 import frc.robot.subsystems.swerve.SwerveModule;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -55,8 +54,8 @@ public class SwerveDrivetrain extends SubsystemBase {
       System.out.println("Starting SwerveDriveTrain -- odometry");
 
     /* Rotation Control PID */
-    rotPID = new PIDController(K_SWRV.KeSWRV_k_CL_PropGx_Rot, K_SWRV.KeSWRV_k_CL_IntglGx_Rot,
-        K_SWRV.KeSWRV_k_CL_DerivGx_Rot);
+    rotPID = new PIDController(Constants.KeSWRV_k_CL_PropGx_Rot, Constants.KeSWRV_k_CL_IntglGx_Rot,
+    Constants.KeSWRV_k_CL_DerivGx_Rot);
     // rotPID_PowCorr = 0;
     rotPID_PowerOutMinimum = -1;
     rotPID_PowerOutMaximum = 1;
@@ -291,7 +290,7 @@ public class SwerveDrivetrain extends SubsystemBase {
 
   public void configPID_RotCtrl(double Le_Deg_RotAngTgt) {
     // Rotation PID (has continuous input)
-    rotPID.setPID(K_SWRV.KeSWRV_k_CL_PropGx_Rot, K_SWRV.KeSWRV_k_CL_IntglGx_Rot, K_SWRV.KeSWRV_k_CL_DerivGx_Rot);
+    rotPID.setPID(Constants.KeSWRV_k_CL_PropGx_Rot, Constants.KeSWRV_k_CL_IntglGx_Rot, Constants.KeSWRV_k_CL_DerivGx_Rot);
     setRotWraparoundInputRange(0, 360);
     setRotSetpoint(Le_Deg_RotAngTgt);
     setRotTolerance(5, 5);

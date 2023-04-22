@@ -5,89 +5,40 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import frc.robot.subsystems.swerve.SwerveModuleConstants;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean
- * constants. This class should not be used for any other purpose. All constants
- * should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>
- * It is advised to statically import this class (or one of its inner classes)
- * wherever the
- * constants are needed, to reduce verbosity.
- */
 public final class Constants {
 
     public static final double BEAM_BALANACED_DRIVE_KP = 0.015; // P (Proportional) constant of a PID loop
     public static final double BEAM_BALANCED_GOAL_DEGREES = 0;
     public static final double BEAM_BALANCED_ANGLE_TRESHOLD_DEGREES = 1;
-    public static final double BACKWARDS_BALANCING_EXTRA_POWER_MULTIPLIER = 1.35;
+    public static final double BEAM_BACKWARDS_BALANCING_EXTRA_POWER_MULTIPLIER = 1.35;
     public static final double BEAM_BALANCE_POWER_MULTIPLIER = 0.6;
 
-    // Enum for Solenoid control
-    /*
-    public enum SolenoidPosition {
-        UP, DOWN, OFF
-    }
-    */
-
-    /* PWM ADDRESS ASSIGNMENTS */
-
+    
     public static final int CLAW_YAW_SERVO = 0;
-    //public static final int CONE_ROTATE_SERVO = 1;
-
-    /* MOTOR CAN ADDRESS ASSIGNMENTS */
-    // Drive Motors (FALCON 500)
-    /*
-     * public static final int DRV_MTR_FT_LT = 2; // Front Ledsx Aft
-     * public static final int DRV_MTR_FT_RT = 7; // Front Right
-     * public static final int DRV_MTR_RR_LT = 8; // Rear Left
-     * public static final int DRV_MTR_RR_RT = 6; // Rear Right
-     * // Swerve Steer Motors (FALCON 500)
-     * public static final int SWRV_MTR_FT_LT = 3; // Front Left
-     * public static final int SWRV_MTR_FT_RT = 4; // Front Right
-     * public static final int SWRV_MTR_RR_LT = 1; // Rear Left
-     * public static final int SWRV_MTR_RR_RT = 5; // Rear Right
-     */
-    // Floor Pickup
-    // public static final int FLOOR_MOTOR = 9;
-
-    // Cone Lift Motor (CAN TALON SRX)
-    //public static final int CONE_MTR_LIFT = 11;
-
-    // Elevator
+    
+    
     public static final int ELEVATOR_MOTOR = 10;
     public static final int ELEVATOR_PITCH_MOTOR = 13;
 
-    // Claw Motor
     public static final int CLAW_PITCH = 12;
 
-    /* PNEUMATIC HUB CAN ADDRESS ASSIGNMENTS */
     public static final int PNEUMATIC_COMPRESSOR = 1;
-
-    /* PNEUMATIC ACTUATOR ADDRESS ASSIGNMENTS */
+    public static final boolean PNEUMATIC_COMPRESSOR_DEBUG_ENABLE=true;
 
     public static final int PNEUMATIC_CLAW_0 = 11;
     public static final int PNEUMATIC_CLAW_1 = 10;
 
-    /* DIGITAL INPUT ADDRESS ASSIGNMENTS */
     public static final int SW_LIFT_TRACK_TRIG = 0;
 
-    // Controller Assignments
     public static final int DRVR_CNTRLR = 0;
     public static final int AUX_CNTRLR = 1;
-    // Button Assignments
+
     public static final int BUTTON_A = 1;
     public static final int BUTTON_B = 2;
     public static final int BUTTON_X = 3;
@@ -97,21 +48,17 @@ public final class Constants {
 
     public static final SPI.Port GYRO_ID = SPI.Port.kMXP;
     public static final boolean INVERT_GYRO = true;
-    //public static final int BUTTON_BACK = 7; // LEFT(SELECT)
-    //public static final int BUTTON_START = 8; // RIGHT
-    //public static final int STICK_LEFT_PRESS = 9; // JOYSTICK PRESS
-    //public static final int STICK_RIGHT_PRESS = 10; // JOYSTICK PRESS
-    // Analog Assignments
-    //public static final int STICK_LEFT_XAXIS = 1;
-    //public static final int STICK_LEFT_YAXIS = 2;
-    //public static final int TRIGGERS = 3;
-    //public static final int STICK_RIGHT_XAXIS = 4;
-    //public static final int STICK_RIGHT_YAXIS = 5;
-    //public static final int DPAD = 6;
 
-    //public static final int CLAW_ANGLE_SENSOR = 0;
 
-    // public static final int TOGGLE_AUTO_CLAW_MOVEMENT = BUTTON_A;
+    public static final double AUX_STICK_DEADBAND = 0.1;
+    
+
+    // TODO: Rename these
+    public static final boolean KeSWRV_DebugEnable = true;
+    public static final double KeSWRV_DriveSyncThresholdRotation = 0.100;
+    public static final double KeSWRV_k_CL_PropGx_Rot = 0.1;
+    public static final double KeSWRV_k_CL_IntglGx_Rot = 0.001;
+    public static final double KeSWRV_k_CL_DerivGx_Rot = 0;
 
     public static final class SwerveDrivetrain {
 
@@ -210,28 +157,5 @@ public final class Constants {
         public static final SwerveModuleConstants Module3 = new SwerveModuleConstants(6, 5, 1);
     }
 
-    public static final class Auton {
 
-        /* Drive Motor Characterization Values (Ramsete) */
-        public static final double RAMSETE_B = 7;
-        public static final double RAMSETE_ZETA = 2;
-
-        public static final double MAX_SPEED_MPS = 7.0; // meters per second
-        public static final double MAX_ACCELERATION_MPSS = 5.0; // meters per second squared
-
-        public static final double MAX_ANGULAR_SPEED_RPS = 2 * Math.PI; // radians per second
-        public static final double MAX_ANGULAR_SPEED_RPSS = 2 * Math.PI; // radians per second squared
-        
-        public static final PIDController PX_CONTROLLER = new PIDController(6.0, 0, 0.1);
-        public static final PIDController PY_CONTROLLER = new PIDController(6.0, 0, 0.1);
-        // public static final double PTHETA_CONTROLLER = 1.0;
-
-        public static final TrapezoidProfile.Constraints THETA_CONTROLLER_CONTRAINTS = new TrapezoidProfile.Constraints(
-                MAX_ANGULAR_SPEED_RPS, MAX_ANGULAR_SPEED_RPSS);
-
-        // public static final ProfiledPIDController ROT_PID_CONTROLLER = new
-        // ProfiledPIDController(.13, 0, .39, THETA_CONTROLLER_CONTRAINTS);
-        public static final ProfiledPIDController THETA_CONTROLLER = new ProfiledPIDController(10.0, 0.0, 0.0,
-                THETA_CONTROLLER_CONTRAINTS);
-    }
 }

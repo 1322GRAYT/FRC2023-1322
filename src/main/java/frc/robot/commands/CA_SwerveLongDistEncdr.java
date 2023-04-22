@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.calibrations.K_SWRV;
 import frc.robot.subsystems.SwerveDrivetrain;
 
 public class CA_SwerveLongDistEncdr extends CommandBase {
@@ -67,7 +66,7 @@ public class CA_SwerveLongDistEncdr extends CommandBase {
       rotation = rAxis * Constants.SwerveDrivetrain.MAX_ANGULAR_VELOCITY;
       swerveDrivetrain.drive(translation, rotation, false, true);
 
-    if (K_SWRV.KeSWRV_b_DebugEnbl) {
+    if (Constants.KeSWRV_DebugEnable) {
       SmartDashboard.putNumber("Auto EncdrCnt ZeroA: ",   (zeroEncdrCntA));
       SmartDashboard.putNumber("Auto EncdrCnt ZeroB: ",   (zeroEncdrCntB));
       SmartDashboard.putNumber("Auto EncdrCnt CurrA: ",   (swerveDrivetrain.getDrvCaddyEncdrPstn(caddyIndexA)));

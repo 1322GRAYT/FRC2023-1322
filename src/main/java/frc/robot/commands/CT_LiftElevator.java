@@ -4,7 +4,7 @@
 
 package frc.robot.commands;
 
-import frc.robot.calibrations.ControlSettings;
+import frc.robot.Constants;
 import frc.robot.subsystems.LiftElevator;
 import java.util.function.Supplier;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -38,13 +38,13 @@ public class CT_LiftElevator extends CommandBase {
     
     // Don't interupt Motion Magic unless movement in joystick
     // TODO: Add factor to allow for stoppoing of arm.
-    if (Math.abs(elevatorControl.get()) - ControlSettings.AUX_STICK_DEADBAND > 0 
+    if (Math.abs(elevatorControl.get()) - Constants.AUX_STICK_DEADBAND > 0 
         || liftElevator.getElevatorState() == ControlMode.PercentOutput){
       liftElevator.setElevatorPercentPower(elevatorControl.get());
     }
 
 
-    if (Math.abs(pitchControl.get()) - ControlSettings.AUX_STICK_DEADBAND > 0 || liftElevator.getPitchState() == ControlMode.PercentOutput){
+    if (Math.abs(pitchControl.get()) - Constants.AUX_STICK_DEADBAND > 0 || liftElevator.getPitchState() == ControlMode.PercentOutput){
       liftElevator.setPitchPercentPower(pitchControl.get());
     }
 

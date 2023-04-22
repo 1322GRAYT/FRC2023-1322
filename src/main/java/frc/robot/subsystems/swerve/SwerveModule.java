@@ -82,11 +82,6 @@ public class SwerveModule {
     }
 
     private void configAngleEncoder() {
-        // TODO should this be commented or should this be uncommented? 
-        // angleEncoder.configFactoryDefault();
-        // System.out.println("HERE");
-        //angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCANCoderConfig);
-        // System.out.println("HERE 2");
     }
 
     private void configAngleMotor() {

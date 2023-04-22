@@ -68,16 +68,8 @@ public class RobotContainer {
     driverStick = new XboxController(Constants.DRVR_CNTRLR);
     auxStick = new XboxController(Constants.AUX_CNTRLR);
 
-    // no var needed as it is a singleton instance.
-    CompressorSub.getInstance();
-    // Configure Autonomous Selections Available
-    // m_chooser.setDefaultOption("Default Auto", new
-    // CG_PlaceCone(liftClawSubsystem, liftElevatorSubsystem));
+    Compressor.getInstance();
 
-    // m_chooser.setDefaultOption("Default Auto", new
-    // CA_DriveDeadrecken(swerveSubsystem, -0.5, 2));
-
-    // compressorSubsystem.getCompressorPressure(); // this gets rid of the
 
     m_chooser.setDefaultOption("PlaceAndBack", new CG_DriveBack(swerveSubsystem, clawSubsystem, liftElevatorSubsystem));
     m_chooser.addOption("Ramp Balance",
