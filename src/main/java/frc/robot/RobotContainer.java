@@ -28,25 +28,25 @@ import frc.robot.utils.Direction;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final SendableChooser<Command> m_chooser = new SendableChooser<Command>();
+  private final SendableChooser<Command> m_chooser;
 
-  private final CompressorSub compressorSubsystem = new CompressorSub();
-  private final SwerveDrivetrain swerveSubsystem = new SwerveDrivetrain();
-  private final LiftElevator liftElevatorSubsystem = new LiftElevator();
-  private final LiftClaw liftClawSubsystem = new LiftClaw();
+  private final Gyro gyroSubsystem;
+  private final SwerveDrivetrain swerveSubsystem;
+  private final LiftElevator liftElevatorSubsystem;
+  private final LiftClaw liftClawSubsystem;
 
-  private final Camera cameraSubsystem = new Camera();
-  private XboxController driverStick = new XboxController(Constants.DRVR_CNTRLR);
-  private XboxController auxStick = new XboxController(Constants.AUX_CNTRLR);
+  private final Camera cameraSubsystem;
+  private final XboxController driverStick;
+  private final XboxController auxStick;
 
-  Trigger auxPOVup = new Trigger(() -> auxStick.getPOV() == Direction.UP.getValue());
-  Trigger auxPOVdown = new Trigger(() -> auxStick.getPOV() == Direction.DOWN.getValue());
-  Trigger auxPOVleft = new Trigger(() -> auxStick.getPOV() == Direction.LEFT.getValue());
-  Trigger auxPOVright = new Trigger(() -> auxStick.getPOV() == Direction.RIGHT.getValue());
+  private Trigger auxPOVup;
+  private Trigger auxPOVdown;
+  private Trigger auxPOVleft;
+  private Trigger auxPOVright;
 
-  JoystickButton auxAButton = new JoystickButton(auxStick, Constants.BUTTON_A);
-  JoystickButton auxYButton = new JoystickButton(auxStick, Constants.BUTTON_Y);
-  // JoystickButton auxBButton = new JoystickButton(auxStick, Constants.BUTTON_B);
+  private JoystickButton auxAButton;
+  private JoystickButton auxYButton;
+  //private JoystickButton auxBButton;
 
   private Command m_autoCommandSelected;
 
@@ -54,6 +54,21 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
+    m_chooser = new SendableChooser<Command>();
+
+    gyroSubsystem = new Gyro(Constants.GYRO_ID);
+    swerveSubsystem = new SwerveDrivetrain(gyroSubsystem);
+    liftElevatorSubsystem = new LiftElevator();
+    liftClawSubsystem = new LiftClaw();
+  
+    cameraSubsystem = new Camera();
+    driverStick = new XboxController(Constants.DRVR_CNTRLR);
+    auxStick = new XboxController(Constants.AUX_CNTRLR);
+
+
+    // no var needed as it is a singleton instance.
+    CompressorSub.getInstance();
     // Configure Autonomous Selections Available
     // m_chooser.setDefaultOption("Default Auto", new
     // CG_PlaceCone(liftClawSubsystem, liftElevatorSubsystem));
@@ -61,19 +76,11 @@ public class RobotContainer {
     // m_chooser.setDefaultOption("Default Auto", new
     // CA_DriveDeadrecken(swerveSubsystem, -0.5, 2));
 
-    compressorSubsystem.getCompressorPressure(); // this gets rid of the
+    //compressorSubsystem.getCompressorPressure(); // this gets rid of the
 
-    m_chooser.setDefaultOption("PlaceAndBack",
-        new CG_DriveBack(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
-    //m_chooser.addOption("No Ramp Place and move back.",
-    //    new CG_DriveBackOrig(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
-    // m_chooser.addOption("Place and then attempt to balance.", new
-    // CG_DriveBackBalance(swerveSubsystem, liftClawSubsystem,
-    // liftElevatorSubsystem));
-    m_chooser.addOption("Ramp Balance", new CG_BalanceRamp(swerveSubsystem,
-        liftClawSubsystem, liftElevatorSubsystem));
-    m_chooser.addOption("Yeet Cube, then Ramp", new CG_YeetCubeRamp(swerveSubsystem,
-        liftClawSubsystem, liftElevatorSubsystem));
+    m_chooser.setDefaultOption("PlaceAndBack",new CG_DriveBack(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
+    m_chooser.addOption("Ramp Balance", new BalanceOnRamp(swerveSubsystem, gyroSubsystem,liftClawSubsystem, liftElevatorSubsystem));
+    m_chooser.addOption("Yeet Cube, then Ramp", new CG_YeetCubeRamp(swerveSubsystem, gyroSubsystem,liftClawSubsystem, liftElevatorSubsystem));
         
     SmartDashboard.putData("Auto choices: ", m_chooser);
 
@@ -113,20 +120,18 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // BEGIN DRIVER STICK BUTTON ASSIGNMENTS
     final JoystickButton driverButton_BumpLT = new JoystickButton(driverStick, Constants.BUMPER_LEFT);
-    driverButton_BumpLT.onTrue(new CG_ResetAndZeroEncdrs(swerveSubsystem));
+    driverButton_BumpLT.onTrue(new CG_ResetAndZeroEncdrs(swerveSubsystem,gyroSubsystem));
+    
 
-    /*
-     * auxPOVup.onTrue(new RunCommand(() -> {
-     * liftElevatorSubsystem.setGotoDelivery();
-     * liftClawSubsystem.gotoDelivery();
-     * }, liftElevatorSubsystem, liftClawSubsystem));
-     */
-/* 
-     auxPOVdown.onTrue(new RunCommand(() -> {
-      liftElevatorSubsystem.setGotoIntake();
-      liftClawSubsystem.gotoIntake();
-    }, liftElevatorSubsystem, liftClawSubsystem));
-*/
+    auxPOVup = new Trigger(() -> auxStick.getPOV() == Direction.UP.getValue());
+    auxPOVdown = new Trigger(() -> auxStick.getPOV() == Direction.DOWN.getValue());
+    auxPOVleft = new Trigger(() -> auxStick.getPOV() == Direction.LEFT.getValue());
+    auxPOVright = new Trigger(() -> auxStick.getPOV() == Direction.RIGHT.getValue());
+
+    auxAButton = new JoystickButton(auxStick, Constants.BUTTON_A);
+    auxYButton = new JoystickButton(auxStick, Constants.BUTTON_Y);
+    //auxBButton = new JoystickButton(auxStick, Constants.BUTTON_B);
+
     auxYButton.whileTrue(new RunCommand(() -> {
       liftClawSubsystem.setIntakeMotorPower(1.0);
     }, liftClawSubsystem));

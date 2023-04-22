@@ -15,9 +15,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import com.ctre.phoenix.motorcontrol.*;
 //import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class LiftClaw extends SubsystemBase {
 
@@ -32,7 +30,7 @@ public class LiftClaw extends SubsystemBase {
   private double pitchSetPoint = 0;
   private ControlMode pitchMode = ControlMode.PercentOutput;
 
-  private WPI_TalonSRX intakeMotor = new WPI_TalonSRX(Constants.CONE_MTR_LIFT);
+  //private WPI_TalonSRX intakeMotor = new WPI_TalonSRX(Constants.CONE_MTR_LIFT);
   // Resource Definitions
   private PWM clawYaw = new PWM(Constants.CLAW_YAW_SERVO);
   private WPI_TalonFX clawPitch = new WPI_TalonFX(Constants.CLAW_PITCH);
@@ -46,8 +44,8 @@ public class LiftClaw extends SubsystemBase {
    * Constructor
    */
   public LiftClaw() {
-    intakeMotor.setInverted(true);
-    intakeMotor.setNeutralMode(NeutralMode.Brake);
+    //intakeMotor.setInverted(true);
+    //intakeMotor.setNeutralMode(NeutralMode.Brake);
     yawLimiter = new SlewRateLimiter(0.5);
   }
 
@@ -59,9 +57,11 @@ public class LiftClaw extends SubsystemBase {
     intakeMotorPower = coneMotorPower;
   }
 
+  /* 
   private void intakeControl() {
     intakeMotor.set(intakeMotorMode, intakeMotorPower);
   }
+  */
 
   // Getter Interfaces
 
@@ -151,7 +151,7 @@ public class LiftClaw extends SubsystemBase {
     ControlPitch();
     ControlYaw();
     ControlClaw();
-    intakeControl();
+    //intakeControl();
     //System.out.println(getGrabSensor());
   }
 

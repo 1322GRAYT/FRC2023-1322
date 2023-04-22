@@ -29,7 +29,6 @@ import frc.robot.subsystems.swerve.SwerveModuleConstants;
  */
 public final class Constants {
 
-    // TODO: if does not work for balance delete
     public static final double BEAM_BALANACED_DRIVE_KP = 0.015; // P (Proportional) constant of a PID loop
     public static final double BEAM_BALANCED_GOAL_DEGREES = 0;
     public static final double BEAM_BALANCED_ANGLE_TRESHOLD_DEGREES = 1;
@@ -37,14 +36,16 @@ public final class Constants {
     public static final double BEAM_BALANCE_POWER_MULTIPLIER = 0.6;
 
     // Enum for Solenoid control
+    /*
     public enum SolenoidPosition {
         UP, DOWN, OFF
     }
+    */
 
     /* PWM ADDRESS ASSIGNMENTS */
 
     public static final int CLAW_YAW_SERVO = 0;
-    public static final int CONE_ROTATE_SERVO = 1;
+    //public static final int CONE_ROTATE_SERVO = 1;
 
     /* MOTOR CAN ADDRESS ASSIGNMENTS */
     // Drive Motors (FALCON 500)
@@ -63,7 +64,7 @@ public final class Constants {
     // public static final int FLOOR_MOTOR = 9;
 
     // Cone Lift Motor (CAN TALON SRX)
-    public static final int CONE_MTR_LIFT = 11;
+    //public static final int CONE_MTR_LIFT = 11;
 
     // Elevator
     public static final int ELEVATOR_MOTOR = 10;
@@ -93,10 +94,13 @@ public final class Constants {
     public static final int BUTTON_Y = 4;
     public static final int BUMPER_LEFT = 5;
     public static final int BUMPER_RIGHT = 6;
-    public static final int BUTTON_BACK = 7; // LEFT(SELECT)
-    public static final int BUTTON_START = 8; // RIGHT
-    public static final int STICK_LEFT_PRESS = 9; // JOYSTICK PRESS
-    public static final int STICK_RIGHT_PRESS = 10; // JOYSTICK PRESS
+
+    public static final SPI.Port GYRO_ID = SPI.Port.kMXP;
+    public static final boolean INVERT_GYRO = true;
+    //public static final int BUTTON_BACK = 7; // LEFT(SELECT)
+    //public static final int BUTTON_START = 8; // RIGHT
+    //public static final int STICK_LEFT_PRESS = 9; // JOYSTICK PRESS
+    //public static final int STICK_RIGHT_PRESS = 10; // JOYSTICK PRESS
     // Analog Assignments
     //public static final int STICK_LEFT_XAXIS = 1;
     //public static final int STICK_LEFT_YAXIS = 2;
@@ -111,10 +115,6 @@ public final class Constants {
 
     public static final class SwerveDrivetrain {
 
-        /* Gyro */
-        public static final SPI.Port GYRO_ID = SPI.Port.kMXP;
-        public static final boolean INVERT_GYRO = true;
-
         /* Drivetrain */
         public static final double TRACK_WIDTH = Units.inchesToMeters(23.25);
         public static final double WHEEL_BASE = Units.inchesToMeters(23.5);
@@ -126,13 +126,31 @@ public final class Constants {
 
         public static final double DRIVE_GEAR_RATIO = (10 / 1.0); // 10:1
         public static final double ANGLE_GEAR_RATIO = (19 / 1.0); // 19:1
-        public static final double DRIVE_CNTS_PER_REV = 2048; // FALCON 500;
+        public static final double DRIVE_COUNTS_PER_REVOLUTION = 2048; // FALCON 500;
+        public static final double FALCON_TO_DEGREES = (360.0 / ( DRIVE_COUNTS_PER_REVOLUTION));
+        public static final double ANGLE_FALCON_TO_DEGREES = FALCON_TO_DEGREES/ANGLE_GEAR_RATIO;
+        public static final double DRIVE_FALCON_TO_DEGREES = FALCON_TO_DEGREES/DRIVE_GEAR_RATIO;
+        
+        public static double DEGREES_TO_FALCON=1/FALCON_TO_DEGREES;
+        public static final double DRIVE_DEGREES_TO_FALCON = DEGREES_TO_FALCON / DRIVE_GEAR_RATIO;
+        public static final double ANGLE_DEGREES_TO_FALCON = DEGREES_TO_FALCON / ANGLE_GEAR_RATIO;
+
 
         public static final SwerveDriveKinematics SWERVE_KINEMATICS = new SwerveDriveKinematics(
+                new Translation2d(TRACK_WIDTH / 2.0, WHEEL_BASE / 2.0),  //FRONT RIGHT
+                new Translation2d(TRACK_WIDTH / 2.0, -WHEEL_BASE / 2.0),  //REAR RIGHT
+                new Translation2d(-TRACK_WIDTH / 2.0, WHEEL_BASE / 2.0), //FRONT LEFT
+                new Translation2d(-TRACK_WIDTH / 2.0, -WHEEL_BASE / 2.0) //REAR LEFT
+                );
+
+/*
+        public static final SwerveDriveKinematics SWERVE_KINEMATICS = new SwerveDriveKinematics(
+            // Original: this is wrong......this is why the x and y are mixed up in drive and other places.
                 new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
                 new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
                 new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
                 new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0));
+ */
 
         /* Current Limiting */
         public static final int ANGLE_CONTINUOUS_CL = 25;

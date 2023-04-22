@@ -6,10 +6,12 @@ import frc.robot.Constants;
 import frc.robot.subsystems.*;
 
 public class CA_Balance extends CommandBase {
-    SwerveDrivetrain drive;
+    private SwerveDrivetrain drive;
+    private Gyro gyro;
 
-    public CA_Balance(SwerveDrivetrain drive) {
+    public CA_Balance(SwerveDrivetrain drive, Gyro gyro) {
         this.drive = drive;
+        this.gyro = gyro;
     }
 
     double pitch = 0, roll = 0;
@@ -25,8 +27,8 @@ public class CA_Balance extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        pitch = drive.getPitchOptimized();
-        roll = drive.getRollOptimized();
+        pitch = gyro.getPitchOptimized();
+        roll = gyro.getRollOptimized();
 
         pitch = (pitch/90);
         roll =(roll/90);
@@ -34,7 +36,7 @@ public class CA_Balance extends CommandBase {
 
 
 
-        Translation2d translation = new Translation2d(roll, pitch).times(Constants.SwerveDrivetrain.MAX_SPEED);
+        Translation2d translation = new Translation2d(pitch, roll).times(Constants.SwerveDrivetrain.MAX_SPEED);
         System.out.println("AFTER    pitch --" +translation.getY() +"    roll --"+translation.getX());
 
             drive.drive( translation, 0, false, true);

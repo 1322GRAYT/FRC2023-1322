@@ -10,13 +10,13 @@ import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
-public class CG_BalanceRamp extends SequentialCommandGroup {
+public class BalanceOnRamp extends SequentialCommandGroup {
 
     //no ramp was 1.5, 2.0
     private double power = 2.5;
     private double time = 1.8;
 
-    public CG_BalanceRamp(SwerveDrivetrain drive, LiftClaw liftClaw, LiftElevator liftElevator) {
+    public BalanceOnRamp(SwerveDrivetrain drive, Gyro gyro, LiftClaw liftClaw, LiftElevator liftElevator) {
         addCommands(
             new CA_Elevator(liftElevator, true).withTimeout(3),
             new CA_PitchElevator(liftElevator, true),
@@ -25,10 +25,10 @@ public class CG_BalanceRamp extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 new CA_ToggleClaw(liftClaw),
                 new RunCommand(() -> drive.drive(
-                    new Translation2d(-power, 0.0), 0, false, true),drive).withTimeout(time)
+                    new Translation2d(0.0,-power), 0, false, true),drive).withTimeout(time)
             ),
             //new InstantCommand(() -> drive.stopSwerveDriveMotors()),
-            new CA_Balance2(drive)
+            new AutoBalance(drive,gyro)
             );
     }
 }

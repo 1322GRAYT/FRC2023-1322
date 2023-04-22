@@ -55,8 +55,7 @@ public class CT_SwerveDrive extends CommandBase {
         if (controller.getRightBumper()) {
             max_speed = max_speed/2;
         }
-        // What the Operator Considers X-Y Axes is Different than Actual Robot Field Orientation
-        translation = new Translation2d(yAxis, xAxis).times(max_speed);
+        translation = new Translation2d(xAxis, yAxis).times(max_speed);
         rotation = rAxis * Constants.SwerveDrivetrain.MAX_ANGULAR_VELOCITY;
         swerveSubsystem.drive(translation, rotation, fieldRelative, openLoop);
     }

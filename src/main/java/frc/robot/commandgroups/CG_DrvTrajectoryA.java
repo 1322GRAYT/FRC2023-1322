@@ -97,7 +97,7 @@ public class CG_DrvTrajectoryA extends SequentialCommandGroup {
                                 new CA_PitchElevator(liftElevator, true),
                                 new CA_ToggleClaw(liftClaw),
                                 new CA_PitchElevator(liftElevator, false),
-                                new RunCommand(() -> drive.drive(new Translation2d(-0.5, 0.0), 0, false, true), drive)
+                                new RunCommand(() -> drive.drive(new Translation2d(0.0, -0.5), 0, false, true), drive)
                                                 .withTimeout(1),
                                 new InstantCommand(() -> drive.stopSwerveDriveMotors())
                 // new InstantCommand(() -> drive.stopSwerveRotMotors())

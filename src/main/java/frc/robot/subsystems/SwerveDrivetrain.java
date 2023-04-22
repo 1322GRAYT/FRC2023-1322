@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Constants;
 import frc.robot.calibrations.K_SWRV;
@@ -8,7 +7,6 @@ import frc.robot.subsystems.swerve.SwerveModule;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -20,74 +18,48 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveDrivetrain extends SubsystemBase {
 
   private SwerveDriveOdometry swerveOdometry;
   private SwerveModule[] swerveModules;
-  private AHRS gyro;
+  // private AHRS gyro;
+  private Gyro gyro;
   private Field2d field;
 
   /* Rotation Control PID */
   private PIDController rotPID;
   // private double rotPID_PowCorr;
-  private double rotPID_PowOutMin;
-  private double rotPID_PowOutMax;
+  private double rotPID_PowerOutMinimum;
+  private double rotPID_PowerOutMaximum;
   // private double rotPID_RotAngCmnd;
 
-  // Creates a new TrapezoidProfile
-  // Profile will have a max vel of 3 meters per second
-  // Profile will have a max acceleration of 6 meters per second squared
-  // Profile will end stationary at 5 meters
-  // Profile will start stationary at zero position
-  /*
-   * TrapezoidProfile rotPID_RotProfile = new TrapezoidProfile(new
-   * TrapezoidProfile.Constraints(3, 6),
-   * new TrapezoidProfile.State(3, 0),
-   * new TrapezoidProfile.State(0, 0));
-   */
+  public SwerveDrivetrain(Gyro gyro) {
+      this.gyro = gyro;
 
-  public SwerveDrivetrain() {
+      swerveModules = new SwerveModule[] {
+          new SwerveModule(0, Constants.SwerveDrivetrain.Module0),
+          new SwerveModule(1, Constants.SwerveDrivetrain.Module1),
+          new SwerveModule(2, Constants.SwerveDrivetrain.Module2),
+          new SwerveModule(3, Constants.SwerveDrivetrain.Module3)
+      };
+      System.out.println("SwerveDriveTrain -- SwerveModules");
 
-    System.out.println("Starting SwerveDriveTrain");
-  
-    gyro = new AHRS(Constants.SwerveDrivetrain.GYRO_ID);
-    gyro.calibrate();
-    new Thread(()-> {
-      try {
-        Thread.sleep(1000);
-      }
-      catch (Exception e) {
-      }
-      zeroGyro();
-    }).start();
-    System.out.println("SwerveDriveTrain -- gyro done");
+      swerveOdometry = new SwerveDriveOdometry(Constants.SwerveDrivetrain.SWERVE_KINEMATICS,
+          gyro.getYaw(),
+          getSwerveModulePositions());
 
-    swerveModules = new SwerveModule[] {
-        new SwerveModule(0, Constants.SwerveDrivetrain.Module0),
-        new SwerveModule(1, Constants.SwerveDrivetrain.Module1),
-        new SwerveModule(2, Constants.SwerveDrivetrain.Module2),
-        new SwerveModule(3, Constants.SwerveDrivetrain.Module3)
-    };
-    System.out.println("SwerveDriveTrain -- SwerveModules");
+      field = new Field2d();
 
-
-    swerveOdometry = new SwerveDriveOdometry(Constants.SwerveDrivetrain.SWERVE_KINEMATICS,
-        getYaw(),
-        getSwerveModulePositions());
-
-    field = new Field2d();
-
-    System.out.println("Starting SwerveDriveTrain -- odometry");
+      System.out.println("Starting SwerveDriveTrain -- odometry");
 
     /* Rotation Control PID */
     rotPID = new PIDController(K_SWRV.KeSWRV_k_CL_PropGx_Rot, K_SWRV.KeSWRV_k_CL_IntglGx_Rot,
         K_SWRV.KeSWRV_k_CL_DerivGx_Rot);
     // rotPID_PowCorr = 0;
-    rotPID_PowOutMin = -1;
-    rotPID_PowOutMax = 1;
+    rotPID_PowerOutMinimum = -1;
+    rotPID_PowerOutMaximum = 1;
     // rotPID_RotAngCmnd = getYaw().getDegrees();
     System.out.println("Starting SwerveDriveTrain  -- rotPID");
 
@@ -95,16 +67,15 @@ public class SwerveDrivetrain extends SubsystemBase {
   }
 
   /*
-  public SwerveModule getSwerveModule(int i) {
-    return swerveModules[i];
-  }
-*/
-
+   * public SwerveModule getSwerveModule(int i) {
+   * return swerveModules[i];
+   * }
+   */
 
   public SwerveModulePosition[] getSwerveModulePositions() {
     SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[swerveModules.length];
     for (int i = 0; i < swerveModules.length; i++) {
-      swerveModulePositions[i] = swerveModules[i].geSwerveModulePosition();
+      swerveModulePositions[i] = swerveModules[i].getSwerveModulePosition();
     }
     return swerveModulePositions;
   }
@@ -116,9 +87,9 @@ public class SwerveDrivetrain extends SubsystemBase {
     swerveModules[2].getCanCoder();
     swerveModules[3].getCanCoder();
 
-    //SmartDashboard.putNumber("Field X-Coord: ", field.getRobotPose().getX());
-    //SmartDashboard.putNumber("Field Y-Coord: ", field.getRobotPose().getY());
-    //SmartDashboard.putNumber("Yaw: ", getYaw().getDegrees());
+    // SmartDashboard.putNumber("Field X-Coord: ", field.getRobotPose().getX());
+    // SmartDashboard.putNumber("Field Y-Coord: ", field.getRobotPose().getY());
+    // SmartDashboard.putNumber("Yaw: ", getYaw().getDegrees());
 
   }
 
@@ -128,7 +99,7 @@ public class SwerveDrivetrain extends SubsystemBase {
             translation.getX(),
             translation.getY(),
             rotation,
-            getYaw())
+            gyro.getYaw())
             : new ChassisSpeeds(
                 translation.getX(),
                 translation.getY(),
@@ -141,58 +112,20 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
   }
 
-  /* Gyro */
-  public void zeroGyro() {
-    gyro.reset();
-  }
 
-  private double optimizeGyro(double degrees) {
-    return (360+(degrees%360)) % 360;
-  }
 
-  public Rotation2d getYaw() {
-    double pitch = gyro.getPitch();
-    double roll = gyro.getRoll();
-    double rawYaw = gyro.getYaw();
-    SmartDashboard.putNumber("Roll Gyro: ", roll);
-    SmartDashboard.putNumber("Pitch Gyro: ", pitch);
-    SmartDashboard.putNumber("Yaw Gyro: ", rawYaw);
-    double yaw = optimizeGyro(rawYaw);
-    return Constants.SwerveDrivetrain.INVERT_GYRO ? Rotation2d.fromDegrees(360 - yaw) : Rotation2d.fromDegrees(yaw);
-  }
 
-  public double getPitch() {
-    return gyro.getPitch();
-  }
 
-  public double getRoll() {
-    return gyro.getRoll();
-  }
 
-  public double getPitchOptimized() {
-    return optimizeGyro(getPitch());
-  }
-
-  public double getRollOptimized() {
-    return optimizeGyro(getRoll());
-  }
-
-  public double getGyroAngleDegrees() {
-    return getYaw().getDegrees();
-  }
-
-  public double getGyroAngleRadians() {
-    return getYaw().getRadians();
-  }
 
   /*
-  public void resetToAbsolute() {
-    swerveModules[0].resetToAbsolute();
-    swerveModules[1].resetToAbsolute();
-    swerveModules[2].resetToAbsolute();
-    swerveModules[3].resetToAbsolute();
-  }
-  */
+   * public void resetToAbsolute() {
+   * swerveModules[0].resetToAbsolute();
+   * swerveModules[1].resetToAbsolute();
+   * swerveModules[2].resetToAbsolute();
+   * swerveModules[3].resetToAbsolute();
+   * }
+   */
 
   /* Odometry */
 
@@ -209,7 +142,7 @@ public class SwerveDrivetrain extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     // swerveOdometry.resetPosition(pose, getSwerveModulePositions(),
     // getYaw());
-    swerveOdometry.resetPosition(getYaw(), getSwerveModulePositions(), pose);
+    swerveOdometry.resetPosition(gyro.getYaw(), getSwerveModulePositions(), pose);
   }
 
   /* Module States */
@@ -229,31 +162,31 @@ public class SwerveDrivetrain extends SubsystemBase {
   }
 
   public void resetSwerveDriveEncoders() {
-    for (SwerveModule module: swerveModules) {
-      module.resetDrvEncdrPstn();
+    for (SwerveModule module : swerveModules) {
+      module.resetDriveEncoderPosition();
     }
   }
 
   public void resetSwerveRotateEncoders() {
-    for (SwerveModule module: swerveModules) {
-      module.resetRotEncdrPstn();
+    for (SwerveModule module : swerveModules) {
+      module.resetRotaeEncoderPosition();
     }
   }
 
   public void stopSwerveDriveMotors() {
-    for (SwerveModule module: swerveModules) {
-      module.stopDrvMotor();
+    for (SwerveModule module : swerveModules) {
+      module.stopDriveMotor();
     }
   }
 
   public void stopSwerveRotMotors() {
-    for (SwerveModule module: swerveModules) {
-      module.stopRotMotor();
+    for (SwerveModule module : swerveModules) {
+      module.stopRotateMotor();
     }
   }
 
   public void stopSwerveCaddyDrvMotor(int motorIndex) {
-    swerveModules[motorIndex].stopDrvMotor();
+    swerveModules[motorIndex].stopDriveMotor();
   }
 
   /**
@@ -270,11 +203,10 @@ public class SwerveDrivetrain extends SubsystemBase {
     double wheelRevolutions;
     double wheelDistanceInches;
 
-    encoderRevolutions = encoderCounts / (double) Constants.SwerveDrivetrain.DRIVE_CNTS_PER_REV;
+    encoderRevolutions = encoderCounts / (double) Constants.SwerveDrivetrain.DRIVE_COUNTS_PER_REVOLUTION;
     wheelRevolutions = encoderRevolutions / (double) Constants.SwerveDrivetrain.DRIVE_GEAR_RATIO;
     wheelDistanceInches = wheelRevolutions * (double) Constants.SwerveDrivetrain.WHEEL_CIRCUMFERENCE;
 
-    
     return (wheelDistanceInches);
   }
 
@@ -294,29 +226,29 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     wheelRevs = wheelDistInches / (double) Constants.SwerveDrivetrain.WHEEL_CIRCUMFERENCE;
     encdrRevs = wheelRevs * (double) Constants.SwerveDrivetrain.DRIVE_GEAR_RATIO;
-    encdrCnts = encdrRevs * (double) Constants.SwerveDrivetrain.DRIVE_CNTS_PER_REV;
+    encdrCnts = encdrRevs * (double) Constants.SwerveDrivetrain.DRIVE_COUNTS_PER_REVOLUTION;
 
     return (Math.round(encdrCnts));
   }
 
   public double getDrvDistTravelled(int mtrIdx, double zeroPstnRefCnts) {
     double drvEncdrCntDelt;
-    drvEncdrCntDelt = Math.round(swerveModules[mtrIdx].getDrvEncdrCurrentPstn() - zeroPstnRefCnts);
+    drvEncdrCntDelt = Math.round(swerveModules[mtrIdx].getDriveEncoderCurrentPosition() - zeroPstnRefCnts);
     return (getDrvInchesPerEncdrCnts(drvEncdrCntDelt));
   }
 
   public double getDrvCaddyEncdrPstn(int mtrIdx) {
-    return Math.round(swerveModules[mtrIdx].getDrvEncdrCurrentPstn());  
+    return Math.round(swerveModules[mtrIdx].getDriveEncoderCurrentPosition());
   }
 
   public void dashboard() {
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
     tab.add(this);
-    tab.addNumber("Gyro Angle ???", this::getGyroAngleDegrees).withWidget(BuiltInWidgets.kGyro);
-    tab.addNumber("Gyro Angle (GRAPH) ???", this::getGyroAngleDegrees).withWidget(BuiltInWidgets.kGraph);
+    tab.addNumber("Gyro Angle ???", gyro::getGyroAngleDegrees).withWidget(BuiltInWidgets.kGyro);
+    tab.addNumber("Gyro Angle (GRAPH) ???", gyro::getGyroAngleDegrees).withWidget(BuiltInWidgets.kGraph);
     tab.add("Field X-Coord ", field.getRobotPose().getX());
     tab.add("Field Y-Coord ", field.getRobotPose().getY());
-    //SmartDashboard.putData(field);
+    // SmartDashboard.putData(field);
     // SmartDashboard.putData("ANGLE PID", data);
     // SmartDashboard.putData("DRIVE PID", data);
   }
@@ -329,8 +261,8 @@ public class SwerveDrivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     print();
-    //swerveOdometry.update(getYaw(), getStates());
-    swerveOdometry.update(getYaw(), getSwerveModulePositions());
+    // swerveOdometry.update(getYaw(), getStates());
+    swerveOdometry.update(gyro.getYaw(), getSwerveModulePositions());
     field.setRobotPose(swerveOdometry.getPoseMeters());
   }
 
@@ -346,15 +278,15 @@ public class SwerveDrivetrain extends SubsystemBase {
    * Method: PID_RotCtrl - Drive System: Control Drive Rotational Control
    * with a PID controller using the Gyro as a Reference.
    * 
-   * @param Le_Deg_CL_RotErr The error term (from the input device, generally
-   *                         gyroscope) for rotation
-   *                         and heading correction.
+   * @param roteteError The error term (from the input device, generally
+   *                    gyroscope) for rotation
+   *                    and heading correction.
    */
-  public double PID_RotCtrl(double Le_Deg_CL_RotErr) {
-    double Le_r_CL_CorrNormPwr;
-    Le_r_CL_CorrNormPwr = rotPID.calculate(Le_Deg_CL_RotErr);
-    Le_r_CL_CorrNormPwr = MathUtil.clamp(Le_r_CL_CorrNormPwr, rotPID_PowOutMin, rotPID_PowOutMax);
-    return (Le_r_CL_CorrNormPwr);
+  public double PID_RotateControl(double roteteError) {
+    double rotateErrorCorrected;
+    rotateErrorCorrected = rotPID.calculate(roteteError);
+    rotateErrorCorrected = MathUtil.clamp(rotateErrorCorrected, rotPID_PowerOutMinimum, rotPID_PowerOutMaximum);
+    return (rotateErrorCorrected);
   }
 
   public void configPID_RotCtrl(double Le_Deg_RotAngTgt) {
@@ -387,8 +319,8 @@ public class SwerveDrivetrain extends SubsystemBase {
   }
 
   public void setRotOutputRange(double minOutput, double maxOutput) {
-    rotPID_PowOutMin = minOutput;
-    rotPID_PowOutMax = maxOutput;
+    rotPID_PowerOutMinimum = minOutput;
+    rotPID_PowerOutMaximum = maxOutput;
   }
 
   public double getRotErrorDerivative() {
@@ -418,8 +350,8 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     rotPID.setTolerance(0.05, Double.POSITIVE_INFINITY);
 
-    rotPID_PowOutMin = -1;
-    rotPID_PowOutMax = 1;
+    rotPID_PowerOutMinimum = -1;
+    rotPID_PowerOutMaximum = 1;
   }
 
   /*************************************************/
@@ -446,6 +378,5 @@ public class SwerveDrivetrain extends SubsystemBase {
    * }
    */
   // }
-
 
 }

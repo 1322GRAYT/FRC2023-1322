@@ -8,6 +8,9 @@ public class testlib {
         for (double degrees = -360; degrees <= 360; degrees += 30) {
             double result = placeInAppropriate0To360Scope(currentAngle, degrees);
             System.out.println("Target Position: " +degrees + " --->  Optimized position:" +result);
+            double result2 = normalizeAngle(degrees);
+            System.out.println("Target Position: " +degrees + " --->  Newmalized position:" +result2);
+            System.out.println(" ");
         }
         
     }
@@ -27,7 +30,7 @@ public class testlib {
 
         if (lowerOffset >= 0) {
             lowerBound = currentAngle - lowerOffset;   // lowerbound should be 0 in this case if currentangle is 0 <= currentAngle <= 360
-            upperBound = currentAngle + (360 - lowerOffset); //upperbound should be 360 inb this case if currentangle is 0 <= currentAngle <= 360
+            upperBound = currentAngle + (360 - lowerOffset); //upperbound should be 360 in this case if currentangle is 0 <= currentAngle <= 360
         } else {
             upperBound = currentAngle - lowerOffset;  //upperbound should be 0 in this case if currentangle is -360 <= currentAngle <= 0
             lowerBound = currentAngle - (360 + lowerOffset); //lowerbound should be -360 in this case if currentangle is -360 <= currentAngle <= 0
@@ -50,4 +53,17 @@ public class testlib {
 
         return newAngle;
     }
+
+    public static double normalizeAngle(double angle) {
+
+            double normalizedAngle = angle % 360.0;
+            if (normalizedAngle > 180.0) {
+                normalizedAngle -= 360.0;
+            } else if (normalizedAngle < -180.0) {
+                normalizedAngle += 360.0;
+            }
+            return normalizedAngle;
+        
+    }
+
 }

@@ -63,7 +63,7 @@ public class CA_SwerveLongDistEncdr extends CommandBase {
         xAxis = -xAxis;
       }
 
-      translation = new Translation2d(yAxis, xAxis).times(Constants.SwerveDrivetrain.MAX_SPEED);
+      translation = new Translation2d(xAxis, yAxis).times(Constants.SwerveDrivetrain.MAX_SPEED);
       rotation = rAxis * Constants.SwerveDrivetrain.MAX_ANGULAR_VELOCITY;
       swerveDrivetrain.drive(translation, rotation, false, true);
 

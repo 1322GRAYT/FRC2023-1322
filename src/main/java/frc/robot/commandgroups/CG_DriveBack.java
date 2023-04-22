@@ -25,7 +25,7 @@ public class CG_DriveBack extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                     new CA_ToggleClaw(liftClaw),
                     new RunCommand(() -> drive.drive(
-                        new Translation2d(-power, 0.0), 0, false, true),
+                        new Translation2d(0.0, -power), 0, false, true),
                         drive).withTimeout(time)
                 ),
                 new InstantCommand(() -> drive.stopSwerveDriveMotors()));

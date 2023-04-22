@@ -4,6 +4,7 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
+import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.SwerveDrivetrain;
 
 
@@ -12,9 +13,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 // This command self=balances on the charging station using gyroscope pitch as feedback
-public class CA_Balance2 extends CommandBase {
+public class AutoBalance extends CommandBase {
 
     private SwerveDrivetrain drive;
+    private Gyro gyro;
 
     private double error;
     private double currentAngle;
@@ -24,8 +26,9 @@ public class CA_Balance2 extends CommandBase {
      * Command to use Gyro data to resist the tip angle from the beam - to stabalize
      * and balanace
      */
-    public CA_Balance2(SwerveDrivetrain drive) {
+    public AutoBalance(SwerveDrivetrain drive, Gyro gyro) {
         this.drive = drive;
+        this.gyro = gyro;
         addRequirements(drive);
     }
 
@@ -44,7 +47,7 @@ public class CA_Balance2 extends CommandBase {
         // controller joystick
         // Double currentAngle = -1 *
         // Robot.controller.getRawAxis(Constants.LEFT_VERTICAL_JOYSTICK_AXIS) * 45;
-        currentAngle = -drive.getRoll();
+        currentAngle = -gyro.getRoll();
 
         error = Constants.BEAM_BALANCED_GOAL_DEGREES - currentAngle;
         drivePower = -Math.min(Constants.BEAM_BALANACED_DRIVE_KP * error, 1);

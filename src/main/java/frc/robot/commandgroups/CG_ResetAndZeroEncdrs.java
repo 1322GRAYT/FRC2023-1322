@@ -7,6 +7,7 @@ package frc.robot.commandgroups;
 import frc.robot.commands.CC_SwerveResetDrvEncdrs;
 import frc.robot.commands.CC_SwerveResetRotEncdrs;
 import frc.robot.commands.CC_SwerveZeroGyro;
+import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.SwerveDrivetrain;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -15,13 +16,13 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class CG_ResetAndZeroEncdrs extends SequentialCommandGroup {
   /** Creates a new CG_DrvBack. */
-  public CG_ResetAndZeroEncdrs(SwerveDrivetrain swerveDrivetrain) {
+  public CG_ResetAndZeroEncdrs(SwerveDrivetrain swerveDrivetrain, Gyro gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      (new CC_SwerveResetRotEncdrs(swerveDrivetrain)),
-      (new CC_SwerveResetDrvEncdrs(swerveDrivetrain)),
-      (new CC_SwerveZeroGyro(swerveDrivetrain))
+      new CC_SwerveResetRotEncdrs(swerveDrivetrain),
+      new CC_SwerveResetDrvEncdrs(swerveDrivetrain),
+      new CC_SwerveZeroGyro(gyro)
     );
     System.out.println("CG_ResetAndZeroEncdrs Autonomous Invoked.");
   }

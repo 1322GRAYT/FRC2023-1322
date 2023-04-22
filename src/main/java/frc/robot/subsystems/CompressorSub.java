@@ -14,13 +14,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CompressorSub extends SubsystemBase {
 
+  private static CompressorSub instance;
   private Compressor phCompressor;
   private double pressureCompressor;
   //private double currentCompressor;
   // private boolean displayDashboardData = true;
 
+  public static CompressorSub getInstance() {
+    if (instance == null) {
+      instance = new CompressorSub();
+    }
+    return instance;
+  }
   /** Creates a new CompressorSubsystem. */
-  public CompressorSub() {
+  private CompressorSub() {
     phCompressor = new Compressor(Constants.PNEUMATIC_COMPRESSOR, PneumaticsModuleType.REVPH);
     phCompressor.enableAnalog(90, 120);
     pressureCompressor = 0;

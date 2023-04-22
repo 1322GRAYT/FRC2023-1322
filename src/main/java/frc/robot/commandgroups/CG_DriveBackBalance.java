@@ -16,7 +16,7 @@ public class CG_DriveBackBalance extends SequentialCommandGroup {
     private double power = 2;
     private double time = 2.6;
 
-    public CG_DriveBackBalance(SwerveDrivetrain drive, LiftClaw liftClaw, LiftElevator liftElevator) {
+    public CG_DriveBackBalance(SwerveDrivetrain drive, Gyro gyro, LiftClaw liftClaw, LiftElevator liftElevator) {
         addCommands(
                 new CA_Elevator(liftElevator, true),
                 new CA_PitchElevator(liftElevator, true),
@@ -25,10 +25,10 @@ public class CG_DriveBackBalance extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                     new CA_ToggleClaw(liftClaw),
                     new RunCommand(() -> drive.drive(
-                        new Translation2d(-power, 0.0), 0, false, true),
+                        new Translation2d(0.0, -power), 0, false, true),
                         drive).withTimeout(time)
                 ),
-                new CA_Balance(drive));
+                new CA_Balance(drive,gyro));
                 //new InstantCommand(() -> drive.stopSwerveDriveMotors()));
     }
 }

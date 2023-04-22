@@ -7,19 +7,21 @@ public class Conversions {
      * @param gearRatio Gear Ratio between Falcon and Mechanism
      * @return Degrees of Rotation of Mechanism
      */
-    public static double falconToDegrees(double counts, double gearRatio) {
-        return counts * (360.0 / (gearRatio * 2048.0));
-    }
+    
+//    public static double falconToDegrees(double counts, double gearRatio) {
+//        return counts * (360.0 / (gearRatio * 2048.0));
+//    }
 
     /**
      * @param degrees Degrees of rotation of Mechanism
      * @param gearRatio Gear Ratio between Falcon and Mechanism
      * @return Falcon Counts
      */
-    public static double degreesToFalcon(double degrees, double gearRatio) {
-        double ticks =  degrees / (360.0 / (gearRatio * 2048.0));
-        return ticks;
-    }
+    //
+    //public static double degreesToFalcon(double degrees, double gearRatio) {
+    //    double ticks =  degrees / (360.0 / (gearRatio * 2048.0));
+    //    return ticks;
+    //}
 
     /**
      * @param velocityCounts Falcon Velocity Counts
@@ -30,7 +32,7 @@ public class Conversions {
         double motorRPM = velocityCounts * (600.0 / 2048.0);        
         double mechRPM = motorRPM / gearRatio;
         return mechRPM;
-    }
+    } 
 
     /**
      * @param RPM RPM of mechanism

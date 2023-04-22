@@ -16,16 +16,18 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 public class SwerveModule {
-    public int moduleNumber;
+    public   int moduleNumber;
 
-    public TalonFX driveMotor;
+    private  TalonFX driveMotor;
     private TalonFX angleMotor;
     private AnalogPotentiometer angleEncoder;
 
     private double lastAngle;
 
-    public SwerveModulePosition geSwerveModulePosition() {
-        return new SwerveModulePosition(getDrvEncdrCurrentPstn(), new Rotation2d(getDrvEncdrCurrentPstn()));
+    private double _zeroPosition;
+
+    public SwerveModulePosition getSwerveModulePosition() {
+        return new SwerveModulePosition(getDriveEncoderCurrentPosition(), new Rotation2d(getDriveEncoderCurrentPosition()));
     }
 
     SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.SwerveDrivetrain.FF_kS,
@@ -46,8 +48,8 @@ public class SwerveModule {
         angleMotor = new TalonFX(moduleConstants.angleMotorID);
         configAngleMotor();
 
-        resetDrvEncdrPstn();
-        resetRotEncdrPstn();
+        resetDriveEncoderPosition();
+        resetRotaeEncoderPosition();
         lastAngle = getState().angle.getDegrees();
         System.out.println("lastangle == "+lastAngle);
     }
@@ -74,14 +76,14 @@ public class SwerveModule {
                 : desiredState.angle.getDegrees(); // Prevent rotating module if speed is less then 1%. Prevents
                                                    // Jittering.
         angleMotor.set(ControlMode.Position,
-                Conversions.degreesToFalcon(angle, Constants.SwerveDrivetrain.ANGLE_GEAR_RATIO));
+                angle * Constants.SwerveDrivetrain.ANGLE_DEGREES_TO_FALCON);
         lastAngle = angle;
 
     }
 
     private void configAngleEncoder() {
         // TODO should this be commented or should this be uncommented? 
-        //angleEncoder.configFactoryDefault();
+        // angleEncoder.configFactoryDefault();
         // System.out.println("HERE");
         //angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCANCoderConfig);
         // System.out.println("HERE 2");
@@ -103,48 +105,73 @@ public class SwerveModule {
     }
 
     public Rotation2d getCanCoder() {
-        // Encoder Range: 0 - 72
-        double raw = angleEncoder.get();
-        double temp = raw * 360;
-        SmartDashboard.putNumber("Encoder for Module " + moduleNumber + " Position: ", temp);
-        //SmartDashboard.putNumber("Encoder for Module " + moduleNumber + " Raw Position: ", raw);
-        return Rotation2d.fromDegrees(temp);
+        double degrees = angleEncoder.get() * 360;
+        SmartDashboard.putNumber("Encoder for Module " + moduleNumber + " Position: ", degrees);
+        return Rotation2d.fromDegrees(degrees);
     }
 
     public SwerveModuleState getState() {
         double velocity = Conversions.falconToMPS(driveMotor.getSelectedSensorVelocity(),
                 Constants.SwerveDrivetrain.WHEEL_CIRCUMFERENCE, Constants.SwerveDrivetrain.DRIVE_GEAR_RATIO);
-        Rotation2d angle = Rotation2d.fromDegrees(Conversions.falconToDegrees(
-                angleMotor.getSelectedSensorPosition(), Constants.SwerveDrivetrain.ANGLE_GEAR_RATIO));
+        Rotation2d angle = Rotation2d.fromDegrees(
+                angleMotor.getSelectedSensorPosition() * Constants.SwerveDrivetrain.ANGLE_FALCON_TO_DEGREES);
         return new SwerveModuleState(velocity, angle);
     }
 
-    public void stopDrvMotor() {
+    public void stopDriveMotor() {
         driveMotor.set(TalonFXControlMode.Disabled, 0);
     }
 
-    public double getDrvEncdrCurrentPstn() {
+    public double getDriveEncoderCurrentPosition() {
         return driveMotor.getSelectedSensorPosition();
     }
 
-    public void resetDrvEncdrPstn() {
+    public void resetDriveEncoderPosition() {
         driveMotor.setSelectedSensorPosition(0);
     }
 
-    public void stopRotMotor() {
+    public void stopRotateMotor() {
         angleMotor.set(TalonFXControlMode.Disabled, 0);
     }
 
-    public void resetRotEncdrPstn() {
+    public void resetRotaeEncoderPosition() {
         angleMotor.setSelectedSensorPosition(0);
     }
 
-    public void zeroRotEncdrPstn() {
-       /*
-        double zeroPstnOffset = Conversions.degreesToFalcon(getCanCoder().getDegrees() - angleOffset,
-                Constants.SwerveDrivetrain.ANGLE_GEAR_RATIO);
-        angleMotor.set(TalonFXControlMode.Position, zeroPstnOffset);
-        */
-    }
+    public void zeroRotateEncoderPosition() {
+        double start=0.0,end=0.0;
 
-}
+        angleMotor.set(ControlMode.Position, 0);
+        do {
+            if (angleMotor.getSensorCollection().isRevLimitSwitchClosed() == 1) {
+                start = angleMotor.getSelectedSensorPosition();
+                break;
+            }
+        } while (angleMotor.getSensorCollection().isRevLimitSwitchClosed() == 0);
+
+        do {
+            if (angleMotor.getSensorCollection().isRevLimitSwitchClosed() == 1) {
+                end = angleMotor.getSelectedSensorPosition();
+                break;
+            }
+        } while (angleMotor.getSensorCollection().isRevLimitSwitchClosed() == 1);
+
+        _zeroPosition = (Math.abs(start - end) / 2);
+
+        /*
+        while (! angleMotor.getSensorCollection().isRevLimitSwitchClosed()) {
+            angleMotor.set(ControlMode.PercentOutput, 0.1);
+        }
+        angleMotor.set(ControlMode.PercentOutput, 0);
+        double start  = angleMotor.getSelectedSensorPosition();
+        while (angleMotor.getSensorCollection().isRevLimitSwitchClosed()) {
+            angleMotor.set(ControlMode.PercentOutput, 0.1);
+        }
+        angleMotor.set(ControlMode.PercentOutput, 0);
+        double finish = angleMotor.getSelectedSensorPosition();
+
+        _zero_position = (Math.abs(start - finish) / 2);
+        angleMotor.set(ControlMode.RuntoPosition,_zero_position);
+        */
+        }
+    }
