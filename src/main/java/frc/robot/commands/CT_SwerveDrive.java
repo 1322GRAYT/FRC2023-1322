@@ -35,20 +35,10 @@ public class CT_SwerveDrive extends CommandBase {
         double xAxis = -controller.getLeftX();
         double rAxis = -controller.getRightX();
 
-        // double xAxis = -controller.getRawAxis(1);  // Field-Oriented Operator Robot X-Axis Input
-        // double yAxis =  controller.getRawAxis(0);  // Field-Oriented Operator Robot Y-Axis Input
-        // double rAxis = -controller.getRawAxis(4);
-        
         /* Deadbands */
         yAxis = ApplyDeadBand_Scaled(yAxis, DEADBAND, 1.0);
         xAxis = ApplyDeadBand_Scaled(xAxis, DEADBAND, 1.0);
         rAxis = ApplyDeadBand_Scaled(rAxis, DEADBAND, 1.0);
-
-        //xAxis = xLimiter.calculate(xAxis);
-        //yAxis = yLimiter.calculate(yAxis);
-        //rAxis = rLimiter.calculate(rAxis);
-
-
 
         double max_speed =  Constants.SwerveDrivetrain.MAX_SPEED;
 
