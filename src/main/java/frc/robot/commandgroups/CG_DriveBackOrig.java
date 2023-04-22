@@ -15,15 +15,15 @@ public class CG_DriveBackOrig extends SequentialCommandGroup {
     private double power = 1.5;
     private double time = 2.0;
 
-    public CG_DriveBackOrig(SwerveDrivetrain drive, LiftClaw liftClaw, LiftElevator liftElevator) {
+    public CG_DriveBackOrig(SwerveDrivetrain drive, Claw claw, LiftElevator liftElevator) {
         addCommands(
                 new InstantCommand(() -> {drive.resetSwerveDriveEncoders();drive.resetSwerveRotateEncoders();}),
                 new CA_Elevator(liftElevator, true),
                 new CA_PitchElevator(liftElevator, true),
-                new CA_ToggleClaw(liftClaw),
+                new CA_ToggleClaw(claw),
                 new CA_PitchElevator(liftElevator, false),
                 new ParallelCommandGroup(
-                    new CA_ToggleClaw(liftClaw),
+                    new CA_ToggleClaw(claw),
                     new RunCommand(() -> drive.drive(
                         new Translation2d(0.0,-power), 0, false, true),
                         drive).withTimeout(time)

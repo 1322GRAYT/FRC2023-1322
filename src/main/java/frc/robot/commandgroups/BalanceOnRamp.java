@@ -16,14 +16,14 @@ public class BalanceOnRamp extends SequentialCommandGroup {
     private double power = 2.5;
     private double time = 1.8;
 
-    public BalanceOnRamp(SwerveDrivetrain drive, Gyro gyro, LiftClaw liftClaw, LiftElevator liftElevator) {
+    public BalanceOnRamp(SwerveDrivetrain drive, Gyro gyro, Claw claw, LiftElevator liftElevator) {
         addCommands(
             new CA_Elevator(liftElevator, true).withTimeout(3),
             new CA_PitchElevator(liftElevator, true),
-            new CA_ToggleClaw(liftClaw),
+            new CA_ToggleClaw(claw),
             new CA_PitchElevator(liftElevator, false),
             new ParallelCommandGroup(
-                new CA_ToggleClaw(liftClaw),
+                new CA_ToggleClaw(claw),
                 new RunCommand(() -> drive.drive(
                     new Translation2d(0.0,-power), 0, false, true),drive).withTimeout(time)
             ),

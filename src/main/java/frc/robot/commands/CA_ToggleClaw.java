@@ -5,24 +5,24 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.LiftClaw;
-import frc.robot.subsystems.LiftClaw.ClawState;
+import frc.robot.subsystems.Claw;
+import frc.robot.subsystems.Claw.ClawState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class CA_ToggleClaw extends InstantCommand {
-  private LiftClaw liftClaw;
+  private Claw claw;
 
-  public CA_ToggleClaw(LiftClaw liftClaw) {
+  public CA_ToggleClaw(Claw claw) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(liftClaw);
-    this.liftClaw = liftClaw;
+    addRequirements(claw);
+    this.claw = claw;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    liftClaw.setClawState(liftClaw.getClawState() == ClawState.Open ? ClawState.Closed : ClawState.Open);
+    claw.setClawState(claw.getClawState() == ClawState.Open ? ClawState.Closed : ClawState.Open);
   }
 }

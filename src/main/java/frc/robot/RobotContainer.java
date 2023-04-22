@@ -33,7 +33,8 @@ public class RobotContainer {
   private final Gyro gyroSubsystem;
   private final SwerveDrivetrain swerveSubsystem;
   private final LiftElevator liftElevatorSubsystem;
-  private final LiftClaw liftClawSubsystem;
+  private final Lift liftClawSubsystem;
+  private final Claw clawSubsystem;
 
   private final Camera cameraSubsystem;
   private final XboxController driverStick;
@@ -46,7 +47,7 @@ public class RobotContainer {
 
   private JoystickButton auxAButton;
   private JoystickButton auxYButton;
-  //private JoystickButton auxBButton;
+  // private JoystickButton auxBButton;
 
   private Command m_autoCommandSelected;
 
@@ -60,12 +61,12 @@ public class RobotContainer {
     gyroSubsystem = new Gyro(Constants.GYRO_ID);
     swerveSubsystem = new SwerveDrivetrain(gyroSubsystem);
     liftElevatorSubsystem = new LiftElevator();
-    liftClawSubsystem = new LiftClaw();
-  
+    liftClawSubsystem = new Lift();
+    clawSubsystem = new Claw();
+
     cameraSubsystem = new Camera();
     driverStick = new XboxController(Constants.DRVR_CNTRLR);
     auxStick = new XboxController(Constants.AUX_CNTRLR);
-
 
     // no var needed as it is a singleton instance.
     CompressorSub.getInstance();
@@ -76,12 +77,14 @@ public class RobotContainer {
     // m_chooser.setDefaultOption("Default Auto", new
     // CA_DriveDeadrecken(swerveSubsystem, -0.5, 2));
 
-    //compressorSubsystem.getCompressorPressure(); // this gets rid of the
+    // compressorSubsystem.getCompressorPressure(); // this gets rid of the
 
-    m_chooser.setDefaultOption("PlaceAndBack",new CG_DriveBack(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
-    m_chooser.addOption("Ramp Balance", new BalanceOnRamp(swerveSubsystem, gyroSubsystem,liftClawSubsystem, liftElevatorSubsystem));
-    m_chooser.addOption("Yeet Cube, then Ramp", new CG_YeetCubeRamp(swerveSubsystem, gyroSubsystem,liftClawSubsystem, liftElevatorSubsystem));
-        
+    m_chooser.setDefaultOption("PlaceAndBack", new CG_DriveBack(swerveSubsystem, clawSubsystem, liftElevatorSubsystem));
+    m_chooser.addOption("Ramp Balance",
+        new BalanceOnRamp(swerveSubsystem, gyroSubsystem, clawSubsystem, liftElevatorSubsystem));
+    m_chooser.addOption("Yeet Cube, then Ramp",
+        new CG_YeetCubeRamp(swerveSubsystem, gyroSubsystem, clawSubsystem, liftElevatorSubsystem));
+
     SmartDashboard.putData("Auto choices: ", m_chooser);
 
     // Configure the button bindings
@@ -120,8 +123,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // BEGIN DRIVER STICK BUTTON ASSIGNMENTS
     final JoystickButton driverButton_BumpLT = new JoystickButton(driverStick, Constants.BUMPER_LEFT);
-    driverButton_BumpLT.onTrue(new CG_ResetAndZeroEncdrs(swerveSubsystem,gyroSubsystem));
-    
+    driverButton_BumpLT.onTrue(new CG_ResetAndZeroEncdrs(swerveSubsystem, gyroSubsystem));
 
     auxPOVup = new Trigger(() -> auxStick.getPOV() == Direction.UP.getValue());
     auxPOVdown = new Trigger(() -> auxStick.getPOV() == Direction.DOWN.getValue());
@@ -130,14 +132,14 @@ public class RobotContainer {
 
     auxAButton = new JoystickButton(auxStick, Constants.BUTTON_A);
     auxYButton = new JoystickButton(auxStick, Constants.BUTTON_Y);
-    //auxBButton = new JoystickButton(auxStick, Constants.BUTTON_B);
+    // auxBButton = new JoystickButton(auxStick, Constants.BUTTON_B);
 
     auxYButton.whileTrue(new RunCommand(() -> {
-      liftClawSubsystem.setIntakeMotorPower(1.0);
-    }, liftClawSubsystem));
+      clawSubsystem.setIntakeMotorPower(1.0);
+    }, clawSubsystem));
     auxAButton.whileTrue(new RunCommand(() -> {
-      liftClawSubsystem.setIntakeMotorPower(-1.0);
-    }, liftClawSubsystem));
+      clawSubsystem.setIntakeMotorPower(-1.0);
+    }, clawSubsystem));
   }
 
   private void setDefaultCommands() {
@@ -146,6 +148,7 @@ public class RobotContainer {
         () -> auxStick.getLeftY(),
         () -> (auxStick.getLeftTriggerAxis() - auxStick.getRightTriggerAxis())));
     liftClawSubsystem.setDefaultCommand(new CT_LiftCLaw(liftClawSubsystem,
+        clawSubsystem,
         () -> auxStick.getRightY(),
         () -> auxStick.getRightX(),
         () -> auxStick.getBButtonPressed()));

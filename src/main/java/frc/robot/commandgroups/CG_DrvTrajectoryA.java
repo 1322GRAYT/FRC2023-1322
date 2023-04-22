@@ -28,7 +28,7 @@ import frc.robot.subsystems.*;
 public class CG_DrvTrajectoryA extends SequentialCommandGroup {
         
         /** Creates a new CG_DrvTrajectoryA. */
-        public CG_DrvTrajectoryA(SwerveDrivetrain drive, LiftClaw liftClaw, LiftElevator liftElevator) {
+        public CG_DrvTrajectoryA(SwerveDrivetrain drive, Claw claw, LiftElevator liftElevator) {
 
         
                 // 1. Create trajectory settings
@@ -95,7 +95,7 @@ public class CG_DrvTrajectoryA extends SequentialCommandGroup {
                                 new InstantCommand(() -> drive.stopSwerveDriveMotors()),
                                 new CA_Elevator(liftElevator, true),
                                 new CA_PitchElevator(liftElevator, true),
-                                new CA_ToggleClaw(liftClaw),
+                                new CA_ToggleClaw(claw),
                                 new CA_PitchElevator(liftElevator, false),
                                 new RunCommand(() -> drive.drive(new Translation2d(0.0, -0.5), 0, false, true), drive)
                                                 .withTimeout(1),
