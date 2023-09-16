@@ -18,6 +18,7 @@ public class CT_LiftCLaw extends CommandBase {
   SlewRateLimiter clawLimiter;
   Supplier<Double> pitchPowerControl, yawPowerControl;
   Supplier<Boolean> clawOpenControl;
+  
 
   /** Creates a new CT_LiftCLaw. */
   public CT_LiftCLaw(LiftClaw liftClaw, 
@@ -41,27 +42,41 @@ public class CT_LiftCLaw extends CommandBase {
   }
 
   boolean stateReleased = true;
+  long last_release=0;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     var clawButtonState = clawOpenControl.get();
 
 
-    if(liftClaw.getClawState() == ClawState.Closed && clawButtonState){
-      liftClaw.setClawState(ClawState.Open);
-    }
-    else if (liftClaw.getClawState() == ClawState.Open && clawButtonState ){
+    
+    
+    if (!liftClaw.getClawGrabSensor() && !clawButtonState && System.currentTimeMillis()-last_release>750) {
       liftClaw.setClawState(ClawState.Closed);
+      liftClaw.setIntakeMotorPower(-1.0);
+      last_release = System.currentTimeMillis();
     }
+    else {
+      liftClaw.setIntakeMotorPower(0.0);
+      if (clawButtonState) {
+        if(liftClaw.getClawState() == ClawState.Closed && clawButtonState){
+          liftClaw.setClawState(ClawState.Open);
+        }
+        else if (liftClaw.getClawState() == ClawState.Open && clawButtonState ){
+          liftClaw.setClawState(ClawState.Closed);
+        }
+      }
+    }  
 
     stateReleased = !clawButtonState;
+
+
 
     if(Math.abs(pitchPowerControl.get()) - 0.1 > 0 || liftClaw.getPiControlMode() == ControlMode.PercentOutput){
       liftClaw.setPitchPower(pitchPowerControl.get()/4); // TODO: transfer scaling to motor controller maybe
     }
 
     liftClaw.setYawPower(yawPowerControl.get());
-    liftClaw.setIntakeMotorPower(0);
   }
 
   // Called once the command ends or is interrupted.

@@ -24,7 +24,7 @@ public class CA_YeetCube extends InstantCommand {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        liftClaw.setIntakeMotorPower(-1.0);
+        //liftClaw.setIntakeMotorPower(-1.0);
         //Timer.delay(1);
         //liftClaw.setIntakeMotorPower(0);
     }

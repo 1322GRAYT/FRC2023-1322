@@ -127,12 +127,13 @@ public class RobotContainer {
       liftClawSubsystem.gotoIntake();
     }, liftElevatorSubsystem, liftClawSubsystem));
 */
-    auxYButton.whileTrue(new RunCommand(() -> {
+    /*auxYButton.whileTrue(new RunCommand(() -> {
       liftClawSubsystem.setIntakeMotorPower(1.0);
     }, liftClawSubsystem));
     auxAButton.whileTrue(new RunCommand(() -> {
       liftClawSubsystem.setIntakeMotorPower(-1.0);
     }, liftClawSubsystem));
+    */
   }
 
   private void setDefaultCommands() {
