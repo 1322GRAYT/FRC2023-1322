@@ -5,11 +5,8 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import frc.robot.subsystems.swerve.SwerveModuleConstants;
@@ -58,13 +55,6 @@ public final class Constants {
     public static int MOTOR_10 = 10;
     public static int MOTOR_11 = 11;
     public static int MOTOR_12 = 12;
-    public static int MOTOR_13 = 13;
-    public static int MOTOR_14 = 14;
-    public static int MOTOR_15 = 15;
-    public static int MOTOR_16 = 16;
-    public static int MOTOR_17 = 13;
-    public static int MOTOR_18 = 18;
-    public static int MOTOR_19 = 19;
     
     public static String _motorStick [] = {
         "LX",
@@ -227,9 +217,9 @@ public final class Constants {
         };
 
     }
-    public static final class Auton {
+  /*   public static final class Auton {
 
-        /* Drive Motor Characterization Values (Ramsete) */
+        /* Drive Motor Characterization Values (Ramsete) * /
         public static final double RAMSETE_B = 7;
         public static final double RAMSETE_ZETA = 2;
 
@@ -255,7 +245,7 @@ public final class Constants {
         public static final ProfiledPIDController THETA_CONTROLLER = new ProfiledPIDController(10.0, 0.0, 0.0,
                 THETA_CONTROLLER_CONTRAINTS);
     }
-
+ */
 
      /**
      * @param counts Falcon Counts
@@ -321,5 +311,12 @@ public final class Constants {
         double wheelVelocity = RPMToFalcon(wheelRPM, gearRatio);
         return wheelVelocity;
     }
+
+    public static double ApplyDeadBand_Scaled( double power, double deadBand, double powerLimit) {
+		if (power > -deadBand && power < deadBand) return 0.0;
+		double sign = (power>0)?1:((power<0)?-1:0);
+		if (power > powerLimit || power < - powerLimit) return powerLimit*sign;
+		return ((power - sign*deadBand)/(powerLimit - deadBand))*powerLimit;
+	}
     
 }

@@ -35,10 +35,6 @@ public class CT_SwerveDrive extends CommandBase {
         double xAxis = -controller.getLeftX();
         double rAxis = -controller.getRightX();
 
-        // double xAxis = -controller.getRawAxis(1);  // Field-Oriented Operator Robot X-Axis Input
-        // double yAxis =  controller.getRawAxis(0);  // Field-Oriented Operator Robot Y-Axis Input
-        // double rAxis = -controller.getRawAxis(4);
-
         // make it curve instead of linear
         xAxis=xAxis*xAxis*xAxis;
         yAxis=yAxis*yAxis*yAxis;
@@ -46,13 +42,9 @@ public class CT_SwerveDrive extends CommandBase {
         
         
         /* Deadbands */
-        yAxis = ApplyDeadBand_Scaled(yAxis, DEADBAND, 1.0);
-        xAxis = ApplyDeadBand_Scaled(xAxis, DEADBAND, 1.0);
-        rAxis = ApplyDeadBand_Scaled(rAxis, DEADBAND, 1.0);
-
-        //xAxis = xLimiter.calculate(xAxis);
-        //yAxis = yLimiter.calculate(yAxis);
-        //rAxis = rLimiter.calculate(rAxis);
+        yAxis = Constants.ApplyDeadBand_Scaled(yAxis, DEADBAND, 1.0);
+        xAxis = Constants.ApplyDeadBand_Scaled(xAxis, DEADBAND, 1.0);
+        rAxis = Constants.ApplyDeadBand_Scaled(rAxis, DEADBAND, 1.0);
 
 
 
@@ -68,11 +60,4 @@ public class CT_SwerveDrive extends CommandBase {
         rotation = rAxis * max_angular_velocity;
         swerveSubsystem.drive(translation, rotation, fieldRelative, openLoop);
     }
-
-    public double ApplyDeadBand_Scaled( double power, double deadBand, double powerLimit) {
-		if (power > -deadBand && power < deadBand) return 0.0;
-		double sign = (power>0)?1:((power<0)?-1:0);
-		if (power > powerLimit || power < - powerLimit) return powerLimit*sign;
-		return ((power - sign*deadBand)/(powerLimit - deadBand))*powerLimit;
-	}
 }

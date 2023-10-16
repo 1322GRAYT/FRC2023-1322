@@ -15,7 +15,7 @@ import frc.robot.subsystems.swerve.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+//import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 
 /**
@@ -31,35 +31,21 @@ public class RobotContainer {
   private final SendableChooser<Command> _auto_chooser = new SendableChooser<Command>();
   private final SendableChooser<Command> _teleop_chooser = new SendableChooser<Command>();
 
- /*
-  private SendableChooser<String> [] _motorTestType;
-  private SendableChooser<String> [] _motorTestStopmode; // = new SendableChooser<Command>();
-  private SendableChooser<String> [] _motorTestDirection; // = new SendableChooser<Command>();
-*/
-
-
 
   private final SwerveDrivetrain _swerveSubsystem = new SwerveDrivetrain();
+  private final AuxMotors _auxMotors = new AuxMotors();
   private XboxController _driverStick = new XboxController(Constants.DRVR_CNTRLR);
   private XboxController _auxStick = new XboxController(Constants.AUX_CNTRLR);
 
 
-  private JoystickButton _auxAButton = new JoystickButton(_auxStick, Constants.BUTTON_A);
-  private JoystickButton _auxYButton = new JoystickButton(_auxStick, Constants.BUTTON_Y);
-
-
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
   public RobotContainer() {
 
     _auto_chooser.setDefaultOption("Default Auto", new SequentialCommandGroup());
     SmartDashboard.putData("Auto Choices: ", _auto_chooser);
 
-
-    _teleop_chooser.setDefaultOption("Teleop - Robot Centric", new CT_SwerveDrive(_swerveSubsystem, _driverStick, false, true));
+    _teleop_chooser.setDefaultOption("Teleop - Robot Centric", new CG_SwerveAuxMotors(_swerveSubsystem, _driverStick, _auxMotors,_auxStick, false, true));
     //teleop_chooser.setDefaultOption(
-    _teleop_chooser.addOption("Teleop - Field Centric", new CT_SwerveDrive(_swerveSubsystem, _driverStick, true, true));
+    _teleop_chooser.addOption("Teleop - Field Centric", new CG_SwerveAuxMotors(_swerveSubsystem, _driverStick, _auxMotors,_auxStick,true, true));
     
     SmartDashboard.putData("Teleop Choices", _teleop_chooser);
     // Configure the button bindings
