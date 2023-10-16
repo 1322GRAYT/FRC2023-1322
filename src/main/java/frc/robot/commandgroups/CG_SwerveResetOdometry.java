@@ -5,8 +5,7 @@
 package frc.robot.commandgroups;
 
 import frc.robot.commands.CC_SwerveResetOdometry;
-import frc.robot.subsystems.SwerveDrivetrain;
-
+import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 

@@ -1,0 +1,10 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Drivetrain/SwerveDrivetrain": "Subsystem",
+      "/SmartDashboard/Auto Choices: ": "String Chooser",
+      "/SmartDashboard/Teleop Choices": "String Chooser"
+    }
+  }
+}

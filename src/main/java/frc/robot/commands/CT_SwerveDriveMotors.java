@@ -5,8 +5,9 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class CT_SwerveDrive extends CommandBase {
+public class CT_SwerveDriveMotors extends CommandBase {
 
     private static final double DEADBAND = 0.15;
 
@@ -16,24 +17,38 @@ public class CT_SwerveDrive extends CommandBase {
     private boolean openLoop;
     
     private SwerveDrivetrain swerveSubsystem;
-    private XboxController controller;
+    private XboxController driverController;
+    private XboxController auxController;
     
-    public CT_SwerveDrive (SwerveDrivetrain s_Swerve, XboxController controller, boolean fieldRelative, boolean openLoop) {
+    public CT_SwerveDriveMotors (SwerveDrivetrain s_Swerve, XboxController driverController, XboxController auxController, boolean fieldRelative, boolean openLoop) {
         this.swerveSubsystem = s_Swerve;
         addRequirements(s_Swerve);
 
-        this.controller = controller;
+        this.driverController = driverController;
+        this.auxController = auxController;
         this.fieldRelative = fieldRelative;
         this.openLoop = openLoop;
         s_Swerve.resetSwerveDriveEncoders();
-        //s_Swerve.resetSwerveRotateEncoders();
+        s_Swerve.resetSwerveRotateEncoders();
     }
 
+    public int auxButtonPressed() {
+        
+        if (auxController.getAButton()) return Constants.BUTTON_A;
+        if (auxController.getBButton()) return Constants.BUTTON_B;
+        if (auxController.getXButton()) return Constants.BUTTON_X;
+        if (auxController.getYButton()) return Constants.BUTTON_Y;
+        return 0;
+    }
+
+    private int _curerent_button=0;
     @Override
     public void execute() {
-        double yAxis = -controller.getLeftY();
-        double xAxis = -controller.getLeftX();
-        double rAxis = -controller.getRightX();
+        //int button = auxButtonPressed();
+        //SmartDashboard.putString("Current Motor: ", Constants.BUTTONS[button]);
+        double yAxis = -driverController.getLeftY();
+        double xAxis = -driverController.getLeftX();
+        double rAxis = -driverController.getRightX();
 
         // double xAxis = -controller.getRawAxis(1);  // Field-Oriented Operator Robot X-Axis Input
         // double yAxis =  controller.getRawAxis(0);  // Field-Oriented Operator Robot Y-Axis Input
@@ -59,7 +74,7 @@ public class CT_SwerveDrive extends CommandBase {
         double max_speed =  Constants.SwerveDrivetrain.MAX_SPEED;
 
         double max_angular_velocity = Constants.SwerveDrivetrain.MAX_ANGULAR_VELOCITY;
-        if (controller.getRightBumper()) {
+        if (driverController.getRightBumper()) {
             max_speed *= Constants.SwerveDrivetrain.SLOW_SPEED_REDUCTION;
             max_angular_velocity *= Constants.SwerveDrivetrain.SLOW_SPEED_REDUCTION;
         }

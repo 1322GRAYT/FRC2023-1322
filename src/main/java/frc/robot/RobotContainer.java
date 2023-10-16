@@ -4,18 +4,19 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.commandgroups.*;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.swerve.*;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.utils.Direction;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -27,56 +28,40 @@ import frc.robot.utils.Direction;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final SendableChooser<Command> m_chooser = new SendableChooser<Command>();
+  private final SendableChooser<Command> _auto_chooser = new SendableChooser<Command>();
+  private final SendableChooser<Command> _teleop_chooser = new SendableChooser<Command>();
 
-  private final CompressorSub compressorSubsystem = new CompressorSub();
-  private final SwerveDrivetrain swerveSubsystem = new SwerveDrivetrain();
-  private final LiftElevator liftElevatorSubsystem = new LiftElevator();
-  private final LiftClaw liftClawSubsystem = new LiftClaw();
+ /*
+  private SendableChooser<String> [] _motorTestType;
+  private SendableChooser<String> [] _motorTestStopmode; // = new SendableChooser<Command>();
+  private SendableChooser<String> [] _motorTestDirection; // = new SendableChooser<Command>();
+*/
 
-  private final Camera cameraSubsystem = new Camera();
-  private XboxController driverStick = new XboxController(Constants.DRVR_CNTRLR);
-  private XboxController auxStick = new XboxController(Constants.AUX_CNTRLR);
 
-  Trigger auxPOVup = new Trigger(() -> auxStick.getPOV() == Direction.UP.getValue());
-  Trigger auxPOVdown = new Trigger(() -> auxStick.getPOV() == Direction.DOWN.getValue());
-  Trigger auxPOVleft = new Trigger(() -> auxStick.getPOV() == Direction.LEFT.getValue());
-  Trigger auxPOVright = new Trigger(() -> auxStick.getPOV() == Direction.RIGHT.getValue());
 
-  JoystickButton auxAButton = new JoystickButton(auxStick, Constants.BUTTON_A);
-  JoystickButton auxYButton = new JoystickButton(auxStick, Constants.BUTTON_Y);
-  // JoystickButton auxBButton = new JoystickButton(auxStick, Constants.BUTTON_B);
+  private final SwerveDrivetrain _swerveSubsystem = new SwerveDrivetrain();
+  private XboxController _driverStick = new XboxController(Constants.DRVR_CNTRLR);
+  private XboxController _auxStick = new XboxController(Constants.AUX_CNTRLR);
 
-  private Command m_autoCommandSelected;
+
+  private JoystickButton _auxAButton = new JoystickButton(_auxStick, Constants.BUTTON_A);
+  private JoystickButton _auxYButton = new JoystickButton(_auxStick, Constants.BUTTON_Y);
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure Autonomous Selections Available
-    // m_chooser.setDefaultOption("Default Auto", new
-    // CG_PlaceCone(liftClawSubsystem, liftElevatorSubsystem));
 
-    // m_chooser.setDefaultOption("Default Auto", new
-    // CA_DriveDeadrecken(swerveSubsystem, -0.5, 2));
+    _auto_chooser.setDefaultOption("Default Auto", new SequentialCommandGroup());
+    SmartDashboard.putData("Auto Choices: ", _auto_chooser);
 
-    compressorSubsystem.getCompressorPressure(); // this gets rid of the
 
-    m_chooser.setDefaultOption("PlaceAndBack",
-        new CG_DriveBack(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
-    //m_chooser.addOption("No Ramp Place and move back.",
-    //    new CG_DriveBackOrig(swerveSubsystem, liftClawSubsystem, liftElevatorSubsystem));
-    // m_chooser.addOption("Place and then attempt to balance.", new
-    // CG_DriveBackBalance(swerveSubsystem, liftClawSubsystem,
-    // liftElevatorSubsystem));
-    m_chooser.addOption("Ramp Balance", new CG_BalanceRamp(swerveSubsystem,
-        liftClawSubsystem, liftElevatorSubsystem));
-    m_chooser.addOption("Yeet Cube, then Ramp", new CG_YeetCubeRamp(swerveSubsystem,
-        liftClawSubsystem, liftElevatorSubsystem));
-        
-    SmartDashboard.putData("Auto choices: ", m_chooser);
-
+    _teleop_chooser.setDefaultOption("Teleop - Robot Centric", new CT_SwerveDrive(_swerveSubsystem, _driverStick, false, true));
+    //teleop_chooser.setDefaultOption(
+    _teleop_chooser.addOption("Teleop - Field Centric", new CT_SwerveDrive(_swerveSubsystem, _driverStick, true, true));
+    
+    SmartDashboard.putData("Teleop Choices", _teleop_chooser);
     // Configure the button bindings
     configureButtonBindings();
     // Configure Default Commands
@@ -90,7 +75,7 @@ public class RobotContainer {
    * at the initialization of the Autonomous Period.
    */
   public void autonomousInit() {
-    swerveSubsystem.init_periodic();
+    _swerveSubsystem.init_periodic();
   }
 
   /**
@@ -99,7 +84,8 @@ public class RobotContainer {
    * at the initialization of the Tele-Op Period.
    */
   public void teleopInit() {
-    swerveSubsystem.init_periodic();
+    _swerveSubsystem.setDefaultCommand(getTeleopCommand());
+    _swerveSubsystem.init_periodic();
   }
 
   /**
@@ -112,51 +98,22 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // BEGIN DRIVER STICK BUTTON ASSIGNMENTS
-    final JoystickButton driverButton_BumpLT = new JoystickButton(driverStick, Constants.BUMPER_LEFT);
-    driverButton_BumpLT.onTrue(new CG_ResetAndZeroEncdrs(swerveSubsystem));
+    final JoystickButton driverButton_BumpLT = new JoystickButton(_driverStick, Constants.BUMPER_LEFT);
+    driverButton_BumpLT.onTrue(new CG_ResetAndZeroEncdrs(_swerveSubsystem));
 
-    /*
-     * auxPOVup.onTrue(new RunCommand(() -> {
-     * liftElevatorSubsystem.setGotoDelivery();
-     * liftClawSubsystem.gotoDelivery();
-     * }, liftElevatorSubsystem, liftClawSubsystem));
-     */
-/* 
-     auxPOVdown.onTrue(new RunCommand(() -> {
-      liftElevatorSubsystem.setGotoIntake();
-      liftClawSubsystem.gotoIntake();
-    }, liftElevatorSubsystem, liftClawSubsystem));
-*/
-    /*auxYButton.whileTrue(new RunCommand(() -> {
-      liftClawSubsystem.setIntakeMotorPower(1.0);
-    }, liftClawSubsystem));
-    auxAButton.whileTrue(new RunCommand(() -> {
-      liftClawSubsystem.setIntakeMotorPower(-1.0);
-    }, liftClawSubsystem));
-    */
   }
 
   private void setDefaultCommands() {
-    swerveSubsystem.setDefaultCommand(new CT_SwerveDrive(swerveSubsystem, driverStick, false, true));
-    liftElevatorSubsystem.setDefaultCommand(new CT_LiftElevator(liftElevatorSubsystem,
-        () -> auxStick.getLeftY(),
-        () -> (auxStick.getLeftTriggerAxis() - auxStick.getRightTriggerAxis())));
-    liftClawSubsystem.setDefaultCommand(new CT_LiftCLaw(liftClawSubsystem,
-        () -> auxStick.getRightY(),
-        () -> auxStick.getRightX(),
-        () -> auxStick.getBButtonPressed()));
-    cameraSubsystem.setDefaultCommand(new CC_CameraTrackTarget(cameraSubsystem));
+    _swerveSubsystem.setDefaultCommand(new CT_SwerveDrive(_swerveSubsystem, _driverStick, false, true));
 
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+
+  public Command getTeleopCommand() {
+    return _teleop_chooser.getSelected();
+   }
+
   public Command getAutonomousCommand() {
-    m_autoCommandSelected = m_chooser.getSelected();
-    System.out.println("Auto selected: " + m_autoCommandSelected);
-    return (m_autoCommandSelected);
+    return _auto_chooser.getSelected();
   }
 }
