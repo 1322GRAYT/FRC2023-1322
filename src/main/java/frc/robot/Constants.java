@@ -51,11 +51,34 @@ public final class Constants {
     public static final int DPAD = 6;
 
 
+    /*
+     * First pickup, then preshoot, then lift, then shooter
+     */
+    public static final int SHOOTER_MOTOR_0 = 13;
+    public static final int SHOOTER_MOTOR_1 = 10;
+    public static final int SHOOTER_PRESHOOT = 12;
+
+    public static final int FLOOR_PICKUP = 14;
+    public static final int LIFT_MOTOR = 0;
+    public static final int TILT_MOTOR = 15;
+
+    public static final double SHOOTER_VELOCITY = 1.0;
+    public static final double PRESHOOT_INITIAL_VELOCITY = 1.0;
+    public static final double PRESHOOT_TIME = 3.0;
+    public static final int SHOOTER_SENSOR0 = 5;
+    public static final int SHOOTER_SENSOR1 = 6;
+    public static final int SHOOTER_SENSOR2 = 7;
+
+    public static final int TILT_LOAD_POSITION = 100;
+
+
+
+    /*
     public static int MOTOR_9 = 9;
     public static int MOTOR_10 = 10;
     public static int MOTOR_11 = 11;
     public static int MOTOR_12 = 12;
-    
+    */
     public static String _motorStick [] = {
         "LX",
         "LY",

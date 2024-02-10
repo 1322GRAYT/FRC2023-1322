@@ -25,6 +25,9 @@ public class SwerveDrivetrain extends SubsystemBase {
   private AHRS _gyro;
   private Field2d _field;
 
+  private Pose2d _holdPosition;
+
+
 
 
   /* Rotation Control PID */
@@ -81,6 +84,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     System.out.println(System.currentTimeMillis() + " Starting SwerveDriveTrain  -- rotPID");
 
     //dashboard();
+    _holdPosition=null;
   }
 
 
@@ -110,7 +114,7 @@ public class SwerveDrivetrain extends SubsystemBase {
   }
 
   public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-    SwerveModuleState[] swerveModuleStates = Constants.SwerveDrivetrain.SWERVE_KINEMATICS.toSwerveModuleStates(
+   SwerveModuleState[] swerveModuleStates = Constants.SwerveDrivetrain.SWERVE_KINEMATICS.toSwerveModuleStates(
         fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
             translation.getX(),
             translation.getY(),
@@ -189,6 +193,18 @@ public class SwerveDrivetrain extends SubsystemBase {
       module.stopRotateMotor();
     }
   }
+
+  public Pose2d getCurrentPose() {
+    return this._swerveOdometry.getPoseMeters();
+  }
+
+/*   public void holdPosition(Pose2d pose) {
+    _holdPosition = pose;
+  }
+
+  public void stopHoldposition() {
+    _holdPosition = null;
+  } */
 
 /*   public void stopSwerveCaddyDrvMotor(int motorIndex) {
     _swerveModules[motorIndex].stopDriveMotor();

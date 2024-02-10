@@ -31,9 +31,22 @@ public class CT_SwerveDrive extends CommandBase {
 
     @Override
     public void execute() {
+
+        boolean holdHeading = controller.getYButton();
+
+        boolean stopHold = controller.getAButton();
+
+
         double yAxis = -controller.getLeftY();
         double xAxis = -controller.getLeftX();
         double rAxis = -controller.getRightX();
+
+/*         if (holdHeading && !stopHold && (Math.abs(xAxis) < 0.1) && (Math.abs(yAxis) < 0.1)) {
+            swerveSubsystem.holdPosition(swerveSubsystem.getCurrentPose());
+            return;
+        } else {
+            swerveSubsystem.stopHoldposition();
+        } */
 
         // make it curve instead of linear
         xAxis=xAxis*xAxis*xAxis;

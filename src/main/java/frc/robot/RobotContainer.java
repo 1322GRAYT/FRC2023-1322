@@ -33,7 +33,10 @@ public class RobotContainer {
 
 
   private final SwerveDrivetrain _swerveSubsystem = new SwerveDrivetrain();
-  private final AuxMotors _auxMotors = new AuxMotors();
+  private final LiftSubsystem _liftSubsystem = new LiftSubsystem(Constants.LIFT_MOTOR);
+  private final TiltSubsystem _tiltSubsystem = new TiltSubsystem(Constants.TILT_MOTOR);
+  private final IntakeSubsystem _intakeSubsystem = new IntakeSubsystem(Constants.FLOOR_PICKUP);
+  private final ShooterSubsystem _shooterSubsystem = new ShooterSubsystem(Constants.SHOOTER_MOTOR_0, Constants.SHOOTER_MOTOR_1, Constants.SHOOTER_PRESHOOT,Constants.SHOOTER_SENSOR0, Constants.SHOOTER_SENSOR1, Constants.SHOOTER_SENSOR2);
   private XboxController _driverStick = new XboxController(Constants.DRVR_CNTRLR);
   private XboxController _auxStick = new XboxController(Constants.AUX_CNTRLR);
 
@@ -43,9 +46,28 @@ public class RobotContainer {
     _auto_chooser.setDefaultOption("Default Auto", new SequentialCommandGroup());
     SmartDashboard.putData("Auto Choices: ", _auto_chooser);
 
-    _teleop_chooser.setDefaultOption("Teleop - Robot Centric", new CG_SwerveAuxMotors(_swerveSubsystem, _driverStick, _auxMotors,_auxStick, false, true));
+    _teleop_chooser.setDefaultOption("Teleop - Robot Centric", 
+          new CG_Teleop(_swerveSubsystem, 
+                        _driverStick,
+                        _tiltSubsystem, 
+                        _liftSubsystem, 
+                        _shooterSubsystem,
+                        _intakeSubsystem,
+                        _auxStick  ,
+                        false, 
+                        true));
     //teleop_chooser.setDefaultOption(
-    _teleop_chooser.addOption("Teleop - Field Centric", new CG_SwerveAuxMotors(_swerveSubsystem, _driverStick, _auxMotors,_auxStick,true, true));
+    _teleop_chooser.addOption("Teleop - Field Centric", 
+          new CG_Teleop(_swerveSubsystem, 
+                        _driverStick,
+                        _tiltSubsystem, 
+                        _liftSubsystem, 
+                        _shooterSubsystem,
+                        _intakeSubsystem,
+                        _auxStick  ,
+                        false, 
+                        true));
+    
     
     SmartDashboard.putData("Teleop Choices", _teleop_chooser);
     // Configure the button bindings
@@ -85,7 +107,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // BEGIN DRIVER STICK BUTTON ASSIGNMENTS
     final JoystickButton driverButton_BumpLT = new JoystickButton(_driverStick, Constants.BUMPER_LEFT);
-    driverButton_BumpLT.onTrue(new CG_ResetAndZeroEncdrs(_swerveSubsystem));
+   
+ 
 
   }
 
