@@ -1,8 +1,7 @@
 package frc.robot.commands;
 
-import frc.robot.subsystems.swerve.IntakeSubsystem;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class CC_IntakeOn extends CommandBase {
 

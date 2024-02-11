@@ -5,12 +5,19 @@
 package frc.robot;
 
 
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.music.Orchestra;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.commandgroups.*;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LiftSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TiltSubsystem;
 import frc.robot.subsystems.swerve.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -43,7 +50,9 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-    _auto_chooser.setDefaultOption("Default Auto", new SequentialCommandGroup());
+  
+
+    _auto_chooser.setDefaultOption("Default Auto", new CT_Music());
     SmartDashboard.putData("Auto Choices: ", _auto_chooser);
 
     _teleop_chooser.setDefaultOption("Teleop - Robot Centric", 

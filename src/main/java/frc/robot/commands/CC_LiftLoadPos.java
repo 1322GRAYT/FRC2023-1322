@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
-import frc.robot.subsystems.swerve.LiftSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.LiftSubsystem;
 
 public class CC_LiftLoadPos extends CommandBase {
 

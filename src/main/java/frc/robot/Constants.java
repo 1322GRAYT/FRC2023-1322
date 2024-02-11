@@ -5,6 +5,11 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -25,7 +30,30 @@ import frc.robot.subsystems.swerve.SwerveModuleConstants;
  */
 public final class Constants {
 
-
+    public static void configMotor(TalonFX motor) {
+        TalonFXConfiguration talonFXConfig = new TalonFXConfiguration();
+    
+        /* Swerve Drive Motor Configuration */
+        SupplyCurrentLimitConfiguration driveSupplyLimit = new SupplyCurrentLimitConfiguration(
+            Constants.SwerveDrivetrain.DRIVE_ENABLE_CURRENT_LIMIT, 
+            Constants.SwerveDrivetrain.DRIVE_CONTINUOUS_CL, 
+            Constants.SwerveDrivetrain.DRIVE_PEAK_CL, 
+            Constants.SwerveDrivetrain.DRIVE_PEAK_CURRENT_DURATION);
+    
+        talonFXConfig.slot0.kP = Constants.SwerveDrivetrain.DRIVE_kP;
+        talonFXConfig.slot0.kI = Constants.SwerveDrivetrain.DRIVE_kI;
+        talonFXConfig.slot0.kD = Constants.SwerveDrivetrain.DRIVE_kD;
+        talonFXConfig.slot0.kF = Constants.SwerveDrivetrain.DRIVE_kF;        
+        talonFXConfig.supplyCurrLimit = driveSupplyLimit;
+        talonFXConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
+        talonFXConfig.openloopRamp = Constants.SwerveDrivetrain.OPEN_LOOP_RAMP;
+        talonFXConfig.closedloopRamp = Constants.SwerveDrivetrain.CLOSED_LOOP_RAMP;
+        
+        motor.configFactoryDefault();
+        motor.configAllSettings(talonFXConfig);
+        //motor.setInverted(Constants.SwerveDrivetrain.DRIVE_MOTOR_INVERTED);
+        motor.setNeutralMode(Constants.SwerveDrivetrain.DRIVE_NEUTRAL_MODE);
+    }
     /* X-BOX CONTROLLER MAPPING */
     // Controller Assignments
     public static final int DRVR_CNTRLR = 0;
@@ -58,8 +86,8 @@ public final class Constants {
     public static final int SHOOTER_MOTOR_1 = 10;
     public static final int SHOOTER_PRESHOOT = 12;
 
-    public static final int FLOOR_PICKUP = 14;
-    public static final int LIFT_MOTOR = 0;
+    public static final int FLOOR_PICKUP = 18;
+    public static final int LIFT_MOTOR = 17;
     public static final int TILT_MOTOR = 15;
 
     public static final double SHOOTER_VELOCITY = 1.0;

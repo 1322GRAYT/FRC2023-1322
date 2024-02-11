@@ -9,10 +9,10 @@ import frc.robot.commands.CC_IntakeOn;
 import frc.robot.commands.CC_LiftLoadPos;
 import frc.robot.commands.CC_ShooterLoadRing;
 import frc.robot.commands.CC_TiltLoadPos;
-import frc.robot.subsystems.swerve.IntakeSubsystem;
-import frc.robot.subsystems.swerve.LiftSubsystem;
-import frc.robot.subsystems.swerve.ShooterSubsystem;
-import frc.robot.subsystems.swerve.TiltSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LiftSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TiltSubsystem;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class CG_LoadRing extends SequentialCommandGroup {

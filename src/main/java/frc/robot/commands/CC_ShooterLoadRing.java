@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
-import frc.robot.subsystems.swerve.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class CC_ShooterLoadRing extends CommandBase {
 

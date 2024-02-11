@@ -1,4 +1,4 @@
-package frc.robot.subsystems.swerve;
+package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
@@ -9,34 +9,34 @@ import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class LiftSubsystem extends SubsystemBase {
-  private TalonFX _liftMotor;
-  public LiftSubsystem(int LIFT_MOTOR) {
-    _liftMotor = new TalonFX(LIFT_MOTOR);
-    configMotor(_liftMotor);
+public class TiltSubsystem extends SubsystemBase {
+  private TalonFX _tiltMotor;
+  public TiltSubsystem(int TILT_MOTOR) {
+    _tiltMotor = new TalonFX(TILT_MOTOR);
+    Constants.configMotor(_tiltMotor);
+    _tiltMotor.setSelectedSensorPosition(0);
   }
-
 
   public void loadPosition() {
-    down(1.0);
+    _tiltMotor.set(TalonFXControlMode.Position, Constants.TILT_LOAD_POSITION);
   }
-  
+
   public void up(double speed) {
-    _liftMotor.set(TalonFXControlMode.PercentOutput, speed);
+    _tiltMotor.set(TalonFXControlMode.PercentOutput, speed);
   }
 
   public void down(double speed) {
-    _liftMotor.set(TalonFXControlMode.PercentOutput, -speed);
+    _tiltMotor.set(TalonFXControlMode.PercentOutput, -speed);
   }
 
   public void move(double speed) {
-    _liftMotor.set(TalonFXControlMode.PercentOutput, speed);
+    _tiltMotor.set(TalonFXControlMode.PercentOutput, speed);
   }
 
-  private void configMotor(TalonFX motor) {
+/* private void configMotor(TalonFX motor) {
     TalonFXConfiguration talonFXConfig = new TalonFXConfiguration();
 
-    /* Swerve Drive Motor Configuration */
+    /* Swerve Drive Motor Configuration * /
     SupplyCurrentLimitConfiguration driveSupplyLimit = new SupplyCurrentLimitConfiguration(
         Constants.SwerveDrivetrain.DRIVE_ENABLE_CURRENT_LIMIT, 
         Constants.SwerveDrivetrain.DRIVE_CONTINUOUS_CL, 
@@ -56,5 +56,5 @@ public class LiftSubsystem extends SubsystemBase {
     motor.configAllSettings(talonFXConfig);
     //motor.setInverted(Constants.SwerveDrivetrain.DRIVE_MOTOR_INVERTED);
     motor.setNeutralMode(Constants.SwerveDrivetrain.DRIVE_NEUTRAL_MODE);
-}
+}*/
 }

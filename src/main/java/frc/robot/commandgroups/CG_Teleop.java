@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.CT_LiftTiltShooter;
 import frc.robot.commands.CT_SwerveDrive;
-import frc.robot.subsystems.swerve.IntakeSubsystem;
-import frc.robot.subsystems.swerve.LiftSubsystem;
-import frc.robot.subsystems.swerve.ShooterSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LiftSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TiltSubsystem;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
-import frc.robot.subsystems.swerve.TiltSubsystem;
 
 public class CG_Teleop extends ParallelCommandGroup {
 
