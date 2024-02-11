@@ -1,13 +1,11 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
-import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TiltSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class CT_LiftTiltShooter extends CommandBase {
@@ -50,6 +48,10 @@ public class CT_LiftTiltShooter extends CommandBase {
         /* Deadbands */
         //liftAxis = Constants.ApplyDeadBand_Scaled(liftAxis, DEADBAND, 1.0);
         tiltAxis = Constants.ApplyDeadBand_Scaled(tiltAxis, DEADBAND, 1.0);
+        
+        if (controller.getLeftBumper()) _intakeSubsystem.move(1.0);
+        else if (controller.getRightBumper()) _intakeSubsystem.move( -1.0);
+        else _intakeSubsystem.move(0.0);
         
         _liftSubsystem.move(liftAxis);
         _tiltSubsystem.move(tiltAxis);

@@ -32,10 +32,6 @@ public class CT_SwerveDrive extends CommandBase {
     @Override
     public void execute() {
 
-        boolean holdHeading = controller.getYButton();
-
-        boolean stopHold = controller.getAButton();
-
 
         double yAxis = -controller.getLeftY();
         double xAxis = -controller.getLeftX();

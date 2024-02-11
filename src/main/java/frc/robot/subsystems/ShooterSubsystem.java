@@ -8,7 +8,6 @@ import frc.robot.Constants;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -77,55 +76,23 @@ public void preShootMove(double speed) {
     _shooterMotor1.set(ControlMode.PercentOutput, -1.0);
   }
 
-  static enum state {
-    UNLOADED, LOADED, TOOFAR
-  }
+
 
   public void loadRing() {
-    double velocity = Constants.PRESHOOT_INITIAL_VELOCITY;
-    // preshoot load until it is in the right position
-
-    Timer timer = new Timer();
-    timer.start();
-
-    state currentState = state.UNLOADED;
-
-    boolean done = false;
-    while (timer.get() < Constants.PRESHOOT_TIME && !done) {
-      _preshootMotor.set(ControlMode.PercentOutput, velocity);
-      
-      switch (currentState) {
-        case UNLOADED:
-          if (_shooterSensor0.get()) {
-            velocity *= 0.5;
-            currentState = state.LOADED;
-          }
-          break;
-        case LOADED:
-          if (_shooterSensor1.get()) {
-            velocity *= 0;
-            _preshootMotor.set(ControlMode.PercentOutput, 0);
-            done = true;
-          }
-          if (_shooterSensor2.get()) {
-            velocity *= -0.5;
-            currentState = state.TOOFAR;
-          }
-          break;
-        case TOOFAR:
-          if (_shooterSensor1.get()) {
-            velocity *= 0;
-            _preshootMotor.set(ControlMode.PercentOutput, 0);
-            done = true;
-          }
-          if (_shooterSensor0.get()) {
-            velocity *= -0.5;
-            currentState = state.LOADED;
-          }
-          break;
+    double speed = Constants.PRESHOOT_SPEED_INITIAL;
+    _preshootMotor.set(ControlMode.PercentOutput, speed);
+    while (!_shooterSensor1.get()) {
+      if (_shooterSensor0.get()) {
+          speed += ((speed<0)?-1:1)*Constants.PRESHOOT_SPEED_KP;
+          _preshootMotor.set(ControlMode.PercentOutput,speed);  
+      } else if (_shooterSensor2.get()) {
+          speed *= -Constants.PRESHOOT_SPEED_KP;
+          _preshootMotor.set(ControlMode.PercentOutput,-speed);
       }
-     }
   }
+  
+  // Object is aligned with _shooterSensor1, stop the motor
+  _preshootMotor.set(ControlMode.PercentOutput,0);
 
-
+  }
 }

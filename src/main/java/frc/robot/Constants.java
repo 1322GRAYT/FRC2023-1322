@@ -91,7 +91,8 @@ public final class Constants {
     public static final int TILT_MOTOR = 15;
 
     public static final double SHOOTER_VELOCITY = 1.0;
-    public static final double PRESHOOT_INITIAL_VELOCITY = 1.0;
+    public static final double PRESHOOT_SPEED_INITIAL = 0.5;
+    public static final double PRESHOOT_SPEED_KP = 0.2;
     public static final double PRESHOOT_TIME = 3.0;
     public static final int SHOOTER_SENSOR0 = 5;
     public static final int SHOOTER_SENSOR1 = 6;

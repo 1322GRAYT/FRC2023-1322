@@ -5,8 +5,6 @@
 package frc.robot;
 
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.music.Orchestra;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -20,9 +18,6 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TiltSubsystem;
 import frc.robot.subsystems.swerve.*;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-//import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 
 /**
@@ -115,7 +110,6 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // BEGIN DRIVER STICK BUTTON ASSIGNMENTS
-    final JoystickButton driverButton_BumpLT = new JoystickButton(_driverStick, Constants.BUMPER_LEFT);
    
  
 

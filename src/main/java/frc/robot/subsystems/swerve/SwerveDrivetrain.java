@@ -25,8 +25,6 @@ public class SwerveDrivetrain extends SubsystemBase {
   private AHRS _gyro;
   private Field2d _field;
 
-  private Pose2d _holdPosition;
-
 
 
 
@@ -83,8 +81,6 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     System.out.println(System.currentTimeMillis() + " Starting SwerveDriveTrain  -- rotPID");
 
-    //dashboard();
-    _holdPosition=null;
   }
 
 
