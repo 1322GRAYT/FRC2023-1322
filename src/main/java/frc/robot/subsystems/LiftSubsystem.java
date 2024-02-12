@@ -4,20 +4,16 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class LiftSubsystem extends SubsystemBase {
-  private WPI_TalonFX _liftMotor;
-  public LiftSubsystem(int LIFT_MOTOR) {
-    _liftMotor = new WPI_TalonFX(LIFT_MOTOR);
-    configMotor(_liftMotor);
-  }
-
-  public static void configMotor(TalonFX motor) {
+  //private WPI_TalonFX _liftMotor;
+  private TalonFX _liftMotor;
+  public LiftSubsystem(int lift_motor_id) {
+    _liftMotor = new TalonFX(lift_motor_id);
     TalonFXConfiguration talonFXConfig = new TalonFXConfiguration();
 
     /* Swerve Drive Motor Configuration */
@@ -35,12 +31,12 @@ public class LiftSubsystem extends SubsystemBase {
     talonFXConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
     talonFXConfig.openloopRamp = Constants.SwerveDrivetrain.OPEN_LOOP_RAMP;
     talonFXConfig.closedloopRamp = Constants.SwerveDrivetrain.CLOSED_LOOP_RAMP;
-    
-    //motor.configFactoryDefault();
-    motor.configAllSettings(talonFXConfig);
-    //motor.setInverted(Constants.SwerveDrivetrain.DRIVE_MOTOR_INVERTED);
-    motor.setNeutralMode(Constants.SwerveDrivetrain.DRIVE_NEUTRAL_MODE);
+    _liftMotor.configAllSettings(talonFXConfig);
+
+    _liftMotor.setNeutralMode(Constants.SwerveDrivetrain.DRIVE_NEUTRAL_MODE);
 }
+
+
   public void loadPosition() {
     down(1.0);
   }

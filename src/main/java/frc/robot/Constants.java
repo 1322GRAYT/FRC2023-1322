@@ -30,63 +30,21 @@ import frc.robot.subsystems.swerve.SwerveModuleConstants;
  */
 public final class Constants {
 
-    public static void configMotor(TalonFX motor) {
-        TalonFXConfiguration talonFXConfig = new TalonFXConfiguration();
+ 
     
-        /* Swerve Drive Motor Configuration */
-        SupplyCurrentLimitConfiguration driveSupplyLimit = new SupplyCurrentLimitConfiguration(
-            Constants.SwerveDrivetrain.DRIVE_ENABLE_CURRENT_LIMIT, 
-            Constants.SwerveDrivetrain.DRIVE_CONTINUOUS_CL, 
-            Constants.SwerveDrivetrain.DRIVE_PEAK_CL, 
-            Constants.SwerveDrivetrain.DRIVE_PEAK_CURRENT_DURATION);
-    
-        talonFXConfig.slot0.kP = Constants.SwerveDrivetrain.DRIVE_kP;
-        talonFXConfig.slot0.kI = Constants.SwerveDrivetrain.DRIVE_kI;
-        talonFXConfig.slot0.kD = Constants.SwerveDrivetrain.DRIVE_kD;
-        talonFXConfig.slot0.kF = Constants.SwerveDrivetrain.DRIVE_kF;        
-        talonFXConfig.supplyCurrLimit = driveSupplyLimit;
-        talonFXConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
-        talonFXConfig.openloopRamp = Constants.SwerveDrivetrain.OPEN_LOOP_RAMP;
-        talonFXConfig.closedloopRamp = Constants.SwerveDrivetrain.CLOSED_LOOP_RAMP;
-        
-        motor.configFactoryDefault();
-        motor.configAllSettings(talonFXConfig);
-        //motor.setInverted(Constants.SwerveDrivetrain.DRIVE_MOTOR_INVERTED);
-        motor.setNeutralMode(Constants.SwerveDrivetrain.DRIVE_NEUTRAL_MODE);
-    }
     /* X-BOX CONTROLLER MAPPING */
     // Controller Assignments
-    public static final int DRVR_CNTRLR = 0;
-    public static final int AUX_CNTRLR = 1;
-    // Button Assignments
-    public static final String [] BUTTONS = {"None","A","B","X","Y","LeftBumper","RightBumper", "Back", "Start", "LeftStickPress", "RightStickPress"};
-    public static final int BUTTON_A = 1;
-    public static final int BUTTON_B = 2;
-    public static final int BUTTON_X = 3;
-    public static final int BUTTON_Y = 4;
-    public static final int BUMPER_LEFT = 5;
-    public static final int BUMPER_RIGHT = 6;
-    public static final int BUTTON_BACK = 7; // LEFT(SELECT)
-    public static final int BUTTON_START = 8; // RIGHT
-    public static final int STICK_LEFT_PRESS = 9; // JOYSTICK PRESS
-    public static final int STICK_RIGHT_PRESS = 10; // JOYSTICK PRESS
-    // Analog Assignments
-    public static final int STICK_LEFT_XAXIS = 1;
-    public static final int STICK_LEFT_YAXIS = 2;
-    public static final int TRIGGERS = 3;
-    public static final int STICK_RIGHT_XAXIS = 4;
-    public static final int STICK_RIGHT_YAXIS = 5;
-    public static final int DPAD = 6;
-
+    public static final int DRIVER_CONTROLLER = 0;
+    public static final int AUX_CONTROLLER = 1;
 
     /*
      * First pickup, then preshoot, then lift, then shooter
      */
     public static final int SHOOTER_MOTOR_0 = 13;
     public static final int SHOOTER_MOTOR_1 = 10;
-    public static final int SHOOTER_PRESHOOT = 12;
+    public static final int SHOOTER_PRESHOOT_MOTOR = 12;
 
-    public static final int FLOOR_PICKUP = 18;
+    public static final int FLOOR_PICKUP_MOTOR = 18;
     public static final int LIFT_MOTOR = 17;
     public static final int TILT_MOTOR = 15;
 
@@ -100,6 +58,52 @@ public final class Constants {
 
     public static final int TILT_LOAD_POSITION = 100;
 
+
+    
+   public static Tags RedTags = new Tags() {
+    @Override
+    public void init() { 
+        this.SOURCE0 = 9;
+        this.SOURCE1 = 10;
+        this.SPEAKER0 = 3;
+        this.SPEAKER1 = 4;
+        this.AMP = 5;
+        this.STAGE0 = 11;
+        this.STAGE1 = 12;
+        this.STAGE2 = 13;
+    }
+   };
+   public static Tags BlueTags = new Tags() {
+    @Override
+    public void init() { 
+        this.SOURCE0 = 1;
+        this.SOURCE1 = 2;
+        this.SPEAKER0 = 7;
+        this.SPEAKER1 = 8;
+        this.AMP = 6;
+        this.STAGE0 = 14;
+        this.STAGE1 = 15;
+        this.STAGE2 = 16;
+    }
+   };
+
+
+
+    /*
+     * SOURCE AprilTags (IDs 1, 2, 9, and 10)
+     * SPEAKER AprilTags (IDs 3, 4, 7, and 8) 
+     * AMP AprilTag panels (IDs 5 and 6) 
+     * STAGE AprilTag plates (IDs 11-16)
+     * 
+     * Event Timer Value Audio Cue
+     * MATCH start 0:15 (for AUTO) “Cavalry Charge”
+     * AUTO ends 0:00 (for AUTO) “Buzzer”
+     * TELEOP begins 2:15 “3 Bells”
+     * Final 20 seconds 0:20 “Guitar Riff”
+     * MATCH end 0:00 “Buzzer”
+     * MATCH stopped n/a “Foghorn”
+
+     */
 
 
     /*
@@ -269,35 +273,6 @@ public final class Constants {
         };
 
     }
-  /*   public static final class Auton {
-
-        /* Drive Motor Characterization Values (Ramsete) * /
-        public static final double RAMSETE_B = 7;
-        public static final double RAMSETE_ZETA = 2;
-
-        public static final double MAX_SPEED_MPS = 7.0; // meters per second
-        public static final double MAX_ACCELERATION_MPSS = 5.0; // meters per second squared
-
-        public static final double MAX_ANGULAR_SPEED_RPS = 2 * Math.PI; // radians per second
-        public static final double MAX_ANGULAR_SPEED_RPSS = 2 * Math.PI; // radians per second squared
-
-        // public static final PIDController PX_CONTROLLER = new PIDController(5.25, 1,
-        // 0.4);
-        // public static final PIDController PY_CONTROLLER = new PIDController(5.25, 1,
-        // 0.4);
-        public static final PIDController PX_CONTROLLER = new PIDController(6.0, 0, 0.1);
-        public static final PIDController PY_CONTROLLER = new PIDController(6.0, 0, 0.1);
-        // public static final double PTHETA_CONTROLLER = 1.0;
-
-        public static final TrapezoidProfile.Constraints THETA_CONTROLLER_CONTRAINTS = new TrapezoidProfile.Constraints(
-                MAX_ANGULAR_SPEED_RPS, MAX_ANGULAR_SPEED_RPSS);
-
-        // public static final ProfiledPIDController ROT_PID_CONTROLLER = new
-        // ProfiledPIDController(.13, 0, .39, THETA_CONTROLLER_CONTRAINTS);
-        public static final ProfiledPIDController THETA_CONTROLLER = new ProfiledPIDController(10.0, 0.0, 0.0,
-                THETA_CONTROLLER_CONTRAINTS);
-    }
- */
 
      /**
      * @param counts Falcon Counts
@@ -371,4 +346,29 @@ public final class Constants {
 		return ((power - sign*deadBand)/(powerLimit - deadBand))*powerLimit;
 	}
     
+    public static void configMotor(TalonFX motor) {
+        TalonFXConfiguration talonFXConfig = new TalonFXConfiguration();
+    
+        /* Swerve Drive Motor Configuration */
+        SupplyCurrentLimitConfiguration driveSupplyLimit = new SupplyCurrentLimitConfiguration(
+            Constants.SwerveDrivetrain.DRIVE_ENABLE_CURRENT_LIMIT, 
+            Constants.SwerveDrivetrain.DRIVE_CONTINUOUS_CL, 
+            Constants.SwerveDrivetrain.DRIVE_PEAK_CL, 
+            Constants.SwerveDrivetrain.DRIVE_PEAK_CURRENT_DURATION);
+    
+        talonFXConfig.slot0.kP = Constants.SwerveDrivetrain.DRIVE_kP;
+        talonFXConfig.slot0.kI = Constants.SwerveDrivetrain.DRIVE_kI;
+        talonFXConfig.slot0.kD = Constants.SwerveDrivetrain.DRIVE_kD;
+        talonFXConfig.slot0.kF = Constants.SwerveDrivetrain.DRIVE_kF;        
+        talonFXConfig.supplyCurrLimit = driveSupplyLimit;
+        talonFXConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
+        talonFXConfig.openloopRamp = Constants.SwerveDrivetrain.OPEN_LOOP_RAMP;
+        talonFXConfig.closedloopRamp = Constants.SwerveDrivetrain.CLOSED_LOOP_RAMP;
+        
+        motor.configFactoryDefault();
+        motor.configAllSettings(talonFXConfig);
+        //motor.setInverted(Constants.SwerveDrivetrain.DRIVE_MOTOR_INVERTED);
+        motor.setNeutralMode(Constants.SwerveDrivetrain.DRIVE_NEUTRAL_MODE);
+    }
+   
 }

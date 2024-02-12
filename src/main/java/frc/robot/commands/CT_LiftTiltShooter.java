@@ -1,12 +1,14 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
+import frc.robot.commandgroups.CG_LoadRing;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TiltSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class CT_LiftTiltShooter extends CommandBase {
 
@@ -57,6 +59,10 @@ public class CT_LiftTiltShooter extends CommandBase {
         _tiltSubsystem.move(tiltAxis);
         _shooterSubsystem.move(shooterAxisRight);
         _shooterSubsystem.preShootMove(shooterAxisLeft);
+
+        if (controller.getAButton()) {
+            CommandScheduler.getInstance().schedule(new CG_LoadRing(_tiltSubsystem, _liftSubsystem, _intakeSubsystem, _shooterSubsystem));
+        }
         
     }
 }

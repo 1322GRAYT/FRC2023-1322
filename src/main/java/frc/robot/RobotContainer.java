@@ -37,17 +37,18 @@ public class RobotContainer {
   private final SwerveDrivetrain _swerveSubsystem = new SwerveDrivetrain();
   private final LiftSubsystem _liftSubsystem = new LiftSubsystem(Constants.LIFT_MOTOR);
   private final TiltSubsystem _tiltSubsystem = new TiltSubsystem(Constants.TILT_MOTOR);
-  private final IntakeSubsystem _intakeSubsystem = new IntakeSubsystem(Constants.FLOOR_PICKUP);
-  private final ShooterSubsystem _shooterSubsystem = new ShooterSubsystem(Constants.SHOOTER_MOTOR_0, Constants.SHOOTER_MOTOR_1, Constants.SHOOTER_PRESHOOT,Constants.SHOOTER_SENSOR0, Constants.SHOOTER_SENSOR1, Constants.SHOOTER_SENSOR2);
-  private XboxController _driverStick = new XboxController(Constants.DRVR_CNTRLR);
-  private XboxController _auxStick = new XboxController(Constants.AUX_CNTRLR);
+  private final IntakeSubsystem _intakeSubsystem = new IntakeSubsystem(Constants.FLOOR_PICKUP_MOTOR);
+  private final ShooterSubsystem _shooterSubsystem = new ShooterSubsystem(Constants.SHOOTER_MOTOR_0, Constants.SHOOTER_MOTOR_1, Constants.SHOOTER_PRESHOOT_MOTOR,Constants.SHOOTER_SENSOR0, Constants.SHOOTER_SENSOR1, Constants.SHOOTER_SENSOR2);
+
+  private XboxController _driverStick = new XboxController(Constants.DRIVER_CONTROLLER);
+  private XboxController _auxStick = new XboxController(Constants.AUX_CONTROLLER);
 
 
   public RobotContainer() {
 
   
 
-    _auto_chooser.setDefaultOption("Default Auto", new CT_Music());
+    _auto_chooser.setDefaultOption("Default Auto", new CA_Music());
     SmartDashboard.putData("Auto Choices: ", _auto_chooser);
 
     _teleop_chooser.setDefaultOption("Teleop - Robot Centric", 
