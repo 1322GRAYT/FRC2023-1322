@@ -4,13 +4,17 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+import java.util.HashMap;
+import java.util.Map;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import frc.robot.subsystems.swerve.SwerveModuleConstants;
@@ -29,95 +33,59 @@ import frc.robot.subsystems.swerve.SwerveModuleConstants;
  */
 public final class Constants {
 
-    //TODO: if does not work for balance delete
-    public static final double BEAM_BALANACED_DRIVE_KP = 0.015; // P (Proportional) constant of a PID loop
-    public static final double BEAM_BALANCED_GOAL_DEGREES = 0;
-    public static final double BEAM_BALANCED_ANGLE_TRESHOLD_DEGREES = 1;
-    public static final double BACKWARDS_BALANCING_EXTRA_POWER_MULTIPLIER = 1.35;
-    public static final double BEAM_BALANCE_POWER_MULTIPLIER=0.6;
-
-    // Enum for Solenoid control
-    public enum SolenoidPosition {
-        UP, DOWN, OFF
+    public static void configMotor(TalonFX motor) {
+        TalonFXConfiguration talonFXConfig = new TalonFXConfiguration();
+    
+        /* Swerve Drive Motor Configuration */
+        SupplyCurrentLimitConfiguration driveSupplyLimit = new SupplyCurrentLimitConfiguration(
+            Constants.SwerveDrivetrain.DRIVE_ENABLE_CURRENT_LIMIT, 
+            Constants.SwerveDrivetrain.DRIVE_CONTINUOUS_CL, 
+            Constants.SwerveDrivetrain.DRIVE_PEAK_CL, 
+            Constants.SwerveDrivetrain.DRIVE_PEAK_CURRENT_DURATION);
+    
+        talonFXConfig.slot0.kP = Constants.SwerveDrivetrain.DRIVE_kP;
+        talonFXConfig.slot0.kI = Constants.SwerveDrivetrain.DRIVE_kI;
+        talonFXConfig.slot0.kD = Constants.SwerveDrivetrain.DRIVE_kD;
+        talonFXConfig.slot0.kF = Constants.SwerveDrivetrain.DRIVE_kF;        
+        talonFXConfig.supplyCurrLimit = driveSupplyLimit;
+        talonFXConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
+        talonFXConfig.openloopRamp = Constants.SwerveDrivetrain.OPEN_LOOP_RAMP;
+        talonFXConfig.closedloopRamp = Constants.SwerveDrivetrain.CLOSED_LOOP_RAMP;
+        
+        motor.configFactoryDefault();
+        motor.configAllSettings(talonFXConfig);
+        //motor.setInverted(Constants.SwerveDrivetrain.DRIVE_MOTOR_INVERTED);
+        motor.setNeutralMode(Constants.SwerveDrivetrain.DRIVE_NEUTRAL_MODE);
     }
 
-    /* PWM ADDRESS ASSIGNMENTS */
 
-    public static final int CLAW_YAW_SERVO = 0;
-    public static final int CONE_ROTATE_SERVO = 1;
+    // April Tag List 2024
+    public static final Map<Integer, String> AprilTags = new HashMap<Integer, String>() {{
+        put(1, "Blue Source - Right");
+        put(2, "Blue Source - Left");
+        put(3, "Red Source - Right");
+        put(4, "Red Source - Left");
+        put(5, "Red Amp");
+        put(6, "Blue Amp");
+        put(7, "Blue Speaker - Right");
+        put(8, "Blue Speaker - Left");
+        put(9, "Red Speaker - Right");
+        put(10, "Red Speaker - Left");
+        put(11, "Red Stage - Left");
+        put(12, "Red Stage - Right");
+        put(13, "Red Stage - Center");
+        put(14, "Blue Stage - Center");
+        put(15, "Blue Stage - Left");
+        put(16, "Blue Stage - Right");
+    }};
 
-    /* MOTOR CAN ADDRESS ASSIGNMENTS */
-    // Drive Motors (FALCON 500)
-    /* 
-    public static final int DRV_MTR_FT_LT = 2; // Front Ledsx Aft
-    public static final int DRV_MTR_FT_RT = 7; // Front Right
-    public static final int DRV_MTR_RR_LT = 8; // Rear Left
-    public static final int DRV_MTR_RR_RT = 6; // Rear Right
-    // Swerve Steer Motors (FALCON 500)
-    public static final int SWRV_MTR_FT_LT = 3; // Front Left
-    public static final int SWRV_MTR_FT_RT = 4; // Front Right
-    public static final int SWRV_MTR_RR_LT = 1; // Rear Left
-    public static final int SWRV_MTR_RR_RT = 5; // Rear Right
-*/
-    // Floor Pickup
-    //public static final int FLOOR_MOTOR = 9;
-
-    // Cone Lift Motor (CAN TALON SRX)
-    public static final int CONE_MTR_LIFT = 11;
-    
-    // Elevator
-    public static final int ELEVATOR_MOTOR = 10;
-    public static final int ELEVATOR_PITCH_MOTOR = 13;
-
-    // Claw Motor
-    public static final int CLAW_PITCH = 12;
-
-    /* PNEUMATIC HUB CAN ADDRESS ASSIGNMENTS */
-    public static final int PNEUMATIC_COMPRESSOR = 1;
-
-    /* PNEUMATIC ACTUATOR ADDRESS ASSIGNMENTS */
-    // TODO fix assignments
-
-    public static final int PNEUMATIC_CLAW_0 = 11;
-    public static final int PNEUMATIC_CLAW_1 = 10;
-
-/* 
-    public static final int PNEUMATIC_FLOORPICK = 5;
-    public static final int PNEUMATIC_FLOORPUSH = 33;
-    public static final int PNEUMATIC_CONECENTERLIFT = 34;
-
-
-    public static final int PNEU_PRESSURE_SENSOR = 0;
-    public static final int PNEU_BALL_INTAKE_LT = 11;
-    public static final int PNEU_BALL_INTAKE_RT = 9;
-    public static final int PNEU_BALL_INTAKE_FT = 10;
-    public static final int PNEU_BALL_INTAKE_RR = 12;
-    public static final int PNEU_LIFT_TRACK = 13;
-    public static final int PNEU_SHOOTER_CAMERA = 8;
-*/
-    /* ANALOG INPUT ADDRESS ASSIGNMENTS */
-    /*/ Swerve Steer Motors Position
-    public static final int ANA_SWRV_ANG_FT_LT = 3; // Front Left
-    public static final int ANA_SWRV_ANG_RR_LT = 2; // Rear Left
-    public static final int ANA_SWRV_ANG_FT_RT = 0; // Front Right
-    public static final int ANA_SWRV_ANG_RR_RT = 1; // Rear Right
-*/
-    /* DIGITAL INPUT ADDRESS ASSIGNMENTS */
-    public static final int SW_LIFT_TRACK_TRIG = 0;
-/*
-    public static final int SW_BALL_INTAKE_LT = 1;
-    public static final int SW_BALL_INTAKE_RT = 3;
-    public static final int SW_BALL_INTAKE_FT = 4;
-    public static final int SW_BALL_INTAKE_RR = 2;
-    public static final int SW_BALL_ADVANCE_1 = 5;
-    public static final int SW_BALL_ADVANCE_2 = 6;
-*/
     /* X-BOX CONTROLLER MAPPING */
     // Controller Assignments
     public static final int DRVR_CNTRLR = 0;
     public static final int AUX_CNTRLR = 1;
     // Button Assignments
-     public static final int BUTTON_A = 1;
+    public static final String [] BUTTONS = {"None","A","B","X","Y","LeftBumper","RightBumper", "Back", "Start", "LeftStickPress", "RightStickPress"};
+    public static final int BUTTON_A = 1;
     public static final int BUTTON_B = 2;
     public static final int BUTTON_X = 3;
     public static final int BUTTON_Y = 4;
@@ -136,11 +104,47 @@ public final class Constants {
     public static final int DPAD = 6;
 
 
-    public static final int CLAW_ANGLE_SENSOR=0;
+    /*
+     * First pickup, then preshoot, then lift, then shooter
+     */
+    public static final int SHOOTER_MOTOR_0 = 13;
+    public static final int SHOOTER_MOTOR_1 = 10;
+    public static final int SHOOTER_PRESHOOT = 12;
 
-   // public static final int TOGGLE_AUTO_CLAW_MOVEMENT = BUTTON_A;
+    public static final int FLOOR_PICKUP = 18;
+    public static final int LIFT_MOTOR = 17;
+    public static final int TILT_MOTOR = 15;
+
+    public static final double SHOOTER_VELOCITY = 1.0;
+    public static final double PRESHOOT_INITIAL_VELOCITY = 1.0;
+    public static final double PRESHOOT_TIME = 3.0;
+    public static final int SHOOTER_SENSOR0 = 5;
+    public static final int SHOOTER_SENSOR1 = 6;
+    public static final int SHOOTER_SENSOR2 = 7;
+
+    public static final int TILT_LOAD_POSITION = 100;
+
+
+
+    /*
+    public static int MOTOR_9 = 9;
+    public static int MOTOR_10 = 10;
+    public static int MOTOR_11 = 11;
+    public static int MOTOR_12 = 12;
+    */
+    public static String _motorStick [] = {
+        "LX",
+        "LY",
+        "RX",
+        "RY"
+      };
 
     public static final class SwerveDrivetrain {
+
+        /* Rotation control PID settings */
+        public static final double ROTATE_kP   = 0.1;
+        public static final double ROTATE_kI  = 0.001;
+        public static final double ROTATE_kD  = 0;
 
         /* Gyro */
         public static final SPI.Port GYRO_ID = SPI.Port.kMXP;
@@ -160,43 +164,50 @@ public final class Constants {
         public static final double DRIVE_CNTS_PER_REV = 2048; // FALCON 500;
 
         public static final SwerveDriveKinematics SWERVE_KINEMATICS = new SwerveDriveKinematics(
-                new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-                new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
-                new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-                new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0));
+        /*
+        * WHEEL_BASE is distance from front to back wheel center to center
+        * TRACK_WIDTH is distance from left to right wheels center to center
+        */
+        new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),   // front left + +
+        new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),  // front right + -
+        new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),  // back left - +
+        new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0));// back right - - 
 
         /* Current Limiting */
         public static final int ANGLE_CONTINUOUS_CL = 25;
         public static final int ANGLE_PEAK_CL = 40;
         public static final double ANGLE_PEAK_CURRENT_DURATION = 0.1;
         public static final boolean ANGLE_ENABLE_CURRENT_LIMIT = true;
-
-        public static final int DRIVE_CONTINUOUS_CL = 35;
-        public static final int DRIVE_PEAK_CL = 60;
-        public static final double DRIVE_PEAK_CURRENT_DURATION = 0.1;
-        public static final boolean DRIVE_ENABLE_CURRENT_LIMIT = true;
-
         /* Angle Motor PID Values */
         public static final double ANGLE_kP = 0.6; // 0.6
         public static final double ANGLE_kI = 0.0; // 0.0
         public static final double ANGLE_kD = 12.0; // 12.0
         public static final double ANGLE_kF = 0.0; // 0.0
 
+        
+
+        public static final int DRIVE_CONTINUOUS_CL = 35;
+        public static final int DRIVE_PEAK_CL = 60;
+        public static final double DRIVE_PEAK_CURRENT_DURATION = 0.1;
+        public static final boolean DRIVE_ENABLE_CURRENT_LIMIT = true;
         /* Drive Motor PID Values */
         public static final double DRIVE_kP = 0.10; // 0.10
         public static final double DRIVE_kI = 0.0; // 0.0
         public static final double DRIVE_kD = 0.0; // 0.0
         public static final double DRIVE_kF = 0.0; // 0.0
 
+
+
         /* Drive Motor Characterization Values (FeedForward) */
-        public static final double FF_kS = (0.632 / 12); // 0.667 --- divide by 12 to convert from volts to percent
+        public static final double FeedForwardStaticGain = (0.632 / 12); // 0.667 --- divide by 12 to convert from volts to percent
                                                          // output for CTRE
-        public static final double FF_kV = (0.0514 / 12); // 2.44
-        public static final double FF_kA = (0.00337 / 12); // 0.27
+        public static final double FeedForwardVelocityGain = (0.0514 / 12); // 2.44
+        public static final double FeedForwardAccerationGain = (0.00337 / 12); // 0.27
 
         /* Swerve Profiling Values */
         public static final double MAX_SPEED = 4.5; // m/s
         public static final double MAX_ANGULAR_VELOCITY = 11.5; // m/s
+        public static final double SLOW_SPEED_REDUCTION = 0.25; // 1/4 speed
 
         /* Neutral Modes */
         public static final NeutralMode ANGLE_NEUTRAL_MODE = NeutralMode.Coast;
@@ -210,50 +221,81 @@ public final class Constants {
         public static final boolean CAN_CODER_INVERTED = false;
 
         /* Module Specific Constants */
-        /* Front Left Module - Module 0 */
-        public static final class Mod0 {
-            public static final int DRIVE_MOTOR_ID = 2;
-            public static final int ANGLE_MOTOR_ID = 3;
-            public static final int CAN_CODER_ID = 3;
-            public static final double ANGLE_OFFSET = 126.0;
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(DRIVE_MOTOR_ID,
-                    ANGLE_MOTOR_ID, CAN_CODER_ID, ANGLE_OFFSET);
-        }
 
-        /* Front Right Module - Module 1 */
-        public static final class Mod1 {
-            public static final int DRIVE_MOTOR_ID = 7;
-            public static final int ANGLE_MOTOR_ID = 4;
-            public static final int CAN_CODER_ID = 0;
-            public static final double ANGLE_OFFSET = 235.2;
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(DRIVE_MOTOR_ID,
-                    ANGLE_MOTOR_ID, CAN_CODER_ID, ANGLE_OFFSET);
-        }
+        public static final int DRIVE_MOTOR_FRONT_LEFT = 2; // Front Left
+        public static final int SWERVE_MOTOR_FRONT_LEFT = 3; // Front Left
+        public static final int SWERVE_CAN_CODER_FRONT_LEFT=3;
+        public static final int SWERVE_ZERO_SENSOR_FRONT_LEFT=4;
+        public static final double SWERVE_ANGLE_OFFSET_FRONT_LEFT=126.0;
 
-        /* Back Left Module - Module 2 */
-        public static final class Mod2 {
-            public static final int DRIVE_MOTOR_ID = 8;
-            public static final int ANGLE_MOTOR_ID = 1;
-            public static final int CAN_CODER_ID = 2;
-            public static final double ANGLE_OFFSET = 128.5;
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(DRIVE_MOTOR_ID,
-                    ANGLE_MOTOR_ID, CAN_CODER_ID, ANGLE_OFFSET);
-        }
+        public static final int DRIVE_MOTOR_FRONT_RIGHT = 7; // Front Right
+        public static final int SWERVE_MOTOR_FRONT_RIGHT = 4; // Front Right
+        public static final int SWERVE_CAN_CODER_FRONT_RIGHT=0;
+        public static final int SWERVE_ZERO_SENSOR_FRONT_RIGHT=1;
+        public static final double SWERVE_ANGLE_OFFSET_FRONT_RIGHT=235.2;
 
-        /* Back Right Module - Module 3 */
-        public static final class Mod3 {
-            public static final int DRIVE_MOTOR_ID = 6;
-            public static final int ANGLE_MOTOR_ID = 5;
-            public static final int CAN_CODER_ID = 1;
-            public static final double ANGLE_OFFSET = 138.7;
-            public static final SwerveModuleConstants constants = new SwerveModuleConstants(DRIVE_MOTOR_ID,
-                    ANGLE_MOTOR_ID, CAN_CODER_ID, ANGLE_OFFSET);
-        }
+        public static final int DRIVE_MOTOR_REAR_LEFT = 8; // Rear Left
+        public static final int SWERVE_MOTOR_REAR_LEFT = 1; // Rear Left
+        public static final int SWERVE_CAN_CODER_REAR_LEFT=2;
+        public static final int SWERVE_ZERO_SENSOR_REAR_LEFT=3;
+        public static final double SWERVE_ANGLE_OFFSET_REAR_LEFT=128.5;
+
+        public static final int DRIVE_MOTOR_REAR_RIGHT = 6; // Rear Right
+        public static final int SWERVE_MOTOR_REAR_RIGHT = 5; // Rear Right
+        public static final int SWERVE_CAN_CODER_REAR_RIGHT=1;
+        public static final int SWERVE_ZERO_SENSOR_REAR_RIGHT=2;
+        public static final double SWERVE_ANGLE_OFFSET_REAR_RIGHT=138.7;
+        
+        // Swerve Steer Motors (FALCON 500)
+
+        public static final double SWERVE_ZERO_SPEED=0.2;
+    
+    
+        public static SwerveModuleConstants Modules []  = {
+            // Front left
+            new SwerveModuleConstants(
+                DRIVE_MOTOR_FRONT_LEFT, 
+                SWERVE_MOTOR_FRONT_LEFT, 
+                SWERVE_CAN_CODER_FRONT_LEFT, 
+                SWERVE_ANGLE_OFFSET_FRONT_LEFT, 
+                SWERVE_ZERO_SENSOR_FRONT_LEFT
+                ), //FL
+
+            // Front Right
+            new SwerveModuleConstants(
+                DRIVE_MOTOR_FRONT_RIGHT, 
+                SWERVE_MOTOR_FRONT_RIGHT, 
+                SWERVE_CAN_CODER_FRONT_RIGHT, 
+                SWERVE_ANGLE_OFFSET_FRONT_RIGHT, 
+                SWERVE_ZERO_SENSOR_FRONT_RIGHT
+                ), //FL
+            //new SwerveModuleConstants(7, 4, 0, 235.2), 
+
+            // Rear Left
+            new SwerveModuleConstants(
+                DRIVE_MOTOR_REAR_LEFT, 
+                SWERVE_MOTOR_REAR_LEFT, 
+                SWERVE_CAN_CODER_REAR_LEFT, 
+                SWERVE_ANGLE_OFFSET_REAR_LEFT, 
+                SWERVE_ZERO_SENSOR_REAR_LEFT
+                ), //FL
+            //new SwerveModuleConstants(8, 1, 2, 128.5), 
+
+            // Rear Right
+            new SwerveModuleConstants(
+                DRIVE_MOTOR_REAR_RIGHT, 
+                SWERVE_MOTOR_REAR_RIGHT, 
+                SWERVE_CAN_CODER_REAR_RIGHT, 
+                SWERVE_ANGLE_OFFSET_REAR_RIGHT, 
+                SWERVE_ZERO_SENSOR_REAR_RIGHT
+                ), //FL
+            //new SwerveModuleConstants(6, 5, 1, 138.7)
+        };
+
     }
+  /*   public static final class Auton {
 
-    public static final class Auton {
-
-        /* Drive Motor Characterization Values (Ramsete) */
+        /* Drive Motor Characterization Values (Ramsete) * /
         public static final double RAMSETE_B = 7;
         public static final double RAMSETE_ZETA = 2;
 
@@ -279,4 +321,78 @@ public final class Constants {
         public static final ProfiledPIDController THETA_CONTROLLER = new ProfiledPIDController(10.0, 0.0, 0.0,
                 THETA_CONTROLLER_CONTRAINTS);
     }
+ */
+
+     /**
+     * @param counts Falcon Counts
+     * @param gearRatio Gear Ratio between Falcon and Mechanism
+     * @return Degrees of Rotation of Mechanism
+     */
+    public static double falconToDegrees(double counts, double gearRatio) {
+        return counts * (360.0 / (gearRatio * 2048.0));
+    }
+
+    /**
+     * @param degrees Degrees of rotation of Mechanism
+     * @param gearRatio Gear Ratio between Falcon and Mechanism
+     * @return Falcon Counts
+     */
+    public static double degreesToFalcon(double degrees, double gearRatio) {
+        double ticks =  degrees / (360.0 / (gearRatio * 2048.0));
+        return ticks;
+    }
+
+    /**
+     * @param velocityCounts Falcon Velocity Counts
+     * @param gearRatio Gear Ratio between Falcon and Mechanism (set to 1 for Falcon RPM)
+     * @return RPM of Mechanism
+     */
+    public static double falconToRPM(double velocityCounts, double gearRatio) {
+        double motorRPM = velocityCounts * (600.0 / 2048.0);        
+        double mechRPM = motorRPM / gearRatio;
+        return mechRPM;
+    }
+
+    /**
+     * @param RPM RPM of mechanism
+     * @param gearRatio Gear Ratio between Falcon and Mechanism (set to 1 for Falcon RPM)
+     * @return RPM of Mechanism
+     */
+    public static double RPMToFalcon(double RPM, double gearRatio) {
+        double motorRPM = RPM * gearRatio;
+        double sensorCounts = motorRPM * (2048.0 / 600.0);
+        return sensorCounts;
+    }
+
+    /**
+     * @param velocitycounts Falcon Velocity Counts
+     * @param circumference Circumference of Wheel
+     * @param gearRatio Gear Ratio between Falcon and Mechanism (set to 1 for Falcon RPM)
+     * @return Falcon Velocity Counts
+     */
+    public static double falconToMPS(double velocitycounts, double circumference, double gearRatio){
+        double wheelRPM = falconToRPM(velocitycounts, gearRatio);
+        double wheelMPS = (wheelRPM * circumference) / 60;
+        return wheelMPS;
+    }
+
+    /**
+     * @param velocity Velocity MPS
+     * @param circumference Circumference of Wheel
+     * @param gearRatio Gear Ratio between Falcon and Mechanism (set to 1 for Falcon RPM)
+     * @return Falcon Velocity Counts
+     */
+    public static double MPSToFalcon(double velocity, double circumference, double gearRatio){
+        double wheelRPM = ((velocity * 60) / circumference);
+        double wheelVelocity = RPMToFalcon(wheelRPM, gearRatio);
+        return wheelVelocity;
+    }
+
+    public static double ApplyDeadBand_Scaled( double power, double deadBand, double powerLimit) {
+		if (power > -deadBand && power < deadBand) return 0.0;
+		double sign = (power>0)?1:((power<0)?-1:0);
+		if (power > powerLimit || power < - powerLimit) return powerLimit*sign;
+		return ((power - sign*deadBand)/(powerLimit - deadBand))*powerLimit;
+	}
+    
 }

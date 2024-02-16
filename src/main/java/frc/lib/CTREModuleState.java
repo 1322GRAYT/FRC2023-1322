@@ -1,4 +1,4 @@
-package frc.lib.util;
+package frc.lib;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -35,6 +35,7 @@ public class CTREModuleState {
         double lowerBound;
         double upperBound;
         double lowerOffset = scopeReference % 360;
+        lowerBound = scopeReference - lowerOffset;
         if (lowerOffset >= 0) {
             lowerBound = scopeReference - lowerOffset;
             upperBound = scopeReference + (360 - lowerOffset);
