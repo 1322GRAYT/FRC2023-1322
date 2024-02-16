@@ -58,6 +58,11 @@ public final class Constants {
 
     public static final int TILT_LOAD_POSITION = 100;
 
+    public final static double LIFT_KP = 0.1;
+    public final static double LIFT_KI = 0.1;
+    public final static double LIFT_KD = 0.1;
+    public final static int LIFT_CURRENT_LIMIT = 40;
+
 
     
    public static Tags RedTags = new Tags() {
