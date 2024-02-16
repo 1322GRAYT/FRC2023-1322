@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -54,6 +57,28 @@ public final class Constants {
         //motor.setInverted(Constants.SwerveDrivetrain.DRIVE_MOTOR_INVERTED);
         motor.setNeutralMode(Constants.SwerveDrivetrain.DRIVE_NEUTRAL_MODE);
     }
+
+
+    // April Tag List 2024
+    public static final Map<Integer, String> AprilTags = new HashMap<Integer, String>() {{
+        put(1, "Blue Source - Right");
+        put(2, "Blue Source - Left");
+        put(3, "Red Source - Right");
+        put(4, "Red Source - Left");
+        put(5, "Red Amp");
+        put(6, "Blue Amp");
+        put(7, "Blue Speaker - Right");
+        put(8, "Blue Speaker - Left");
+        put(9, "Red Speaker - Right");
+        put(10, "Red Speaker - Left");
+        put(11, "Red Stage - Left");
+        put(12, "Red Stage - Right");
+        put(13, "Red Stage - Center");
+        put(14, "Blue Stage - Center");
+        put(15, "Blue Stage - Left");
+        put(16, "Blue Stage - Right");
+    }};
+
     /* X-BOX CONTROLLER MAPPING */
     // Controller Assignments
     public static final int DRVR_CNTRLR = 0;
