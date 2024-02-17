@@ -66,19 +66,21 @@ public final class Constants {
     public static final int SHOOTER_MOTOR_1 = 10;
     public static final int SHOOTER_PRESHOOT_MOTOR = 12;
 
-    public static final int FLOOR_PICKUP_MOTOR = 18;
+    public static final int FLOOR_PICKUP_MOTOR =18;
     public static final int LIFT_MOTOR = 17;
     public static final int TILT_MOTOR = 15;
 
     public static final double SHOOTER_VELOCITY = 1.0;
-    public static final double PRESHOOT_SPEED_INITIAL = 0.5;
+    public static final long SHOOTER_DWELL_TIME = 200;
+    public static final double PRESHOOT_ADJUST_SPEED = 0.1;
+    public static final double PRESHOOT_SHOOT_SPEED = 1.0;
     public static final double PRESHOOT_SPEED_KP = 0.2;
     public static final double PRESHOOT_TIME = 3.0;
     public static final int SHOOTER_SENSOR0 = 5;
     public static final int SHOOTER_SENSOR1 = 6;
     public static final int SHOOTER_SENSOR2 = 7;
 
-    public static final int TILT_LOAD_POSITION = 100;
+    public static final int TILT_LOAD_POSITION = 0;
 
     public final static double LIFT_KP = 0.1;
     public final static double LIFT_KI = 0.1;
@@ -229,14 +231,14 @@ public final class Constants {
 
         /* Module Specific Constants */
 
-        public static final int DRIVE_MOTOR_FRONT_LEFT = 2; // Front Left
+        public static final int DRIVE_MOTOR_FRONT_LEFT = 22; // Front Left
         public static final int SWERVE_MOTOR_FRONT_LEFT = 3; // Front Left
         public static final int SWERVE_CAN_CODER_FRONT_LEFT=3;
         public static final int SWERVE_ZERO_SENSOR_FRONT_LEFT=4;
         public static final double SWERVE_ANGLE_OFFSET_FRONT_LEFT=126.0;
 
         public static final int DRIVE_MOTOR_FRONT_RIGHT = 7; // Front Right
-        public static final int SWERVE_MOTOR_FRONT_RIGHT = 4; // Front Right
+        public static final int SWERVE_MOTOR_FRONT_RIGHT = 24; // Front Right
         public static final int SWERVE_CAN_CODER_FRONT_RIGHT=0;
         public static final int SWERVE_ZERO_SENSOR_FRONT_RIGHT=1;
         public static final double SWERVE_ANGLE_OFFSET_FRONT_RIGHT=235.2;
@@ -373,7 +375,7 @@ public final class Constants {
 		return ((power - sign*deadBand)/(powerLimit - deadBand))*powerLimit;
 	}
     
-    public static void configMotor(TalonFX motor) {
+    public static void configMotor(TalonFX motor, NeutralMode neutralMode) {
         TalonFXConfiguration talonFXConfig = new TalonFXConfiguration();
     
         /* Swerve Drive Motor Configuration */
@@ -395,7 +397,7 @@ public final class Constants {
         motor.configFactoryDefault();
         motor.configAllSettings(talonFXConfig);
         //motor.setInverted(Constants.SwerveDrivetrain.DRIVE_MOTOR_INVERTED);
-        motor.setNeutralMode(Constants.SwerveDrivetrain.DRIVE_NEUTRAL_MODE);
+        motor.setNeutralMode(neutralMode);
     }
    
 }

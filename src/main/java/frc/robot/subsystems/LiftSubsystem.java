@@ -1,56 +1,34 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class LiftSubsystem extends SubsystemBase {
   // private WPI_TalonFX _liftMotor;
-  private CANSparkMax _liftMotor;
-  private RelativeEncoder _liftEncoder;
-  private PIDController _pid;
+  private TalonFX _liftMotor;
 
   public LiftSubsystem(int lift_motor_id) {
-    _liftMotor = new CANSparkMax(lift_motor_id, MotorType.kBrushless);
-    _liftMotor.setIdleMode(IdleMode.kBrake);
-    _liftMotor.setSmartCurrentLimit(Constants.LIFT_CURRENT_LIMIT);
-    _liftEncoder = _liftMotor.getEncoder();
-    _pid = new PIDController(
-        Constants.LIFT_KP,
-        Constants.LIFT_KI,
-        Constants.LIFT_KD);
+    _liftMotor = new TalonFX(lift_motor_id);
+    Constants.configMotor(_liftMotor,NeutralMode.Brake);
+    _liftMotor.setSelectedSensorPosition(0);
   }
 
 
   public void setHomePosition() {
-    _liftMotor.set(1);
-    //wait for .5 seconds
-    Timer.delay(0.5);
-    _liftEncoder.setPosition(0);
+    //_liftMotor.set(1);
   }
 
   public void setPositionWait(double position) {
-    _pid.setSetpoint(position);
-    while (Math.abs(_liftEncoder.getPosition() - position) > 15) {
-      _liftMotor.set(_pid.calculate(_liftEncoder.getPosition()));
-    }
+//
   }
 
   public void setPositionNoWait(double position) {
-    _pid.setSetpoint(position);
-    new Thread() {
-      public void run() {
-        while (Math.abs(_liftEncoder.getPosition() - position) > 15) {
-          _liftMotor.set(_pid.calculate(_liftEncoder.getPosition()));
-        }
-      }
-    }.start();
+//
   }
 
   public void loadPosition() {
@@ -58,14 +36,19 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public void up(double speed) {
-    _liftMotor.set(speed);
+    _liftMotor.set(TalonFXControlMode.PercentOutput,speed);
   }
 
   public void down(double speed) {
-    _liftMotor.set(-speed);
+    _liftMotor.set(TalonFXControlMode.PercentOutput,-speed);
   }
 
   public void move(double speed) {
-    _liftMotor.set(speed);
+    _liftMotor.set(TalonFXControlMode.PercentOutput,speed);
+  }
+
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("Lift Position", _liftMotor.getSelectedSensorPosition());
   }
 }

@@ -18,6 +18,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TiltSubsystem;
 import frc.robot.subsystems.swerve.*;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 
 /**
@@ -46,9 +47,7 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-  
-
-    _auto_chooser.setDefaultOption("Default Auto", new CA_Music());
+    _auto_chooser.setDefaultOption("Default Auto", new SequentialCommandGroup() );
     SmartDashboard.putData("Auto Choices: ", _auto_chooser);
 
     _teleop_chooser.setDefaultOption("Teleop - Robot Centric", 
@@ -118,7 +117,6 @@ public class RobotContainer {
 
   private void setDefaultCommands() {
     _swerveSubsystem.setDefaultCommand(new CT_SwerveDrive(_swerveSubsystem, _driverStick, false, true));
-
   }
 
 

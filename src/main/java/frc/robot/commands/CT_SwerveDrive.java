@@ -1,10 +1,14 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
+import frc.robot.commandgroups.CG_ResetAndZeroEncdrs;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class CT_SwerveDrive extends CommandBase {
 
@@ -17,6 +21,7 @@ public class CT_SwerveDrive extends CommandBase {
     
     private SwerveDrivetrain swerveSubsystem;
     private XboxController controller;
+    private Debouncer ybutton;
     
     public CT_SwerveDrive (SwerveDrivetrain s_Swerve, XboxController controller, boolean fieldRelative, boolean openLoop) {
         this.swerveSubsystem = s_Swerve;
@@ -27,6 +32,7 @@ public class CT_SwerveDrive extends CommandBase {
         this.openLoop = openLoop;
         s_Swerve.resetSwerveDriveEncoders();
         //s_Swerve.resetSwerveRotateEncoders();
+        ybutton = new Debouncer(.1,DebounceType.kBoth);
     }
 
     @Override
@@ -55,6 +61,10 @@ public class CT_SwerveDrive extends CommandBase {
         xAxis = Constants.ApplyDeadBand_Scaled(xAxis, DEADBAND, 1.0);
         rAxis = Constants.ApplyDeadBand_Scaled(rAxis, DEADBAND, 1.0);
 
+
+        if (ybutton.calculate(controller.getYButton())) {
+            CommandScheduler.getInstance().schedule(new CG_ResetAndZeroEncdrs(swerveSubsystem));
+        }
 
 
         double max_speed =  Constants.SwerveDrivetrain.MAX_SPEED;

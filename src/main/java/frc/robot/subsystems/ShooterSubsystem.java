@@ -10,6 +10,8 @@ import frc.robot.Constants;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -18,6 +20,9 @@ public class ShooterSubsystem extends SubsystemBase {
   private TalonFX _preshootMotor;
 
   private DigitalInput _shooterSensor0, _shooterSensor1, _shooterSensor2;
+
+  private boolean shooting = false;
+  private boolean loading = false;
 
   public ShooterSubsystem(int SHOOTER_MOTOR_0,
       int SHOOTER_MOTOR_1,
@@ -70,26 +75,70 @@ public class ShooterSubsystem extends SubsystemBase {
     _preshootMotor.set(ControlMode.PercentOutput, speed);
   }
 
-  public void shoot() {
-    _shooterMotor0.set(ControlMode.PercentOutput, Constants.SHOOTER_VELOCITY);
-    _shooterMotor1.set(ControlMode.PercentOutput, Constants.SHOOTER_VELOCITY);
+  public void drop() {
+    shooting = true;
+    try {
+    _preshootMotor.set(ControlMode.PercentOutput,1.0);
+    Thread.sleep(Constants.SHOOTER_DWELL_TIME);
+    }
+    catch (InterruptedException ignored) {
+
+    }
+    finally {
+      _preshootMotor.set(ControlMode.PercentOutput, 0);
+      shooting=false;
+    }
   }
 
-  public void loadRing() {
-    double speed = Constants.PRESHOOT_SPEED_INITIAL;
-    _preshootMotor.set(ControlMode.PercentOutput, speed);
-    while (!_shooterSensor1.get()) {
-      if (_shooterSensor0.get()) {
-        speed += ((speed < 0) ? -1 : 1) * Constants.PRESHOOT_SPEED_KP;
-        _preshootMotor.set(ControlMode.PercentOutput, speed);
-      } else if (_shooterSensor2.get()) {
-        speed *= -Constants.PRESHOOT_SPEED_KP;
-        _preshootMotor.set(ControlMode.PercentOutput, -speed);
-      }
+  public void shoot() {
+    shooting = true;
+    try {
+      _shooterMotor0.set(ControlMode.PercentOutput, -Constants.SHOOTER_VELOCITY);
+      _shooterMotor1.set(ControlMode.PercentOutput, -Constants.SHOOTER_VELOCITY);
+      Thread.sleep(Constants.SHOOTER_DWELL_TIME);
+      _preshootMotor.set(ControlMode.PercentOutput, -Constants.PRESHOOT_SHOOT_SPEED);
+      Thread.sleep(Constants.SHOOTER_DWELL_TIME);
+    } catch (InterruptedException ignored) {
+
+    } finally {
+      _preshootMotor.set(ControlMode.PercentOutput, 0);
+      _shooterMotor0.set(ControlMode.PercentOutput, 0);
+      _shooterMotor1.set(ControlMode.PercentOutput, 0);
+      shooting = false;
     }
+  }
 
-    // Object is aligned with _shooterSensor1, stop the motor
-    _preshootMotor.set(ControlMode.PercentOutput, 0);
+  public void setLoading() {
+    loading = true;
+  }
 
+  public void unSetLoading() {
+    loading = false;
+  }
+
+  public boolean loaded() {
+    return !_shooterSensor1.get();
+  }
+
+  @Override
+  public void periodic() {
+    SmartDashboard.putString("Sensor 0", _shooterSensor0.get() ? "Detected" : "Not Detected");
+    SmartDashboard.putString("Sensor 1", _shooterSensor1.get() ? "Detected" : "Not Detected");
+    SmartDashboard.putString("Sensor 2", _shooterSensor2.get() ? "Detected" : "Not Detected");
+
+    if (!shooting && !loading) {
+      if (_shooterSensor2.get() == false) {
+        do {
+          preShootMove(Constants.PRESHOOT_ADJUST_SPEED);
+        } while (_shooterSensor1.get() == true);
+        preShootMove(0);
+      } else if (_shooterSensor0.get() == false) {
+        do {
+          preShootMove(-Constants.PRESHOOT_ADJUST_SPEED);
+        } while (_shooterSensor1.get() == true);
+        preShootMove(0);
+      } else
+        preShootMove(0.0);
+    }
   }
 }
