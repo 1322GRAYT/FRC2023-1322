@@ -10,10 +10,10 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class CC_SwerveResetDrvEncdrs extends InstantCommand {
+public class SwerveResetDriveEncoders extends InstantCommand {
   private SwerveDrivetrain swerveDrivetrain;
 
-  public CC_SwerveResetDrvEncdrs(SwerveDrivetrain swerveDrivetrain) {
+  public SwerveResetDriveEncoders(SwerveDrivetrain swerveDrivetrain) {
     this.swerveDrivetrain = swerveDrivetrain;
 
     addRequirements(swerveDrivetrain);

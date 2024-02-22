@@ -4,25 +4,27 @@
 
 package frc.robot.commandgroups;
 
-import frc.robot.commands.CC_SwerveResetDrvEncdrs;
-import frc.robot.commands.CC_SwerveResetRotEncdrs;
-import frc.robot.commands.CC_SwerveZeroGyro;
+
+import frc.robot.commands.SwerveResetDriveEncoders;
+import frc.robot.commands.SwerveResetRotateEncoders;
+import frc.robot.commands.SwerveZeroGyro;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class CG_ResetAndZeroEncdrs extends SequentialCommandGroup {
+public class ResetSwerveDrive extends ParallelCommandGroup {
   /** Creates a new CG_DrvBack. */
-  public CG_ResetAndZeroEncdrs(SwerveDrivetrain swerveDrivetrain) {
+  public ResetSwerveDrive(SwerveDrivetrain swerveDrivetrain
+  ) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      (new CC_SwerveResetRotEncdrs(swerveDrivetrain)),
-      (new CC_SwerveResetDrvEncdrs(swerveDrivetrain)),
-      (new CC_SwerveZeroGyro(swerveDrivetrain))
+      new SwerveResetRotateEncoders(swerveDrivetrain),
+      new SwerveResetDriveEncoders(swerveDrivetrain),
+      new SwerveZeroGyro(swerveDrivetrain)
     );
-    System.out.println("CG_ResetAndZeroEncdrs Autonomous Invoked.");
+
   }
 }

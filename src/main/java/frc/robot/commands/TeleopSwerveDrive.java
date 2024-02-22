@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
-import frc.robot.commandgroups.CG_ResetAndZeroEncdrs;
+import frc.robot.commandgroups.ResetSwerveDrive;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.math.filter.Debouncer;
@@ -10,7 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-public class CT_SwerveDrive extends CommandBase {
+public class TeleopSwerveDrive extends CommandBase {
 
     private static final double DEADBAND = 0.15;
 
@@ -23,7 +23,11 @@ public class CT_SwerveDrive extends CommandBase {
     private XboxController controller;
     private Debouncer ybutton;
     
-    public CT_SwerveDrive (SwerveDrivetrain s_Swerve, XboxController controller, boolean fieldRelative, boolean openLoop) {
+    public TeleopSwerveDrive (
+            XboxController controller, 
+            SwerveDrivetrain s_Swerve, 
+            boolean fieldRelative, 
+            boolean openLoop) {
         this.swerveSubsystem = s_Swerve;
         addRequirements(s_Swerve);
 
@@ -63,7 +67,7 @@ public class CT_SwerveDrive extends CommandBase {
 
 
         if (ybutton.calculate(controller.getYButton())) {
-            CommandScheduler.getInstance().schedule(new CG_ResetAndZeroEncdrs(swerveSubsystem));
+            CommandScheduler.getInstance().schedule(new ResetSwerveDrive(swerveSubsystem));
         }
 
 

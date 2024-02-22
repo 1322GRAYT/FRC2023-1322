@@ -13,7 +13,7 @@ public class TiltSubsystem extends SubsystemBase {
   public TiltSubsystem(int TILT_MOTOR) {
     _tiltMotor = new TalonFX(TILT_MOTOR);
     Constants.configMotor(_tiltMotor,NeutralMode.Brake);
-    _tiltMotor.setSelectedSensorPosition(0);
+    zeroTiltEncoder();
   }
 
   public void loadPosition() {
@@ -35,5 +35,9 @@ public class TiltSubsystem extends SubsystemBase {
 @Override
 public void periodic() {
   SmartDashboard.putNumber("Tilt Position", _tiltMotor.getSelectedSensorPosition());
+}
+
+public void zeroTiltEncoder() {
+  _tiltMotor.setSelectedSensorPosition(0);
 }
 }

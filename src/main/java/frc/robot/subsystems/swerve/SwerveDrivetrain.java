@@ -3,6 +3,7 @@ package frc.robot.subsystems.swerve;
 import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Constants;
+import edu.wpi.first.math.controller.HolonomicDriveController;
 // import edu.wpi.first.math.MathUtil;
 // import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -125,11 +126,25 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.SwerveDrivetrain.MAX_SPEED);
 
-    for (SwerveModule mod : this._swerveModules) {
-      mod.setDesiredState(swerveModuleStates[mod._moduleNumber], isOpenLoop);
-    }
+    if(isOpenLoop)
+      setModuleStatesOpenLoop(swerveModuleStates);
+      else
+      setModuleStatesClosedLoop(swerveModuleStates);
+
   }
 
+
+
+  public void setModuleStatesOpenLoop( SwerveModuleState[] swerveModuleStates) {
+    for (SwerveModule mod : this._swerveModules) {
+      mod.setDesiredState(swerveModuleStates[mod._moduleNumber], true);
+    }
+  }
+  public void setModuleStatesClosedLoop( SwerveModuleState[] swerveModuleStates) {
+    for (SwerveModule mod : this._swerveModules) {
+      mod.setDesiredState(swerveModuleStates[mod._moduleNumber], false);
+    }
+  }
   /* Gyro */
   public void zeroGyro() {
     _gyro.reset();
@@ -193,6 +208,12 @@ public class SwerveDrivetrain extends SubsystemBase {
   public Pose2d getCurrentPose() {
     return this._swerveOdometry.getPoseMeters();
   }
+
+  public SwerveDriveKinematics getKinematics() {
+    // Return the kinematics of your swerve drive
+    return Constants.SwerveDrivetrain.SWERVE_KINEMATICS;
+}
+
 
 /*   public void holdPosition(Pose2d pose) {
     _holdPosition = pose;
@@ -277,9 +298,19 @@ public class SwerveDrivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     print();
-    //this.swerveOdometry.update(this.getYaw(), this.getStates());
-    _swerveOdometry.update(getYaw(), getSwerveModulePositions());
-    _field.setRobotPose(this._swerveOdometry.getPoseMeters());
+    // update the odometry and field object with the current robot pose
+    _field.setRobotPose(_swerveOdometry.update(getYaw(), getSwerveModulePositions()));  
   }
 
+
+
+  public Pose2d getOdometry() {
+    return _swerveOdometry.getPoseMeters();
+}
+
+
+
+  public HolonomicDriveController getGyro() {
+    return null;
+  }
 }

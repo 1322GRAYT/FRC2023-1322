@@ -3,13 +3,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.LiftSubsystem;
 
-public class CC_LiftLoadPos extends CommandBase {
+public class LiftToLoadPosition extends CommandBase {
 
 
     private LiftSubsystem liftSubsystem;
 
     
-    public CC_LiftLoadPos (LiftSubsystem lift) {
+    public LiftToLoadPosition (LiftSubsystem lift) {
         this.liftSubsystem = lift;
         addRequirements(lift);
     }

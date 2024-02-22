@@ -71,8 +71,17 @@ public class ShooterSubsystem extends SubsystemBase {
     _shooterMotor1.set(ControlMode.PercentOutput, speed);
   }
 
+  public void stop() {
+    _shooterMotor0.set(ControlMode.PercentOutput, 0.0);
+    _shooterMotor1.set(ControlMode.PercentOutput, 0.0);
+  }
+
   public void preShootMove(double speed) {
     _preshootMotor.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void preShootStop() {
+    _preshootMotor.set(ControlMode.PercentOutput, 0.0);
   }
 
   public void drop() {
@@ -93,17 +102,15 @@ public class ShooterSubsystem extends SubsystemBase {
   public void shoot() {
     shooting = true;
     try {
-      _shooterMotor0.set(ControlMode.PercentOutput, -Constants.SHOOTER_VELOCITY);
-      _shooterMotor1.set(ControlMode.PercentOutput, -Constants.SHOOTER_VELOCITY);
+      move(-Constants.SHOOTER_VELOCITY);
       Thread.sleep(Constants.SHOOTER_DWELL_TIME);
-      _preshootMotor.set(ControlMode.PercentOutput, -Constants.PRESHOOT_SHOOT_SPEED);
+      preShootMove(-Constants.PRESHOOT_SHOOT_SPEED);
       Thread.sleep(Constants.SHOOTER_DWELL_TIME);
     } catch (InterruptedException ignored) {
 
     } finally {
-      _preshootMotor.set(ControlMode.PercentOutput, 0);
-      _shooterMotor0.set(ControlMode.PercentOutput, 0);
-      _shooterMotor1.set(ControlMode.PercentOutput, 0);
+      preShootStop();
+      stop();
       shooting = false;
     }
   }
@@ -131,12 +138,12 @@ public class ShooterSubsystem extends SubsystemBase {
         do {
           preShootMove(Constants.PRESHOOT_ADJUST_SPEED);
         } while (_shooterSensor1.get() == true);
-        preShootMove(0);
+        preShootMove(0.0);
       } else if (_shooterSensor0.get() == false) {
         do {
           preShootMove(-Constants.PRESHOOT_ADJUST_SPEED);
         } while (_shooterSensor1.get() == true);
-        preShootMove(0);
+        preShootMove(0.0);
       } else
         preShootMove(0.0);
     }

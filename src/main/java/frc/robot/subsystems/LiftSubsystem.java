@@ -15,7 +15,7 @@ public class LiftSubsystem extends SubsystemBase {
   public LiftSubsystem(int lift_motor_id) {
     _liftMotor = new TalonFX(lift_motor_id);
     Constants.configMotor(_liftMotor,NeutralMode.Brake);
-    _liftMotor.setSelectedSensorPosition(0);
+    zeroLiftEncoder();
   }
 
 
@@ -51,4 +51,9 @@ public class LiftSubsystem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Lift Position", _liftMotor.getSelectedSensorPosition());
   }
+
+
+public void zeroLiftEncoder() {
+  _liftMotor.setSelectedSensorPosition(0);
+}
 }

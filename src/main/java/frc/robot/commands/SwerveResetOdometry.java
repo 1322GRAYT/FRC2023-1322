@@ -4,24 +4,27 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class CC_SwerveZeroGyro extends InstantCommand {
+public class SwerveResetOdometry extends InstantCommand {
   private SwerveDrivetrain swerveDrivetrain;
+  private Pose2d pose;
 
-  public CC_SwerveZeroGyro(SwerveDrivetrain swerveDrivetrain) {
+
+  public SwerveResetOdometry(SwerveDrivetrain swerveDrivetrain, Pose2d pose) {
     this.swerveDrivetrain = swerveDrivetrain;
-
+    this.pose = pose;
     addRequirements(swerveDrivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    swerveDrivetrain.zeroGyro();
+    swerveDrivetrain.resetOdometry(pose);
   }
 }

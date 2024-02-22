@@ -13,8 +13,11 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import frc.robot.subsystems.swerve.SwerveModuleConstants;
@@ -180,7 +183,8 @@ public final class Constants {
         new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),   // front left + +
         new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),  // front right + -
         new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),  // back left - +
-        new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0));// back right - - 
+        new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0)  // back right - - 
+        );
 
         /* Current Limiting */
         public static final int ANGLE_CONTINUOUS_CL = 25;
@@ -216,6 +220,7 @@ public final class Constants {
         /* Swerve Profiling Values */
         public static final double MAX_SPEED = 4.5; // m/s
         public static final double MAX_ANGULAR_VELOCITY = 11.5; // m/s
+        public static final double MAX_ANGULAR_ACCELERATION = 2.5; // m/s^2
         public static final double SLOW_SPEED_REDUCTION = 0.25; // 1/4 speed
 
         /* Neutral Modes */
@@ -400,4 +405,27 @@ public final class Constants {
         motor.setNeutralMode(neutralMode);
     }
    
+    public static final class Auton {
+        
+        /* Drive Motor Characterization Values (Ramsete) */
+        public static final double RAMSETE_B                = 7;
+        public static final double RAMSETE_ZETA             = 2;
+
+        public static final double MAX_SPEED_MPS            = 7.0;    // meters per second
+        public static final double MAX_ACCELERATION_MPSS    = 5.0;    // meters per second squared
+
+        public static final double MAX_ANGULAR_SPEED_RPS    = 2 * Math.PI;      // radians per second
+        public static final double MAX_ANGULAR_SPEED_RPSS   = 2 * Math.PI;      // radians per second squared
+
+        // public static final PIDController PX_CONTROLLER = new PIDController(5.25, 1, 0.4);
+        // public static final PIDController PY_CONTROLLER = new PIDController(5.25, 1, 0.4);
+        public static final PIDController PX_CONTROLLER = new PIDController(6.0, 0, 0.1);
+        public static final PIDController PY_CONTROLLER = new PIDController(6.0, 0, 0.1);
+        // public static final double PTHETA_CONTROLLER    = 1.0;
+
+        public static final TrapezoidProfile.Constraints THETA_CONTROLLER_CONTRAINTS = new TrapezoidProfile.Constraints(MAX_ANGULAR_SPEED_RPS, MAX_ANGULAR_SPEED_RPSS);
+
+        // public static final ProfiledPIDController ROT_PID_CONTROLLER = new ProfiledPIDController(.13, 0, .39, THETA_CONTROLLER_CONTRAINTS);
+        public static final ProfiledPIDController THETA_CONTROLLER = new ProfiledPIDController(10.0, 0.0, 0.0, THETA_CONTROLLER_CONTRAINTS);
+    }
 }

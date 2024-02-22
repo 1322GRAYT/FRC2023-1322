@@ -14,6 +14,7 @@ public class CA_Music  extends CommandBase  {
         orca.addInstrument(new TalonFX(Constants.SHOOTER_MOTOR_0));
         orca.addInstrument(new TalonFX(Constants.SHOOTER_MOTOR_1));
         orca.addInstrument(new TalonFX(Constants.SHOOTER_PRESHOOT_MOTOR));
+        
         orca.loadMusic("test.chrp");
         orca.play();
         while(orca.isPlaying()) {

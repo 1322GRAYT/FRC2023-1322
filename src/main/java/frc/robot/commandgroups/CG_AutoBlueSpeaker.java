@@ -4,10 +4,10 @@
 
 package frc.robot.commandgroups;
 
-import frc.robot.commands.CC_IntakeOff;
-import frc.robot.commands.CC_IntakeOn;
-import frc.robot.commands.CC_LiftLoadPos;
-import frc.robot.commands.CC_TiltLoadPos;
+import frc.robot.commands.IntakeOff;
+import frc.robot.commands.IntakeOn;
+import frc.robot.commands.LiftToLoadPosition;
+import frc.robot.commands.TiltToLoadPosition;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -17,10 +17,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class CG_AutoBlueSpeaker extends SequentialCommandGroup {
   public CG_AutoBlueSpeaker(TiltSubsystem tiltSubsystem, LiftSubsystem liftSubsystem, IntakeSubsystem intakeSubsystem, ShooterSubsystem shooterSubsystem) {
     addCommands(
-      (new CC_TiltLoadPos(tiltSubsystem)),
-      (new CC_LiftLoadPos(liftSubsystem)),
-      (new CC_IntakeOn(intakeSubsystem)),
-      (new CC_IntakeOff(intakeSubsystem))
+      (new TiltToLoadPosition(tiltSubsystem)),
+      (new LiftToLoadPosition(liftSubsystem)),
+      (new IntakeOn(intakeSubsystem)),
+      (new IntakeOff(intakeSubsystem))
     );
     System.out.println("CGA_BlueSpeaker Invoked.");
   }
